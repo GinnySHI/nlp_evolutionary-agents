@@ -1,0 +1,46 @@
+{
+  "cases": [
+    {
+      "id": "software-1",
+      "session": "software",
+      "scenario": "software",
+      "task": "Our team currently manages meeting rooms using a shared spreadsheet. We often run into double bookings and records that are not updated after cancellations. Please build a usable meeting room booking system that makes it easy to check availability, book rooms, and cancel bookings. Show me what you have built and explain how to use it. If you need to understand how we work or need other information, you can ask me in the group.",
+      "checks": []
+    },
+    {
+      "id": "software-2",
+      "session": "software",
+      "scenario": "software",
+      "task": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room allocation. Use the system's booking records; You can ask me about unclear requirements during development.",
+      "checks": []
+    },
+    {
+      "id": "newsroom-1",
+      "session": "newsroom",
+      "scenario": "newsroom",
+      "task": "We want to produce a news report on “AI on HKUST University Campuses” for students and faculty. Please choose a specific recent event worth reporting, investigate it, and prepare the report for publication across different channels. Help readers understand what happened and why it matters. You can discuss the choice of story and the audience’s needs with me.",
+      "checks": []
+    },
+    {
+      "id": "newsroom-2",
+      "session": "newsroom",
+      "scenario": "newsroom",
+      "task": "Please investigate the following claim: \"AI-writing detectors can reliably determine whether a university student's assignment was written by AI.\" Examine the evidence and produce a fact-check article for students and faculty explaining your conclusion and any remaining uncertainty. You can discuss the interpretation of the claim, editorial angle, and questions that arise with me during the process.",
+      "checks": []
+    },
+    {
+      "id": "fund-1",
+      "session": "fund",
+      "scenario": "fund",
+      "task": "I am 25 years old, have HKD 1,000,000, and would like to invest in US stocks. Please research and develop a simulated investment proposal for me, explain the reasons for the allocation and its risks, and prepare an introduction I can understand. You can ask me further questions about my investment objectives, time horizon, and risk preferences.",
+      "checks": []
+    },
+    {
+      "id": "fund-2",
+      "session": "fund",
+      "scenario": "fund",
+      "task": "Taking an end-of-2026 perspective, prepare an analytical presentation for our fund team on the future of the semiconductor industry. Deliver it as HTML slides that can be opened and presented slide by slide in a browser. Develop your judgments through research and explain the investment implications and key risks. Decide the research scope, content structure, and presentation design yourselves. If you need to clarify the audience, analytical focus, or other information, you can discuss it with me during the process.",
+      "checks": []
+    }
+  ]
+}
