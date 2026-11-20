@@ -1,5 +1,8 @@
 import httpx
 import pytest
+from datetime import datetime, timezone
+
+import evoagents.provider as provider_module
 
 from evoagents.config import Settings
 from evoagents.provider import HKGAIClient, ProviderError
@@ -56,3 +59,59 @@ def test_prohibited_provider_rejected(tmp_path, monkeypatch, url):
     monkeypatch.setenv("HKGAI_BASE_URL", url)
     with pytest.raises(ValueError):
         Settings.from_env(tmp_path / ".env")
+
+
+@pytest.mark.parametrize("header,expected", [("4", 4.25), ("invalid", 0.75), ("-1", 0.75), ("nan", 0.75), ("999999", 30)])
+def test_rate_limit_respects_retry_after_with_bounded_jitter(monkeypatch, header, expected):
+    delays = []
+    monkeypatch.setattr(provider_module.time, "sleep", delays.append)
+    monkeypatch.setattr(provider_module.random, "uniform", lambda *_: 0.25)
+    responses = iter([
+        httpx.Response(429, headers={"Retry-After": header}),
+        httpx.Response(200, json={"choices": [{"message": {"content": "OK"}}]}),
+    ])
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: next(responses)))
+    try:
+        assert client.complete([]) == "OK"
+        assert delays == [expected]
+        assert client.stats["requests"] == 2
+    finally:
+        client.close()
+
+
+def test_retry_after_http_date(monkeypatch):
+    class FixedDatetime(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 11, 20, tzinfo=timezone.utc)
+
+    monkeypatch.setattr(provider_module, "datetime", FixedDatetime)
+    monkeypatch.setattr(provider_module.random, "uniform", lambda *_: 0)
+    client = HKGAIClient(Settings(api_key="test"))
+    try:
+        assert client._retry_delay(0, httpx.Response(503, headers={"Retry-After": "Fri, 20 Nov 2026 00:00:08 GMT"})) == 8
+        assert client._retry_delay(0, httpx.Response(503, headers={"Retry-After": "Thu, 19 Nov 2026 00:00:00 GMT"})) == 0.5
+    finally:
+        client.close()
+
+
+@pytest.mark.parametrize("network_error", [False, True])
+def test_retries_are_bounded_for_server_and_network_failures(monkeypatch, network_error):
+    delays = []
+    monkeypatch.setattr(provider_module.time, "sleep", delays.append)
+    monkeypatch.setattr(provider_module.random, "uniform", lambda *_: 0.25)
+
+    def handler(request):
+        if network_error:
+            raise httpx.ConnectError("temporary", request=request)
+        return httpx.Response(503)
+
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(handler))
+    try:
+        with pytest.raises(ProviderError):
+            client.complete([])
+        assert delays == [0.75, 1.25]
+        assert client.stats["requests"] == 3
+        assert client.stats["errors"] == 1
+    finally:
+        client.close()

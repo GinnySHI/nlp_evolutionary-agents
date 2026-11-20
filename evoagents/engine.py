@@ -60,6 +60,7 @@ def _boolean(action: dict, key: str) -> bool:
 
 class SessionEngine:
     VERSION = 1
+    REPEATED_TOOL_FAILURE_LIMIT = 3
     ACTION_KEYS = {
         "delegate": {"action", "recipient", "task", "success_criteria", "retry_of"},
         "message": {"action", "recipient", "content"},
@@ -187,6 +188,7 @@ class SessionEngine:
                                "pending": None, "inflight": None, "final_output": None,
                                "next_agent": self.state["coordinator"], "active_tasks": {}, "invalid_actions": 0,
                                "turn_limit": self.state["max_steps"], "started_epoch": time.time(), "ended_epoch": None,
+                               "tool_failure_streaks": {},
                                "metrics": {"elapsed_seconds": 0.0, "active_seconds": 0.0, "agent_turns": 0,
                                            "tool_calls": 0, "fatal_errors": 0, "tool_errors": 0, "invalid_actions": 0,
                                            "subtasks_total": 0, "subtasks_accepted": 0, "subtask_completion_rate": 0.0,
@@ -320,6 +322,8 @@ Answer the user in the language of their request unless they specify otherwise.
         unexpected = set(action) - self.ACTION_KEYS[name]
         if unexpected:
             raise ActionError(f"Unknown fields for {name}: {', '.join(sorted(unexpected))}")
+        if name != "tool":
+            self.state.setdefault("tool_failure_streaks", {}).pop(agent_id, None)
         if name == "delegate":
             recipient = _text(action, "recipient", maximum=40)
             self._agent(recipient)
@@ -556,7 +560,32 @@ Answer the user in the language of their request unless they specify otherwise.
         self._message("tool", json.dumps({"agent_id": agent_id, "name": name, "result": redact(result)}, ensure_ascii=False),
                       recipient=agent_id, kind="tool_result")
         self.state["inflight"] = None
+        self._track_tool_failure(agent_id, name, arguments, result)
         self._save()
+
+    def _track_tool_failure(self, agent_id: str, name: str, arguments: dict, result: dict) -> None:
+        streaks = self.state.setdefault("tool_failure_streaks", {})
+        if result.get("ok") is not False:
+            streaks.pop(agent_id, None)
+            return
+        signature = hashlib.sha256(json.dumps(
+            {"name": name, "arguments": arguments, "error": result.get("error"),
+             "error_type": result.get("error_type")}, sort_keys=True, ensure_ascii=False,
+        ).encode()).hexdigest()
+        previous = streaks.get(agent_id, {})
+        count = previous.get("count", 0) + 1 if previous.get("signature") == signature else 1
+        streaks[agent_id] = {"signature": signature, "count": count}
+        if count == self.REPEATED_TOOL_FAILURE_LIMIT - 1:
+            self._message("system", "The same tool call has failed twice with the same error. Change the arguments or strategy, inspect prerequisites, or ask the human for help.",
+                          recipient=agent_id, kind="loop_warning")
+        if count >= self.REPEATED_TOOL_FAILURE_LIMIT:
+            self.state["pending"] = {
+                "type": "question", "id": uuid4().hex, "agent_id": agent_id, "loop_guard": True,
+                "question": f"{agent_id} repeated the same failing {name} call {count} times. How should it change its approach?",
+                "reason": "Repeated identical tool failures; execution paused to avoid wasting the turn budget.",
+            }
+            self.state["status"] = "waiting_human"
+            self._event("human_question", **self.state["pending"])
 
     def respond(self, text: str, *, approved: bool | None = None) -> dict:
         if not isinstance(text, str) or len(text) > 30_000:
@@ -593,6 +622,8 @@ Answer the user in the language of their request unless they specify otherwise.
                     raise ValueError("Please provide an answer to the question.")
                 self._message("human", text, recipient=agent_id, kind="clarification")
                 self.state.update({"pending": None, "status": "running", "next_agent": agent_id})
+                if pending.get("loop_guard"):
+                    self.state.setdefault("tool_failure_streaks", {}).pop(agent_id, None)
                 if pending.get("recovery"):
                     self.state["inflight"] = None
                     self._event("interrupted_tool_reconciled", agent_id=agent_id)

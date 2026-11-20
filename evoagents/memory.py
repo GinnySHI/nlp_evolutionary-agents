@@ -105,19 +105,36 @@ class AgentMemory:
         return records[-limit:]
 
     def retrieve(self, query: str, *, scope: str = "group", limit: int = 6) -> list[dict[str, Any]]:
+        """Return distinct relevant records from the latest 2000 scoped entries.
+
+        occurrences counts duplicates in that window; sources contains the latest
+        ten references. The full provenance remains in the append-only JSONL.
+        """
         if not 1 <= limit <= 30:
             raise ValueError("Memory retrieval limit must be between 1 and 30.")
-        entries = self.entries(scope=scope)
+        # Keep the append-only audit intact, but avoid spending prompt slots on
+        # identical experience. Different kinds/outcomes remain distinct.
+        grouped = {}
+        for item in self.entries(scope=scope):
+            key = (item.get("kind"), item.get("outcome"), " ".join(item["text"].split()))
+            previous = grouped.pop(key, None)
+            sources = previous["sources"] if previous else []
+            source = {field: item.get(field) for field in ("id", "task_id", "created_at")}
+            grouped[key] = {**item, "occurrences": previous["occurrences"] + 1 if previous else 1,
+                            "sources": (sources + [source])[-10:]}
+        entries = list(grouped.values())
         query_tokens = _tokens(query)
         ranked = []
         for index, item in enumerate(entries):
             tokens = _tokens(item["text"])
-            similarity = len(query_tokens & tokens) / max(1, len(query_tokens | tokens))
-            # Relevant lessons dominate; a slight recency preference breaks ties.
-            score = similarity + (0.025 if item.get("kind") == "lesson" else 0) + 0.005 * (index + 1) / max(1, len(entries))
-            ranked.append((score, index, item))
-        ranked.sort(key=lambda value: (value[0], value[1]), reverse=True)
-        return [item for _, _, item in ranked[:limit]]
+            overlap = query_tokens & tokens
+            if not overlap:
+                continue
+            similarity = len(overlap) / len(query_tokens | tokens)
+            # Prefer lessons and recent records only when relevance is tied.
+            ranked.append((similarity, item.get("kind") == "lesson", index, item))
+        ranked.sort(key=lambda value: value[:3], reverse=True)
+        return [item for _, _, _, item in ranked[:limit]]
 
     def stats(self) -> dict[str, int]:
         group = self.entries(scope="group")

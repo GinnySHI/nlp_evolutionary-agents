@@ -2,8 +2,12 @@
 from __future__ import annotations
 
 import json
+import math
+import random
 import time
 from collections import defaultdict
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Any
 
 import httpx
@@ -16,6 +20,26 @@ class ProviderError(RuntimeError):
 
 
 class HKGAIClient:
+    MAX_RETRY_DELAY = 30.0
+
+    def _retry_delay(self, attempt: int, response: httpx.Response | None = None) -> float:
+        delay = 0.5 * 2**attempt
+        if response is not None:
+            header = response.headers.get("Retry-After", "").strip()
+            try:
+                if header.isascii() and header.isdecimal():
+                    retry_after = float(header)
+                else:
+                    when = parsedate_to_datetime(header)
+                    if when.tzinfo is None:
+                        when = when.replace(tzinfo=timezone.utc)
+                    retry_after = (when - datetime.now(timezone.utc)).total_seconds()
+                if math.isfinite(retry_after) and retry_after >= 0:
+                    delay = max(delay, retry_after)
+            except (ValueError, TypeError, OverflowError):
+                pass
+        return min(self.MAX_RETRY_DELAY, delay + random.uniform(0, 0.5))
+
     def __init__(self, settings: Settings, *, transport: httpx.BaseTransport | None = None):
         if not settings.api_key:
             raise ProviderError("HKGAI_API_KEY is not configured; add it to your local .env file")
@@ -42,12 +66,12 @@ class HKGAIClient:
                 response = self.http.post(self.endpoint, json=payload)
             except (httpx.TimeoutException, httpx.TransportError) as exc:
                 if attempt < 2:
-                    time.sleep(0.5 * 2**attempt)
+                    time.sleep(self._retry_delay(attempt))
                     continue
                 self.stats["errors"] += 1
                 raise ProviderError(f"Model API network error: {type(exc).__name__}") from None
             if response.status_code in {429, 500, 502, 503, 504} and attempt < 2:
-                time.sleep(0.5 * 2**attempt)
+                time.sleep(self._retry_delay(attempt, response))
                 continue
             if response.status_code >= 300:
                 self.stats["errors"] += 1
