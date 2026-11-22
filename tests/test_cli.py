@@ -87,6 +87,19 @@ def test_init_status_and_sessions_do_not_require_key_or_model(local_cli, monkeyp
     assert "api_key" not in state
 
 
+def test_init_persists_custom_tool_allowlists(local_cli, tmp_path):
+    invoke, runtime = local_cli
+    agents = tmp_path / "agents.json"
+    specs = [
+        {"id": "lead", "name": "Lead", "role": "Coordinate", "allowed_tools": []},
+        {"id": "reviewer", "name": "Reviewer", "role": "Review", "allowed_tools": ["read_file"]},
+    ]
+    agents.write_text(json.dumps(specs), encoding="utf-8")
+    assert invoke("init", "team", "--agents", str(agents)) == 0
+    state = json.loads((runtime / "sessions" / "team" / "state.json").read_text())
+    assert state["agents"] == specs
+
+
 @pytest.mark.parametrize("name", ["../outside", "folder/name", "team name", "", "x" * 81])
 def test_bad_session_names_are_rejected(local_cli, capsys, name):
     invoke, runtime = local_cli
@@ -125,12 +138,19 @@ def test_run_question_and_respond_resume_persisted_session(local_cli, monkeypatc
 def test_pending_approval_is_not_auto_approved_and_can_be_denied(local_cli, monkeypatch):
     invoke, runtime = local_cli
     assert invoke("init", "team") == 0
-    set_client(monkeypatch, [{"action": "tool", "name": "run_python", "arguments": {"path": "job.py"}}])
+    set_client(monkeypatch, [
+        {"action": "message", "recipient": "dev", "content": "Run job.py"},
+        {"action": "tool", "name": "run_python", "arguments": {"path": "job.py"}},
+    ])
     assert invoke("run", "team", "--task", "Run a script") == 2
     state_file = runtime / "sessions" / "team" / "state.json"
     state = json.loads(state_file.read_text())
     assert state["pending"]["type"] == "tool_approval"
-    set_client(monkeypatch, [{"action": "finish", "summary": "User declined code execution.", "success": False}])
+    assert state["pending"]["agent_id"] == "dev"
+    set_client(monkeypatch, [
+        {"action": "message", "recipient": "lead", "content": "User declined code execution."},
+        {"action": "finish", "summary": "User declined code execution.", "success": False},
+    ])
     assert invoke("respond", "team", "Do not run", "--deny") == 2
     final = json.loads(state_file.read_text())
     assert final["status"] == "failed"

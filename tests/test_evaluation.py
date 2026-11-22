@@ -110,10 +110,15 @@ def test_batch_never_automatically_approves_critical_operation(tmp_path, monkeyp
         return original(self, agent_id, name, arguments, approved=approved)
 
     monkeypatch.setattr(ToolRunner, "execute", spy)
-    client = ScriptedClient([{"action": "tool", "name": "run_python", "arguments": {"path": "task.py"}}])
+    client = ScriptedClient([
+        {"action": "message", "recipient": "dev", "content": "Run task.py"},
+        {"action": "tool", "name": "run_python", "arguments": {"path": "task.py"}},
+    ])
     result = run_dataset(tmp_path, [
-        {"id": "requires-approval", "session": "same-team", "task": "Execute code", "human_responses": ["yes"], "checks": [check()]},
-        {"id": "blocked", "session": "same-team", "task": "Continue after prior task", "checks": [check()]},
+        {"id": "requires-approval", "session": "same-team", "scenario": "software", "task": "Execute code",
+         "human_responses": ["yes"], "checks": [check(agent="dev")]},
+        {"id": "blocked", "session": "same-team", "scenario": "software", "task": "Continue after prior task",
+         "checks": [check(agent="dev")]},
     ], client)
     assert result["cases"][0]["status"] == "waiting_human"
     assert result["cases"][0]["pending"]["type"] == "tool_approval"

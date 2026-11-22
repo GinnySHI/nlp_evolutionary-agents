@@ -7,6 +7,7 @@ import pytest
 import evoagents.engine as engine_module
 from evoagents.engine import ActionError, AgentSpec, SessionEngine
 from evoagents.memory import atomic_json
+from evoagents.scenarios import scenario
 
 
 class FakeClient:
@@ -84,6 +85,58 @@ def review(task_id="subtask-1", accepted=True):
 
 def finish(success=True):
     return {"action": "finish", "summary": "Work complete", "success": success}
+
+
+def test_reviewer_can_read_but_cannot_write_or_request_code_execution(tmp_path, monkeypatch):
+    monkeypatch.setattr(engine_module, "ToolRunner", FakeTools)
+    client = FakeClient([
+        {"action": "message", "recipient": "reviewer", "content": "Check evidence.md"},
+        {"action": "tool", "name": "write_file", "arguments": {"path": "evidence.md", "content": "changed"}},
+        {"action": "tool", "name": "run_python", "arguments": {"path": "script.py"}},
+        {"action": "tool", "name": "read_file", "arguments": {"path": "evidence.md"}},
+    ])
+    agents = [AgentSpec(**agent) for agent in scenario("smoke")["agents"]]
+    engine = SessionEngine.create(tmp_path / "session", agents, client, max_steps=4)
+    evidence = engine.tools.workspace("reviewer") / "evidence.md"
+    evidence.write_text("original", encoding="utf-8")
+    engine.start_task("Review evidence")
+    result = engine.run()
+
+    advertised = json.loads(client.prompts[1][0]["content"].split("Tool specifications: ", 1)[1])
+    assert {tool["name"] for tool in advertised} == {"read_file"}
+    assert result["metrics"]["invalid_actions"] == 2
+    assert result["pending"] is None
+    assert engine.tools.calls == [("reviewer", "read_file", {"path": "evidence.md"}, False)]
+    assert evidence.read_text(encoding="utf-8") == "original"
+
+
+def test_approval_rechecks_the_persisted_allowlist(tmp_path, monkeypatch):
+    monkeypatch.setattr(engine_module, "ToolRunner", FakeTools)
+    client = FakeClient([
+        {"action": "message", "recipient": "dev", "content": "Run script.py"},
+        {"action": "tool", "name": "run_python", "arguments": {"path": "script.py"}},
+    ])
+    agents = [AgentSpec(**agent) for agent in scenario("software")["agents"]]
+    engine = SessionEngine.create(tmp_path / "session", agents, client)
+    engine.start_task("Run script")
+    pending = engine.run()["pending"]
+    assert pending["type"] == "tool_approval"
+    assert engine.tools.calls == []
+
+    state = json.loads((engine.root / "state.json").read_text(encoding="utf-8"))
+    next(agent for agent in state["agents"] if agent["id"] == "dev")["allowed_tools"] = []
+    atomic_json(engine.root / "state.json", state)
+    reloaded = SessionEngine.load(engine.root, client)
+    with pytest.raises(ValueError, match="unavailable to agent"):
+        reloaded.respond("Run it", approved=True)
+    assert reloaded.tools.calls == []
+    assert reloaded.status()["pending"]["id"] == pending["id"]
+
+
+@pytest.mark.parametrize("tools", ["read_file", ["new_tool"], ["read_file", "read_file"]])
+def test_invalid_tool_allowlists_are_rejected(tools):
+    with pytest.raises(ValueError, match="allowed_tools"):
+        AgentSpec("reviewer", "Reviewer", "Review", allowed_tools=tools)
 
 
 def test_cooperation_review_and_memory_survive_new_task(make_engine):
