@@ -146,7 +146,7 @@ def build_parser() -> argparse.ArgumentParser:
     init = subs.add_parser("init", help="Create an isolated team session")
     init.add_argument("name")
     init.add_argument("--scenario", choices=SCENARIOS, default="software")
-    init.add_argument("--agents", type=Path, help="Optional JSON list of custom {id,name,role} agents")
+    init.add_argument("--agents", type=Path, help="Optional JSON list of agents with id, name, role and optional allowed_tools")
     run = subs.add_parser("run", help="Start a task or resume a session")
     run.add_argument("name")
     group = run.add_mutually_exclusive_group()
@@ -222,13 +222,14 @@ def main(argv: list[str] | None = None) -> int:
             setup = scenario(args.scenario)
             specs = json.loads(args.agents.read_text(encoding="utf-8")) if args.agents else setup["agents"]
             if not isinstance(specs, list) or any(
-                not isinstance(item, dict) or set(item) != {"id", "name", "role"} or
-                any(not isinstance(item[field], str) or not item[field].strip() for field in ("id", "name", "role"))
+                not isinstance(item, dict) or set(item) - {"id", "name", "role", "allowed_tools"} or
+                any(not isinstance(item.get(field), str) or not item[field].strip() for field in ("id", "name", "role"))
                 for item in specs
             ):
-                raise ValueError("Custom agents must be a JSON array of nonempty string id, name and role fields.")
+                raise ValueError("Custom agents require nonempty string id, name and role fields and accept optional allowed_tools.")
+            agents = [AgentSpec(**item) for item in specs]
             with exclusive_session(root):
-                SessionEngine.create(root, [AgentSpec(**item) for item in specs], None, title=setup["title"],
+                SessionEngine.create(root, agents, None, title=setup["title"],
                                      sandbox_backend=settings.sandbox_backend, max_steps=settings.max_steps)
             print(f"Created session: {args.name}\nLocation: {root}\nNext: evo chat {shlex.quote(args.name)}")
             return 0
