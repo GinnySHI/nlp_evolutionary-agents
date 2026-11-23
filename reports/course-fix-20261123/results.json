@@ -1,0 +1,358 @@
+{
+  "date": "2026-11-23",
+  "base_commit": "438496470405a2a646f5048fdbe39b5eb48a0258",
+  "provider": "HKGAI",
+  "model": "t2_hkgai-v3_fp8_1m_e7",
+  "baseline_complete_successes": 0,
+  "baseline_total": 6,
+  "method": "Iterative development; revisions and retries not pooled as unbiased success rate. 120 turns,8192 output tokens; r1 timeout90s,r2-r4 timeout240s. Same original rubric. Model outputs not repaired by evaluators.",
+  "latest_full_attempt": "r4: all six failed on first turn after3 requests each due ConnectError; unauthenticated DNS diagnostic returned gaierror.",
+  "current_source_after_r4": "Overlap-match safety and low-budget reminder added after r4 frozen; tested offline, not real-model verified.",
+  "rows": [
+    {
+      "revision": "course-fix-20261123",
+      "case": "software-1",
+      "engine_status": "failed",
+      "turns": 47,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 48,
+        "prompt_tokens": 758835,
+        "completion_tokens": 35617,
+        "total_tokens": 794452,
+        "calls": 47
+      },
+      "operator_interventions": 2,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/runs/candidate/software/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-20261123",
+      "case": "software-2",
+      "engine_status": "failed",
+      "turns": 3,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 3,
+        "prompt_tokens": 25330,
+        "completion_tokens": 1229,
+        "total_tokens": 26559,
+        "calls": 3
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/runs/candidate/software/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-20261123",
+      "case": "fund-1",
+      "engine_status": "failed",
+      "turns": 39,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 44,
+        "prompt_tokens": 471670,
+        "completion_tokens": 36862,
+        "total_tokens": 508532,
+        "calls": 38,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/runs/candidate/fund/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-20261123",
+      "case": "fund-2",
+      "engine_status": "failed",
+      "turns": 17,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 17,
+        "prompt_tokens": 604162,
+        "completion_tokens": 14090,
+        "total_tokens": 618252,
+        "calls": 17,
+        "errors": 0
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/runs/candidate/fund/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-20261123",
+      "case": "newsroom-1",
+      "engine_status": "completed",
+      "turns": 71,
+      "independent_success": true,
+      "assessment_available": true,
+      "api_stats": {
+        "requests": 76,
+        "prompt_tokens": 1623959,
+        "completion_tokens": 80647,
+        "total_tokens": 1704606,
+        "calls": 73,
+        "truncated_responses": 2,
+        "errors": 2
+      },
+      "operator_interventions": 1,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/runs/candidate/newsroom/results.json",
+      "assessment_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/independent-newsroom-1.json"
+    },
+    {
+      "revision": "course-fix-20261123",
+      "case": "newsroom-2",
+      "engine_status": "failed",
+      "turns": 15,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 20,
+        "prompt_tokens": 699436,
+        "completion_tokens": 7185,
+        "total_tokens": 706621,
+        "calls": 14,
+        "truncated_responses": 0,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/runs/candidate/newsroom/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-r2-20261123",
+      "case": "software-1",
+      "engine_status": "completed",
+      "turns": 60,
+      "independent_success": true,
+      "assessment_available": true,
+      "api_stats": {
+        "requests": 70,
+        "prompt_tokens": 957435,
+        "completion_tokens": 47905,
+        "total_tokens": 1005340,
+        "calls": 64
+      },
+      "operator_interventions": 5,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/software/results.json",
+      "assessment_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/independent-software-1.json"
+    },
+    {
+      "revision": "course-fix-r2-20261123",
+      "case": "software-2",
+      "engine_status": "completed",
+      "turns": 68,
+      "independent_success": false,
+      "assessment_available": true,
+      "api_stats": {
+        "requests": 72,
+        "prompt_tokens": 4738345,
+        "completion_tokens": 77574,
+        "total_tokens": 4815919,
+        "calls": 70,
+        "truncated_responses": 2,
+        "errors": 2
+      },
+      "operator_interventions": 4,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/software/results.json",
+      "assessment_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/independent-software-2.json"
+    },
+    {
+      "revision": "course-fix-r2-20261123",
+      "case": "fund-1",
+      "engine_status": "completed",
+      "turns": 68,
+      "independent_success": true,
+      "assessment_available": true,
+      "api_stats": {
+        "requests": 78,
+        "prompt_tokens": 1154177,
+        "completion_tokens": 75549,
+        "total_tokens": 1229726,
+        "calls": 72
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/results.json",
+      "assessment_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/independent-fund-1.json"
+    },
+    {
+      "revision": "course-fix-r2-20261123",
+      "case": "fund-2",
+      "engine_status": "budget_exhausted",
+      "turns": 120,
+      "independent_success": false,
+      "assessment_available": true,
+      "api_stats": {
+        "requests": 120,
+        "prompt_tokens": 8734417,
+        "completion_tokens": 241704,
+        "total_tokens": 8976121,
+        "calls": 116,
+        "truncated_responses": 4,
+        "errors": 4
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/results.json",
+      "assessment_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/independent-fund-2.json"
+    },
+    {
+      "revision": "course-fix-r3-20261123",
+      "case": "newsroom-1",
+      "engine_status": "completed",
+      "turns": 116,
+      "independent_success": true,
+      "assessment_available": true,
+      "api_stats": {
+        "requests": 121,
+        "prompt_tokens": 2174485,
+        "completion_tokens": 112009,
+        "total_tokens": 2286494,
+        "calls": 116,
+        "truncated_responses": 4,
+        "errors": 4
+      },
+      "operator_interventions": 1,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r3-20261123/runs/candidate/newsroom/results.json",
+      "assessment_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r3-20261123/independent-newsroom-1.json"
+    },
+    {
+      "revision": "course-fix-r3-20261123",
+      "case": "newsroom-2",
+      "engine_status": "budget_exhausted",
+      "turns": 120,
+      "independent_success": false,
+      "assessment_available": true,
+      "api_stats": {
+        "requests": 120,
+        "prompt_tokens": 3262618,
+        "completion_tokens": 64180,
+        "total_tokens": 3326798,
+        "calls": 120,
+        "truncated_responses": 0,
+        "errors": 0
+      },
+      "operator_interventions": 1,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r3-20261123/runs/candidate/newsroom/results.json",
+      "assessment_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r3-20261123/independent-newsroom-2.json"
+    },
+    {
+      "revision": "course-fix-r4-20261123",
+      "case": "software-1",
+      "engine_status": "failed",
+      "turns": 1,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 3,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r4-20261123/runs/candidate/software/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-r4-20261123",
+      "case": "software-2",
+      "engine_status": "failed",
+      "turns": 1,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 3,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r4-20261123/runs/candidate/software/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-r4-20261123",
+      "case": "fund-1",
+      "engine_status": "failed",
+      "turns": 1,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 3,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r4-20261123/runs/candidate/fund/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-r4-20261123",
+      "case": "fund-2",
+      "engine_status": "failed",
+      "turns": 1,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 3,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r4-20261123/runs/candidate/fund/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-r4-20261123",
+      "case": "newsroom-1",
+      "engine_status": "failed",
+      "turns": 1,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 3,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r4-20261123/runs/candidate/newsroom/results.json",
+      "assessment_path": null
+    },
+    {
+      "revision": "course-fix-r4-20261123",
+      "case": "newsroom-2",
+      "engine_status": "failed",
+      "turns": 1,
+      "independent_success": false,
+      "assessment_available": false,
+      "api_stats": {
+        "requests": 3,
+        "errors": 1
+      },
+      "operator_interventions": 0,
+      "results_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r4-20261123/runs/candidate/newsroom/results.json",
+      "assessment_path": null
+    }
+  ],
+  "source_hashes": {
+    "evoagents/__init__.py": "780fa86d5883112c8eea96620fbaf71b72a90750042cb701831ec601dd49b58a",
+    "evoagents/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "evoagents/cli.py": "5341921b32948b9d73cb8e0d20398d951da7e6c2c88a4bdcfca1970739423411",
+    "evoagents/config.py": "1ba1b86ecbf3571ffba56819cb6d3ab011d987a9f011a6400edb40e38d63791f",
+    "evoagents/engine.py": "85b706ae8fbeb5995f38e3d69e6c8d5e3294eace3cd5ce81efc14f76f867ab87",
+    "evoagents/evaluation.py": "63546fd8197dbb1c044d3401261821534efcdd626c62f11c3456df3caaecf81c",
+    "evoagents/memory.py": "00015eb5ef2f16ef8e02b87b629a8173e0c4320385be8058bfdc71b2881f5ac3",
+    "evoagents/provider.py": "78f2bcbbff64153aea92713a9c45fb23db41e1a4915c30e09bd84dfed6fa937f",
+    "evoagents/sandbox.py": "6e2597c0137f1d1fc6044a34d7ec1d4df7aac17e6ef608370982b89ab7aaaa56",
+    "evoagents/scenarios.py": "16b2ccaf8d87a04445dde51806d6b7fcb06a5251695d2f42e1c14551a00922cd",
+    "evoagents/tools.py": "872b6f932a8d34d3ddcfcb77d902ecd4723653871731bd34669b5977a38092fd",
+    "tests/test_cli.py": "c965e485e39866d3f4d477734e69810422b314c18033f0e169d8a616be1510b3",
+    "tests/test_engine.py": "0b8bfbf6114ab117ea9b09ffa476024e264d4787b93d84471b7494469d8bb0ea",
+    "tests/test_evaluation.py": "f881706244833b3c7f54ccc628214ed02132f15719f5618b30514b775583e9ed",
+    "tests/test_file_chunks.py": "b16dfcfbb0be53fea912114474c4afa054403aaeeab546fe0fb30be192e8b635",
+    "tests/test_loop_guard.py": "b571895756aaff9d23339a3c3c9481b42de52dccf31004d7b793bd54a72cbcb5",
+    "tests/test_memory.py": "2dd97bfc50cfd453e2e3f7b570f3aeef60c7df631a6754ea5a3ebda8b4d5bb71",
+    "tests/test_protocol_recovery.py": "15d62ae957b2a4581b3b382ac98faa431765e937eaacdceb1ec880e39d766f51",
+    "tests/test_provider.py": "d7e4ee34119704baeb00ed117f2734c2fc4ebc16d90bf71e969414be66bec506",
+    "tests/test_regressions.py": "1ed6f3d2d4e1841bb0c4ba4da43df54b37f101cb4eaf31442f176902a0f89fd5",
+    "tests/test_sandbox.py": "45b304d3d335088fb31edd42105f056c9954afa0f5b198ac6db4e340d41d99cb",
+    "tests/test_tools.py": "a51befb6962ef5b6fbf9e103b0518b79ae4dae01db9306110aca8943b9139644"
+  },
+  "unit_tests_passed": 239
+}

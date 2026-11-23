@@ -1,0 +1,215 @@
+{
+  "ok": true,
+  "url": "https://www.semiconductors.org/year-to-date-global-semiconductor-sales-top-1-trillion-through-august/",
+  "content_type": "text/html",
+  "truncated": false,
+  "untrusted": true,
+  "retrieved_at": 1795436600.11423,
+  "links": [
+    {
+      "url": "https://www.semiconductors.org/subscriber-login/",
+      "text": "WSTS Login"
+    },
+    {
+      "url": "https://www.semiconductors.org/contact/",
+      "text": "Contact"
+    },
+    {
+      "url": "https://www.semiconductors.org/",
+      "text": "Home"
+    },
+    {
+      "url": "https://www.semiconductors.org/about/mission/",
+      "text": "Mission"
+    },
+    {
+      "url": "https://www.semiconductors.org/about/history/",
+      "text": "History"
+    },
+    {
+      "url": "https://www.semiconductors.org/about/board-of-directors/",
+      "text": "Board of Directors"
+    },
+    {
+      "url": "https://www.semiconductors.org/about/members/",
+      "text": "Members"
+    },
+    {
+      "url": "https://www.semiconductors.org/about/become-a-member/",
+      "text": "Join SIA"
+    },
+    {
+      "url": "https://www.semiconductors.org/about/staff/",
+      "text": "SIA Team"
+    },
+    {
+      "url": "https://www.semiconductors.org/about/partners/",
+      "text": "Partner Organizations"
+    },
+    {
+      "url": "https://www.semiconductors.org/sia-jobs/",
+      "text": "SIA Jobs"
+    },
+    {
+      "url": "https://www.semiconductors.org/semiconductors-101/what-are-semiconductors/",
+      "text": "What are Semiconductors?"
+    },
+    {
+      "url": "https://www.semiconductors.org/semiconductors-101/why-are-semiconductors-important/",
+      "text": "Why are Semiconductors Important?"
+    },
+    {
+      "url": "https://www.semiconductors.org/semiconductors-101/how-have-semiconductors-evolved-over-time/",
+      "text": "How have Semiconductors Evolved Over Time?"
+    },
+    {
+      "url": "https://www.semiconductors.org/semiconductors-101/how-are-semiconductors-made/",
+      "text": "How are Semiconductors Made?"
+    },
+    {
+      "url": "https://www.semiconductors.org/semiconductors-101/what-are-the-end-uses-of-semiconductors/",
+      "text": "What are the End Uses of Semiconductors?"
+    },
+    {
+      "url": "https://www.semiconductors.org/industry-impact/",
+      "text": "U.S. Industry Impact"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/overview/",
+      "text": "Policy Overview"
+    },
+    {
+      "url": "https://www.semiconductors.org/resources/?fwp_resource_types=policy-reports",
+      "text": "Policy Reports"
+    },
+    {
+      "url": "https://www.semiconductors.org/chips/",
+      "text": "Chip Incentives & Investments"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/tax/",
+      "text": "Tax"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/research/",
+      "text": "Research"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/chip_design/",
+      "text": "Chip Design"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/trade/",
+      "text": "Trade"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/export-control-and-national-security-policy/",
+      "text": "Export Control/Nat’l Security"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/workforce/",
+      "text": "Workforce & Immigration"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/environment-health-safety/",
+      "text": "Environment, Health & Safety"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/supply-chain-security/",
+      "text": "Supply Chain Security"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/anti-counterfeiting/",
+      "text": "Anti-Counterfeiting"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/intellectual-property/",
+      "text": "Intellectual Property"
+    },
+    {
+      "url": "https://www.semiconductors.org/policies/emerging-technologies/",
+      "text": "Emerging Technologies"
+    },
+    {
+      "url": "https://www.semiconductors.org/data-resources/market-data/",
+      "text": "Market Data"
+    },
+    {
+      "url": "https://www.semiconductors.org/data-resources/resources/",
+      "text": "Resources"
+    },
+    {
+      "url": "https://www.semiconductors.org/2026-state-of-the-u-s-semiconductor-industry/",
+      "text": "2026 State of the U.S. Semiconductor Industry"
+    },
+    {
+      "url": "https://www.semiconductors.org/resources/2025-sia-factbook/",
+      "text": "2025 Factbook"
+    },
+    {
+      "url": "https://www.semiconductors.org/news-events/latest-news/",
+      "text": "Latest News"
+    },
+    {
+      "url": "https://www.semiconductors.org/category/blog/",
+      "text": "Blog"
+    },
+    {
+      "url": "https://www.semiconductors.org/sia-news-roundup/",
+      "text": "SIA News Roundup"
+    },
+    {
+      "url": "https://www.semiconductors.org/events/2026-sia-awards-dinner/",
+      "text": "2026 SIA Awards Dinner"
+    },
+    {
+      "url": "https://www.semiconductors.org/events/",
+      "text": "Events & Webinars"
+    },
+    {
+      "url": "https://www.semiconductors.org/news-events/awards/",
+      "text": "Awards"
+    },
+    {
+      "url": "https://www.semiconductors.org/sia-news/",
+      "text": "Sign Up for SIA News"
+    },
+    {
+      "url": "https://www.wsts.org/",
+      "text": "World Semiconductor Trade Statistics (WSTS) organization"
+    },
+    {
+      "url": "https://www.semiconductors.org/industry_statistics/wsts_subscription_package/",
+      "text": "WSTS Subscription Package"
+    },
+    {
+      "url": "https://www.semiconductors.org/data-resources/market-data/sia-databook/",
+      "text": "SIA Databook"
+    },
+    {
+      "url": "https://www.semiconductors.org/wp-content/uploads/2026/10/August-2026-GSR-Table-and-Graph.pdf",
+      "text": "August 2026 chart and graph"
+    },
+    {
+      "url": "https://www.semiconductors.org/cdn-cgi/l/email-protection#88ecf8edfcedfafbe7e6c8fbede5e1ebe7e6ecfdebfce7fafba6e7faef",
+      "text": "[email protected]"
+    },
+    {
+      "url": "https://www.semiconductors.org/",
+      "text": "www.semiconductors.org"
+    },
+    {
+      "url": "https://www.semiconductors.org/cdn-cgi/l/email-protection#2940474f46695a4c44404a46474d5c4a5d465b5a07465b4e",
+      "text": "E-mail"
+    },
+    {
+      "url": "https://www.semiconductors.org/sia-news/",
+      "text": "Sign up for SIA News"
+    },
+    {
+      "url": "https://www.semiconductors.org/privacy-policy/",
+      "text": "Privacy Policy"
+    }
+  ],
+  "content": "WSTS Login\nContact\nSkip to content\nToggle navigation\nHome\nAbout\nMission\nHistory\nBoard of Directors\nMembers\nJoin SIA\nSIA Team\nPartner Organizations\nSIA Jobs\nSEMIS 101\nWhat are Semiconductors?\nWhy are Semiconductors Important?\nHow have Semiconductors Evolved Over Time?\nHow are Semiconductors Made?\nWhat are the End Uses of Semiconductors?\nU.S. Industry Impact\nPolicy\nPolicy Overview\nPolicy Reports\nChip Incentives & Investments\nTax\nResearch\nChip Design\nTrade\nExport Control/Nat’l Security\nWorkforce & Immigration\nEnvironment, Health & Safety\nSupply Chain Security\nAnti-Counterfeiting\nIntellectual Property\nEmerging Technologies\nMarket Data & Resources\nMarket Data\nResources\nPolicy Reports\n2026 State of the U.S. Semiconductor Industry\n2025 Factbook\nNews & Events\nLatest News\nBlog\nSIA News Roundup\n2026 SIA Awards Dinner\nEvents & Webinars\nAwards\nSign Up for SIA News\nWSTS Login\nContact\nLatest News\nYear-to-Date Global Semiconductor Sales Top $1 Trillion Through August\nMonday, Oct 05, 2026, 8:00am\nby Semiconductor Industry Association\nWorldwide chip sales in August up 144.3% year-to-year; sales increase 8% Month-to-Month in August\nWASHINGTON, Oct. 5, 2026 – The Semiconductor Industry Association (SIA) today announced global semiconductor sales were $159.7 billion during the month of August 2026, an increase of 8% compared to the July 2026 total of $147.9 billion and 144.3% more than the August 2025 total of $65.4 billion. Monthly sales are compiled by the World Semiconductor Trade Statistics (WSTS) organization and represent a three-month moving average. SIA represents 99% of the U.S. semiconductor industry by revenue and nearly two-thirds of non-U.S. chip firms.\n“The global semiconductor market grew for the 18th consecutive month in August, with sales into the Americas, the Asia Pacific, and China driving strong and sustained year-to-year growth,” said Michael Robbins, SIA president and CEO. “Annual global semiconductor sales have already surpassed $1 trillion through August, reaching this major milestone for the first time ever. With sales projected to exceed $1.6 trillion in 2026, the semiconductor industry is entering an exciting new era of growth and innovation.”\nRegionally, year-to-year sales in August were up in the Americas (180.9%), Asia Pacific/All Other (143.0%), China (131.3%), Europe (98.5%), and Japan (62.3%). Month-to-month sales increased in the Asia Pacific/All Other (9.1%), Japan (8.5%), the Americas (8.2%), Europe (7.5%), and China (6.6%).\nFor comprehensive monthly semiconductor sales data and detailed WSTS forecasts, consider purchasing the WSTS Subscription Package. For detailed historical information about the global semiconductor industry and market, consider ordering the SIA Databook.\n[August 2026 chart and graph]\n###\nMedia Contact\nDylan Peterson\nSemiconductor Industry Association\n812-679-8952\n[email protected]\nAbout SIA\nThe Semiconductor Industry Association (SIA) is the voice of the semiconductor industry, one of America’s top export industries and a key driver of America’s economic strength, national security, and global competitiveness. SIA represents 99% of the U.S. semiconductor industry by revenue and nearly two-thirds of non-U.S. chip firms. Through this coalition, SIA seeks to strengthen leadership of semiconductor manufacturing, design, and research by working with Congress, the Administration, and key industry stakeholders around the world to encourage policies that fuel innovation, propel business, and drive international competition. Learn more at www.semiconductors.org.\nAbout WSTS\nWorld Semiconductor Trade Statistics (WSTS) is an independent non-profit organization representing the vast majority of the world semiconductor industry. The mission of WSTS is to be the respected source of semiconductor market data and forecasts. Founded in 1986, WSTS is the singular source for monthly industry shipment statistics.\n1101 K Street NW Suite 450, Washington, DC  20005\nE-mail\nSign up for SIA News\n© 2026 Semiconductor Industry Association. All Rights Reserved.\nPrivacy Policy"
+}

@@ -1,0 +1,814 @@
+{
+  "session": "course-software",
+  "title": "Software Development Team",
+  "agents": [
+    {
+      "id": "lead",
+      "name": "Technical Lead",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file"
+      ]
+    },
+    {
+      "id": "dev",
+      "name": "Software Developer",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file",
+        "delete_file",
+        "run_python",
+        "search_web",
+        "fetch_url"
+      ]
+    },
+    {
+      "id": "qa",
+      "name": "Test Engineer",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file",
+        "run_python"
+      ]
+    },
+    {
+      "id": "release",
+      "name": "Release Manager",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file",
+        "git_init",
+        "git_status",
+        "git_diff",
+        "git_commit",
+        "git_push"
+      ]
+    }
+  ],
+  "archived_runs": [
+    {
+      "task_id": "28c5a0a7b4454845bb6aaec684d25a84",
+      "status": "completed",
+      "task": "Our team currently manages meeting rooms using a shared spreadsheet. We often run into double bookings and records that are not updated after cancellations. Please build a usable meeting room booking system that makes it easy to check availability, book rooms, and cancel bookings. Show me what you have built and explain how to use it. If you need to understand how we work or need other information",
+      "final_output": "## Meeting Room Booking System v1.0.0 — delivered\n\nAll three subtasks are accepted: dev's implementation (subtask-1, reviewed with source-level evidence), QA's independent verification (subtask-2), and the release README (subtask-3).\n\n### What you get (5 files, shared copies in inbox/dev/ plus README.md)\n| File | Size | Purpose |\n|---|---|---|\n| `booking.py` | 14,708 B | Core logic + JSON store (stdlib only) |\n| `server.py` | 9,726 B | `ThreadingHTTPServer` web server + JSON API, serves the page |\n| `index.html` | 24,373 B | Single self-contained UI (inline CSS/JS, no CDN, works offline) |\n| `selftest.py` | 7,152 B | Plain-assert self-test |\n| `README.md` | 3,463 B | User guide / release notes |\n\n### How to use it (2 steps)\n1. Put all four code files in **one** folder, then run:\n   ```\n   python3 server.py\n   ```\n   (optional: `--port 8080 --data bookings.json --rooms rooms.json`)\n2. Open `http://localhost:8080`, or the LAN URL printed at startup (e.g. `http://192.168.1.20:8080`) so colleagues share **one** calendar. Data lives in a single `bookings.json` next to the server — copy that file to back it up.\n\nDay to day: pick a date (defaults to today) and optionally a room → read the per-room 07:00–20:00 timeline to see free gaps at a glance → book room/date/start/end (15-min steps)/title/organizer → a clashing slot is refused with a message naming the clashing booking, while back-to-back meetings are allowed → cancel with confirm + optional reason: the slot frees instantly and the record stays as a greyed-out, struck-through entry behind the \"show cancelled\" toggle.\n\n### How double bookings are actually prevented\nEvery create runs inside one `threading.Lock` critical section: read all bookings from disk → validate → scan same-room/same-date **active** bookings for overlap using half-open intervals (`start < other.end and end > other.start`, so 10:00–11:00 and 11:00–12:00 coexist) → append → atomic `tempfile` + `os.replace` write. Check-and-insert cannot interleave, s",
+      "metrics": {
+        "elapsed_seconds": 1244.7468700408936,
+        "active_seconds": 623.2234299168922,
+        "agent_turns": 116,
+        "tool_calls": 73,
+        "tool_errors": 3,
+        "invalid_actions": 22,
+        "recovered_responses": 5,
+        "output_limit_errors": null,
+        "fatal_errors": 0,
+        "subtasks_total": 3,
+        "subtasks_accepted": 3,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "checkpoints": 8,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "normalized_actions": 1
+      },
+      "provider": {
+        "active_provider": "deepseek",
+        "calls": 25,
+        "completion_tokens": 26733,
+        "prompt_tokens": 658167,
+        "reasoning_tokens": 12450,
+        "requests": 25,
+        "total_tokens": 684900
+      },
+      "subtasks": [
+        {
+          "id": "subtask-1",
+          "assignee": "dev",
+          "status": "accepted",
+          "review": {
+            "reviewer": "lead",
+            "accepted": true,
+            "reason": "Lead reviewed the delivered files directly in inbox/dev/ (booking.py sha c7a208d…, server.py 0c2aecb…, index.html d9f5e7f…, selftest.py 7660e99…) and validate_file reports index.html valid with no errors. Verified in the code: (a) create_booking computes/validates inputs then enters `with self._lock:` and inside that single critical section re-reads all bookings, scans same-room/same-date active bookings with half-open overlap (_overlaps start<other.end and end>other.start), and only then appends and performs the atomic tempfile+os.replace write — so check-and-insert cannot interleave and double bookings are impossible; the conflict error carries existing=other plus a message naming room/date/time/organizer/title for inline UI display. (b) cancel_booking under the same lock flips status to 'cancelled', stamps cancelled_at and cancel_reason, keeps the record (audit trail), and availability() excludes non-active rows so the slot is immediately rebookable. (c) Validation covers unknown room, real calendar date via datetime.date(), 15-min step, start<end, 07:00–20:00 window, max 8h, required title/organizer, with machine codes matching the spec. (d) Dates are compared as wall-clock strings and times as int minutes; no UTC conversion anywhere, so no day shift. (e) server.py uses ThreadingHTTPServer on 0.0.0.0, exposes rooms/bookings/availability GETs and create/cancel POSTs, maps conflict->409 with {error,message,existing}, validation->400, unknown id->404, malformed JSON->400 invalid_json, unknown path->404, and never lets an exception escape the handler; make_server(port=0) exists so QA can test in-process. (f) index.html passes validate_file. dev's reported selftest run shows 28 PASS with the HTTP-layer sandbox limitation disclosed honestly. Accepted as v1; the HTTP-layer socket round-trip is delegated to QA for independent verification.",
+            "time": "2026-11-23T11:15:28.857917+00:00"
+          }
+        },
+        {
+          "id": "subtask-2",
+          "assignee": "qa",
+          "status": "accepted",
+          "review": {
+            "reviewer": "lead",
+            "accepted": true,
+            "reason": "QA's review is evidence-based and matches what I independently verified by reading the delivered source (booking.py sha c7a208d…, server.py 0c2aecb…, index.html d9f5e7f…) and running validate_file. Confirmed independently: (a) create_booking validates inputs, then inside `with self._lock:` re-reads bookings, checks half-open overlap for same room/date active rows, and only then appends + atomic write — no interleaving window, so double booking is prevented; conflict carries existing=other and a message naming room/date/time/organizer/title. (b) cancel_booking under the lock keeps the record with status='cancelled', cancelled_at and cancel_reason while availability() excludes inactive rows, so the slot frees without losing history. (c) Validation codes/limits and string-date/int-minute comparisons (no UTC conversion) match the spec, so no day shift. (d) server.py maps conflict->409 {error,message,existing}, validation->400, unknown id/path->404, malformed JSON->400, and catches exceptions in the handler. QA's extra value: its own half-open/leap-day/hours/availability/persistence/thread-race (20 threads -> exactly 1 success, 19 conflicts) and in-process handler-dispatch results, which corroborate the design. QA honestly discloses what it could NOT do: dev's selftest.py never reached QA's inbox, socket-level HTTP bind blocked by sandbox, browser JS not executed. Defect D1 (files delivered one directory deep, so `python3 server.py` cannot find index.html in the delivered layout) is a real handoff/packaging problem — I can see it in my own inbox (inbox/dev/inbox/dev/index.html) — and the release package puts all four files flat, which fixes it. D2 (missing index.html returns 500 not 404) is minor and acceptable. No blocker in the source; QA's stated NOT TESTED items are carried forward honestly into my final report.",
+            "time": "2026-11-23T11:20:15.965210+00:00"
+          }
+        },
+        {
+          "id": "subtask-3",
+          "assignee": "release",
+          "status": "accepted",
+          "review": {
+            "reviewer": "lead",
+            "accepted": true,
+            "reason": "Release delivered README.md (3275 bytes, sha a4d8ed8a…) into lead's inbox as inbox/release/README.md; I read it in full and it is accurate against the verified source: it names the four files and one-folder layout, gives the exact quick start (`python3 server.py`, open http://localhost:8080 or the printed LAN URL) with optional `--port/--data/--rooms` flags, explains the 07:00-20:00 per-room timeline for availability, booking fields, that conflicting slots are refused with a message naming the clashing booking and back-to-back is allowed, that cancel confirms + optional reason, instantly frees the slot and keeps a greyed/struck-through audit record behind 'show cancelled', states data lives in one bookings.json to back up with one server per file, documents `python3 selftest.py`, and lists honest v1 limitations (no login, no recurrence, no edit-in-place, single server per data file). The submission honestly discloses what was not done (its own file re-copy, validate_file on three files, git init/commit/tag) rather than claiming success — I hold the four validated files flat and have verified index.html with validate_file, and drop the git tag as optional for this delivery.",
+            "time": "2026-11-23T11:21:10.415331+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "2f75c214f05c48b7bd0f108dfcdae84c",
+      "status": "failed",
+      "task": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room alloca",
+      "final_output": "Model request failed (ProviderError: Model API HTTP 402: request failed; check configuration)",
+      "metrics": {
+        "elapsed_seconds": 108.45645093917847,
+        "active_seconds": 108.44134987518191,
+        "agent_turns": 25,
+        "tool_calls": 17,
+        "tool_errors": 0,
+        "invalid_actions": 3,
+        "recovered_responses": 2,
+        "output_limit_errors": null,
+        "fatal_errors": 1,
+        "subtasks_total": 1,
+        "subtasks_accepted": 0,
+        "subtask_completion_rate": 0.0,
+        "model_claimed_success": null,
+        "peer_reviewed_completion": false,
+        "checkpoints": 2,
+        "reflection_calls": 0,
+        "reflection_failures": 0,
+        "normalized_actions": null
+      },
+      "provider": {
+        "active_provider": "deepseek",
+        "calls": 24,
+        "completion_tokens": 16207,
+        "errors": 1,
+        "invalid_responses": 1,
+        "prompt_tokens": 667556,
+        "protocol_retries": 1,
+        "reasoning_tokens": 9545,
+        "requests": 26,
+        "total_tokens": 683763
+      },
+      "subtasks": [
+        {
+          "id": "subtask-1",
+          "assignee": "dev",
+          "status": "assigned",
+          "review": null
+        }
+      ]
+    }
+  ],
+  "current_run": {
+    "task_id": "12c9c6be49894f2a994698bdb0f1b313",
+    "status": "budget_exhausted",
+    "task": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room alloca",
+    "final_output": "",
+    "metrics": {
+      "elapsed_seconds": 4162.692017793655,
+      "active_seconds": 811.0383129580878,
+      "agent_turns": 120,
+      "tool_calls": 93,
+      "tool_errors": 5,
+      "invalid_actions": 15,
+      "recovered_responses": 7,
+      "output_limit_errors": null,
+      "fatal_errors": 0,
+      "subtasks_total": 4,
+      "subtasks_accepted": 0,
+      "subtask_completion_rate": 0.0,
+      "model_claimed_success": null,
+      "peer_reviewed_completion": false,
+      "checkpoints": 9,
+      "reflection_calls": 0,
+      "reflection_failures": 0,
+      "normalized_actions": 4
+    },
+    "provider": {
+      "active_provider": "deepseek",
+      "calls": 5,
+      "completion_tokens": 5596,
+      "prompt_tokens": 238873,
+      "reasoning_tokens": 3541,
+      "requests": 5,
+      "total_tokens": 244469
+    },
+    "memory": {
+      "lead": {
+        "group_entries": 3,
+        "lessons": 1,
+        "successes": 0,
+        "failures": 1
+      },
+      "dev": {
+        "group_entries": 4,
+        "lessons": 1,
+        "successes": 1,
+        "failures": 1
+      },
+      "qa": {
+        "group_entries": 4,
+        "lessons": 1,
+        "successes": 1,
+        "failures": 1
+      },
+      "release": {
+        "group_entries": 4,
+        "lessons": 1,
+        "successes": 1,
+        "failures": 1
+      }
+    },
+    "subtasks": [
+      {
+        "id": "subtask-1",
+        "assignee": "dev",
+        "status": "assigned",
+        "review": null
+      },
+      {
+        "id": "subtask-2",
+        "assignee": "dev",
+        "status": "assigned",
+        "review": null
+      },
+      {
+        "id": "subtask-3",
+        "assignee": "dev",
+        "status": "assigned",
+        "review": null
+      },
+      {
+        "id": "subtask-4",
+        "assignee": "dev",
+        "status": "assigned",
+        "review": null
+      }
+    ],
+    "pending": null
+  },
+  "event_counts": {
+    "action_applied": 220,
+    "action_normalized": 5,
+    "agent_turn": 261,
+    "approval_requested": 13,
+    "approval_resolved": 13,
+    "budget_exhausted": 1,
+    "invalid_response": 40,
+    "message": 295,
+    "response_recovered": 14,
+    "session_created": 1,
+    "task_failed": 1,
+    "task_finished": 1,
+    "task_started": 3,
+    "tool_started": 183
+  },
+  "human_interventions": [
+    {
+      "time": "2026-11-23T11:00:54.106161+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "Our team currently manages meeting rooms using a shared spreadsheet. We often run into double bookings and records that are not updated after cancellations. Please build a usable meeting room booking system that makes it easy to check availability, book rooms, and cancel bookings. Show me what you have built and explain how to use it. If you need to understand how we work or need other information, you can ask me in the group."
+    },
+    {
+      "time": "2026-11-23T11:03:21.063300+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:04:07.429560+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation c5e7e914da2c461e911913e3a39add48. Approved: self-test writes only to a temp directory and makes no network calls."
+    },
+    {
+      "time": "2026-11-23T11:04:07.429985+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:04:28.137627+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:05:47.057422+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation da25af4ecd124bb0adb48189949e1cea. Approved: re-running the same self-test after the server.py fix."
+    },
+    {
+      "time": "2026-11-23T11:05:47.057860+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:08:03.650163+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:09:06.272240+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation eb2c3193ba9b4966b5358935f535a59a. Approved: QA checks import dev's files read-only and use temp dirs; any HTTP is loopback to a thread-local server. Sandbox network policy still applies."
+    },
+    {
+      "time": "2026-11-23T11:09:06.272793+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:09:26.362344+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:10:55.362593+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation da1deb41c0004c74a19b599b9e3ba304. Approved: in-process handler dispatch with fake streams, no socket binding, read-only against dev's files."
+    },
+    {
+      "time": "2026-11-23T11:10:55.363171+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:11:04.387116+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:13:31.001579+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation eb661c16356b4e0c81ababaf10f2d6c0. Approved: static pattern search over dev's files, no network or process creation."
+    },
+    {
+      "time": "2026-11-23T11:13:31.002213+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:13:44.717125+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:14:32.823658+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation 5de62777342d45e791f14b35206bb1f6. Approved: same self-test, re-run after fixes."
+    },
+    {
+      "time": "2026-11-23T11:14:32.824488+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:16:27.278164+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:18:57.175797+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation ad676014e0ea441392cbf81e072bf682. Approved: final QA verification, read-only on copied files, no sockets or process creation."
+    },
+    {
+      "time": "2026-11-23T11:18:57.176348+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:22:56.724151+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room allocation. Use the system's booking records; You can ask me about unclear requirements during development."
+    },
+    {
+      "time": "2026-11-23T11:38:19.858256+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room allocation. Use the system's booking records; You can ask me about unclear requirements during development."
+    },
+    {
+      "time": "2026-11-23T11:43:16.634625+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:20:32.253075+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation 0851805044c44f03adb6e182050f94d2. Resume the reviewed verify_stats.py execution under the existing sandbox, as authorized by the user request to complete the remaining tasks."
+    },
+    {
+      "time": "2026-11-23T12:20:32.253530+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:20:46.375921+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:21:08.793353+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation b17c3af47e104c0da6021bbf95d1cbbc. Reviewed the corrected top-days assertion; execute this exact updated test in the sandbox and continue."
+    },
+    {
+      "time": "2026-11-23T12:21:08.793743+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:24:43.214180+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:36:11.872086+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation abb0c516a0344048ac7671439adbeba9. Reviewed copy_dash.py: copies the delivered dashboard only inside the sandbox workspace. Continue the authorized completion and verification."
+    },
+    {
+      "time": "2026-11-23T12:36:11.872711+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:38:20.736563+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:39:59.604545+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation ce92bd20d00a4ce483bcd3edb700912b. Operator follow-up under the user completion request: the reviewed copy_dash.py is approved. Independent checkpoint found statistics arithmetic correct, but GET /dashboard returns 500 because DASHBOARD_PATH is undefined in server.py. Fix that binding, ensure index links to /dashboard, and send final versions with unique destination names because send_file never overwrites. README must document dashboard launch/access. Inform lead of these concrete findings and complete actual review; do not claim success merely from syntax validation."
+    },
+    {
+      "time": "2026-11-23T12:39:59.605171+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:41:45.006618+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:43:13.932510+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation a858cde8e5c1403fbb2deb489af12ca1. Reviewed assemble_stats.py: workspace-only assembly, notes and in-process tests are approved. Preserve truthful test output. Note that a top_days fixture may contain equal totals; ensure expected ordering matches the documented deterministic tie break, without weakening real correctness checks."
+    },
+    {
+      "time": "2026-11-23T12:43:13.933242+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:43:30.039412+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:47:07.151047+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation dedd83aabab14982af68115ed737b1cd. Reviewed the extended selftest; approved to run under the existing sandbox. Preserve and report any real failure, then fix the cause before claiming completion."
+    },
+    {
+      "time": "2026-11-23T12:47:07.151900+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    }
+  ],
+  "workspace_files": {
+    "dev/workspace/.tmp/statsgen-0bzi_pwi/bookings.json": {
+      "size": 487,
+      "sha256": "7d992b635aa4482d880518d6090ce7cce11fd04a1b711295d2637df5555a1c3d"
+    },
+    "dev/workspace/.tmp/statsgen-8iud14gz/bookings.json": {
+      "size": 1208,
+      "sha256": "fc3d1b5168be6dee86c133ce4e8fcd304191fa8dc37af9bb02e6405428100555"
+    },
+    "dev/workspace/.tmp/statsgen-_tamhdp1/bookings.json": {
+      "size": 2291,
+      "sha256": "89fdd1ff66243ebdf0175500e475f53015888917598a54d1230fa62836b8ff57"
+    },
+    "dev/workspace/.tmp/statsgen-e9u62jyy/bookings.json": {
+      "size": 2291,
+      "sha256": "e8b3752f58f1903021d7388a45336a6d7feb26317b9251bb47d0fa1af54fdc78"
+    },
+    "dev/workspace/.tmp/statsgen-htr21woo/bookings.json": {
+      "size": 404,
+      "sha256": "116f133799ecd56a713e83c24a161568de68c79e198537f57f2bb61e0b0edf42"
+    },
+    "dev/workspace/.tmp/statsgen-o2u1qr66/bookings.json": {
+      "size": 1208,
+      "sha256": "9a8ef53e41519ced4be3e3a749cb796169431f6ad7e79f3dbdf216d0cb1b90a5"
+    },
+    "dev/workspace/NOTES-dashboard.md": {
+      "size": 1148,
+      "sha256": "af24150c3c04017fdbffdf5e5756d57ea522bac52361bcb55269032e62ec90c0"
+    },
+    "dev/workspace/__pycache__/booking.cpython-312.pyc": {
+      "size": 29604,
+      "sha256": "cf805a3a512fb43474a5b401809f5bc1c4a70c91d9da3607c02100b9117cd2e6"
+    },
+    "dev/workspace/__pycache__/server.cpython-312.pyc": {
+      "size": 18360,
+      "sha256": "7149ef8bd52fa201a3e626141a3a63538817485dc3cdbc3c9a89a3604bc969bc"
+    },
+    "dev/workspace/analytics.py": {
+      "size": 9769,
+      "sha256": "2673511e1ebd10a6a83d46a2518f8022e399c46d3855241dd79488db83142f5b"
+    },
+    "dev/workspace/assemble_stats.py": {
+      "size": 11613,
+      "sha256": "5b086569b9653be4663218c1e9be292e0f6b70362f13a69ac27052c9c7074bb1"
+    },
+    "dev/workspace/booking.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "dev/workspace/copy_dash.py": {
+      "size": 766,
+      "sha256": "2f98552651d9ced1fa22078844c621ec7a4f4687d617c1d1199569d021f3951a"
+    },
+    "dev/workspace/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "dev/workspace/inbox/lead/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "dev/workspace/index.html": {
+      "size": 24576,
+      "sha256": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6"
+    },
+    "dev/workspace/selftest.py": {
+      "size": 13480,
+      "sha256": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+    },
+    "dev/workspace/server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "dev/workspace/verify_stats.py": {
+      "size": 7791,
+      "sha256": "2c86fe78703c21ae7073994129464f54563105bfb8b849bcb303fa26fa75323d"
+    },
+    "lead/workspace/README.md": {
+      "size": 3463,
+      "sha256": "00fb8e3bc8a5b3aaac34e869f4bb26b2f023ec7b4fc2c4a926261eed2e4b724b"
+    },
+    "lead/workspace/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "lead/workspace/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "lead/workspace/inbox/dev/booking_dash.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "lead/workspace/inbox/dev/booking_py_v2.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "lead/workspace/inbox/dev/booking_v2.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "lead/workspace/inbox/dev/inbox/dev/index.html": {
+      "size": 24373,
+      "sha256": "d9f5e7fcf10144cce36c16ade7e0609ee76a9c46033b02e8d665247bfd26a8de"
+    },
+    "lead/workspace/inbox/dev/index.html": {
+      "size": 24373,
+      "sha256": "d9f5e7fcf10144cce36c16ade7e0609ee76a9c46033b02e8d665247bfd26a8de"
+    },
+    "lead/workspace/inbox/dev/selftest.py": {
+      "size": 7152,
+      "sha256": "7660e9951c68bbc103068ac348975bbc6464f487734f472dc132382498189797"
+    },
+    "lead/workspace/inbox/dev/server.py": {
+      "size": 9726,
+      "sha256": "0c2aecb42c61c1b8252c7ababf287d2cd357398188f727a57421cf1db7195d33"
+    },
+    "lead/workspace/inbox/dev/v2_selftest.py": {
+      "size": 13480,
+      "sha256": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+    },
+    "lead/workspace/inbox/dev/v2_server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "lead/workspace/inbox/release/README.md": {
+      "size": 3275,
+      "sha256": "a4d8ed8a3c5d5bf0cfe11979b5205edcc2f7972be0a6029858e7481f95b3b2e8"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/__pycache__/booking.cpython-312.pyc": {
+      "size": 19988,
+      "sha256": "44145612b7430cd1fd9215612a035b2f1847c57f4bdb664b492e1c09962aa5ed"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/__pycache__/server.cpython-312.pyc": {
+      "size": 16209,
+      "sha256": "1f0dad021dc64de9bfafd53df424f8ee85f1cdc5657d74c687ec8969382dc87a"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/http.json": {
+      "size": 432,
+      "sha256": "dd6ddbd39ce4cc842263e1eabb57f707924c69df36f16dd2071eb054a47637f1"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/logic.json": {
+      "size": 2329,
+      "sha256": "49110d4a61e0a827f512b37f4ee42c47a7f6d511ed8a055c2f01aa6bbd8fba0f"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/race.json": {
+      "size": 406,
+      "sha256": "dc2abec262bf43bb52babe278e87420f2bddb189c27a011fdb300474641e29ac"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/server.py": {
+      "size": 9726,
+      "sha256": "0c2aecb42c61c1b8252c7ababf287d2cd357398188f727a57421cf1db7195d33"
+    },
+    "qa/workspace/.tmp/qa_http_m6x3f9a1/http.json": {
+      "size": 436,
+      "sha256": "3f39430344f1066b8a288c77a70a57fb2729442143f1abc3b3e844e2793f855a"
+    },
+    "qa/workspace/.tmp/tmp2afp717y/bookings.json": {
+      "size": 791,
+      "sha256": "215100b8e5e1f4455b1f8e2c0b86f9e86e5fdf7b0e9ab03537aed8f09d3e7f24"
+    },
+    "qa/workspace/.tmp/tmp2oijy2gs/bookings.json": {
+      "size": 793,
+      "sha256": "f342176af661f4d9ee9a69a13499928bb4f37f0cbd950d89175ef06f767e4b22"
+    },
+    "qa/workspace/.tmp/tmp3sf6gg6l/bookings.json": {
+      "size": 424,
+      "sha256": "c694e6a0f35b7b0e6c1206e6c85bb391f85f4e2fe7b30d32c76f5957b8182090"
+    },
+    "qa/workspace/.tmp/tmp3uw_mklo/bookings.json": {
+      "size": 410,
+      "sha256": "c73c9047ca9eca6a9bf3bce19e50460dc62ae7ba89d2747962b62b08061dcbf2"
+    },
+    "qa/workspace/.tmp/tmp59agm1o8/bookings.json": {
+      "size": 779,
+      "sha256": "d18b3736ae1816515fc916b6a40ffc04209167e205e72adeb44036a29644ee1b"
+    },
+    "qa/workspace/.tmp/tmpa5gozlrh/bookings.json": {
+      "size": 402,
+      "sha256": "31c2b2e8cff36d0932b35e109e60b9fd03aa96443ac72e918c42dcb7ebb92f09"
+    },
+    "qa/workspace/.tmp/tmpeklrunvn/bookings.json": {
+      "size": 404,
+      "sha256": "2d072a6b5c791c09612aefdcda39b9064a450c8185a24ae2e7754b71894e7b65"
+    },
+    "qa/workspace/.tmp/tmphq47r2ki/bookings.json": {
+      "size": 1583,
+      "sha256": "a2ebb7776ebfe1ab74d9139c4c4a5a42b08eb33f6a4f5634044cfb68204f561c"
+    },
+    "qa/workspace/.tmp/tmpk4n85o45/bookings.json": {
+      "size": 404,
+      "sha256": "dbde772da0981e4e6567f1b3f9e55220e5f6c0c50e45cba7033c67991a7aafd3"
+    },
+    "qa/workspace/.tmp/tmpvrtxs0v2/bookings.json": {
+      "size": 404,
+      "sha256": "e92badc327d65caea3040cb3bcd469319ebe9aa4e03253ca9738776dd8a611a3"
+    },
+    "qa/workspace/.tmp/tmpxvw4htkn/bookings.json": {
+      "size": 814,
+      "sha256": "4cfdd0d47e83214ecce7130b2ef042bbf4ae79fd8b93617010bfd8e1e1dde0c9"
+    },
+    "qa/workspace/inbox/dev/__pycache__/booking.cpython-312.pyc": {
+      "size": 19975,
+      "sha256": "7aca6d0a8cf63fba6b3b27db25e4370fa0d59617db05ac36889965161d27bc98"
+    },
+    "qa/workspace/inbox/dev/__pycache__/server.cpython-312.pyc": {
+      "size": 16196,
+      "sha256": "6ffe010420f7eb6f8049717d5544b1725e7854f76fa6e6160e8f0e08490546cc"
+    },
+    "qa/workspace/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "qa/workspace/inbox/dev/inbox/dev/index.html": {
+      "size": 24373,
+      "sha256": "d9f5e7fcf10144cce36c16ade7e0609ee76a9c46033b02e8d665247bfd26a8de"
+    },
+    "qa/workspace/inbox/dev/server.py": {
+      "size": 9726,
+      "sha256": "0c2aecb42c61c1b8252c7ababf287d2cd357398188f727a57421cf1db7195d33"
+    },
+    "qa/workspace/inbox/lead/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "qa/workspace/inbox/lead/selftest.py": {
+      "size": 7152,
+      "sha256": "7660e9951c68bbc103068ac348975bbc6464f487734f472dc132382498189797"
+    },
+    "qa/workspace/qa_checks.py": {
+      "size": 14433,
+      "sha256": "e387dcf1a1ec9b49df18f8f70cfd324faebcc8b5d39bd4aa0cab16eee60f36be"
+    },
+    "qa/workspace/qa_final.py": {
+      "size": 10184,
+      "sha256": "3b301d3f8343047e9d2cd4813800aa131a5906cabc30005175baf036ac99bd00"
+    },
+    "qa/workspace/qa_grep.py": {
+      "size": 1140,
+      "sha256": "6740eb4aaf985307d8ecad4b858f804f63667e009cd4dbd2cba3363f871db864"
+    },
+    "qa/workspace/qa_http.py": {
+      "size": 6661,
+      "sha256": "6496c80944cd16a63b80f39a4a3d652a2e34458fcd19fa538b2be9f990363567"
+    },
+    "qa/workspace/qa_report.md": {
+      "size": 5885,
+      "sha256": "cccffe860aecaa4169feda8440ca4bdabae2b305544038c6f25c8a127a426cbe"
+    },
+    "release/workspace/README.md": {
+      "size": 3275,
+      "sha256": "a4d8ed8a3c5d5bf0cfe11979b5205edcc2f7972be0a6029858e7481f95b3b2e8"
+    },
+    "release/workspace/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "release/workspace/inbox/dev/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "transfers.jsonl": {
+      "size": 4416,
+      "sha256": "1c57b1699f78ef680a831635f874ee9c688ed1798c3001df2af272e08efda393"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "case_id": "newsroom-1",
+  "run": "course-fix-20261123",
+  "assessor": "independent Codex reviewer",
+  "rubric": "../course-comparison-20261123/content-rubric.md",
+  "status": "completed",
+  "verified_success": true,
+  "snapshot": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-20261123/runs/candidate/newsroom/snapshots/newsroom-1",
+  "generated_artifacts_modified": false,
+  "criteria": [
+    {
+      "id": "specific_recent_event",
+      "passed": true,
+      "evidence": "Main article identifies the HKUST–HSBC framework agreement and AI & Emerging Technology Institute, dated 2026-11-03, within the declared 12-month window."
+    },
+    {
+      "id": "investigation_and_factuality",
+      "passed": true,
+      "evidence": "Compared actual article against full successful fetch_url bodies in events.jsonl lines 68 (reporter) and 205 (fact_checker). Date, anchor-academic-partner role, FinTech Week signing, focus areas, 2022/e-HKD background agree. Both long quotations match after typographic apostrophe and whitespace normalization."
+    },
+    {
+      "id": "campus_relevance_and_context",
+      "passed": true,
+      "evidence": "Separate student/faculty relevance sections connect AI upskilling and research collaboration; absent program/funding details and single-source limitation explicitly identified."
+    },
+    {
+      "id": "multiple_channel_outputs",
+      "passed": true,
+      "evidence": "Substantive main campus-news article plus a shorter newsletter/social adaptation with headline and key points. README explains replacing the publication URL placeholder when publishing; publication itself was not required."
+    }
+  ],
+  "source_evidence": [
+    {
+      "url": "https://hkust.edu.hk/news/hkust-and-hsbc-forge-strategic-partnership-advance-ai-emerging-technologies-and-financial",
+      "audit_lines": [
+        68,
+        205
+      ],
+      "result_ok": true,
+      "truncated": false,
+      "body_characters": 12392,
+      "claim_checks": [
+        "date 2026-11-03",
+        "anchor academic partner",
+        "signed during Hong Kong FinTech Week",
+        "AI upskilling and privacy-enhancing technologies",
+        "2022 partnership and e-HKD Pilot Programme"
+      ],
+      "quote_checks": [
+        true,
+        true
+      ]
+    },
+    {
+      "url": "https://www.hsbc.com/news-and-views/news/media-releases",
+      "scope": "First-page listing check only, explicitly disclosed; not an independent corroborating partnership release."
+    }
+  ],
+  "minor_notes": [
+    "README calls this the most recent fully corroborated event, but recon also lists a later Unitree announcement. The publication article does not make that superlative claim; remove it from delivery notes in a future revision.",
+    "The short-version live article link is a publication-time placeholder. README explicitly instructs the publisher to replace it. No external publication was requested.",
+    "No new network fetch was performed by this reviewer; independent verification used preserved raw fetch results, not the model-written fact-check assertions. Single-source reporting limitation remains."
+  ],
+  "artifact_sha256": {
+    "final_article.md": "a91dab4ece37fd7e909dfb25667c3d71d2ae1138e5aeb7722120367691e23832",
+    "final_short_version.md": "43bb6270e5548f81281e5eccf2c98db2f996bacbdd5e0c0d0289bbba5ac6e609",
+    "factcheck.md": "5ad639e38aa63705656efe5b265513f026714617b54e2d4c4cfdeab9b3a929a4",
+    "README.md": "2933f0e62d4ae6905aa5a77d3a97c0a4af3cb82c1ceb9e28ad095a6aa3555b59"
+  }
+}

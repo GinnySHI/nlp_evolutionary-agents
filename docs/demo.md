@@ -1,6 +1,6 @@
 # 展示流程建议
 
-1. 运行 `./run.sh doctor`，解释指定的 HKGAI 模型和隔离后端。
+1. 运行 `./run.sh doctor`，解释当前配置的 DeepSeek 或 HKGAI 模型与隔离后端；课程推荐配置见 README。
 2. 运行 `./run.sh init demo --scenario software`，展示四位成员的角色。
 3. 运行 `./run.sh chat demo`，提交一个范围适合现场演示的小任务，观察模型自行委派和交接。
 4. 遇到需求问题时现场回答。遇到执行/删除/提交等操作，展示具体文件和参数后批准或拒绝。

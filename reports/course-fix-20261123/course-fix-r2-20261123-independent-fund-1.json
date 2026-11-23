@@ -1,0 +1,133 @@
+{
+  "task": "fund-1",
+  "source_revision_label": "r2 development validation",
+  "review_date": "2026-11-23",
+  "rubric": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-comparison-20261123/content-rubric.md",
+  "snapshot": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1",
+  "engine_status": "completed",
+  "agent_turns": 68,
+  "independent_acceptance": "pass",
+  "criteria_passed": 4,
+  "criteria_total": 4,
+  "task_pass": true,
+  "criteria": [
+    {
+      "id": 1,
+      "status": "pass",
+      "finding": "The final proposal and both introductions contain identifiable fund/stock allocations totaling 100% and HKD 1,000,000. Main weights 42+5+10+8+8+7+20=100; six satellites sum to 7%. US-stock exposure is explicit; international stocks and bonds are disclosed."
+    },
+    {
+      "id": 2,
+      "status": "pass",
+      "finding": "The research memo and assumptions file supply traceable source URLs and access dates across Multpl and Stock Analysis. Five central factual claims were corroborated against recorded fetch results, including facts from both domains. Quoted prices are dated 2026-11-20 and planning returns/volatility are labeled assumptions."
+    },
+    {
+      "id": 3,
+      "status": "pass",
+      "finding": "Proposal covers 5–10 year horizon, stated risk profile, broad vs sector/single-stock exposure, overlapping technology/semiconductor holdings, valuation/rate risk, losses exceeding 25%, USD/HKD peg, fees, dividend withholding and estate-tax exposure. Severe drawdown is disclosed and acceptance made conditional; no trades were executed. This passes the qualitative course rubric, not a professional suitability certification."
+    },
+    {
+      "id": 4,
+      "status": "pass",
+      "finding": "A substantive plain-English introduction explains holdings, diversification, risks and fees, alongside the full proposal. Monitoring and semiannual/5-percentage-point rebalancing rules are explicit. A self-contained optional HTML introduction is also present; slide navigation is not an essential fund-1 criterion."
+    }
+  ],
+  "corroborated_claims": [
+    {
+      "claim": "CAPE 36.44; supports elevated-valuation discussion",
+      "source_url": "https://www.multpl.com/shiller-pe",
+      "verification": "corroborated by recorded successful fetch_url response; source text independently read by reviewer",
+      "recorded_message_index_zero_based": 5,
+      "retrieved_at": 1795421711.727495,
+      "excerpt": "Shiller PE Ratio:\n36.44",
+      "record_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/state.json"
+    },
+    {
+      "claim": "10-year Treasury rate 4.92%, dated market close 2026-11-20",
+      "source_url": "https://www.multpl.com/10-year-treasury-rate",
+      "verification": "corroborated by recorded successful fetch_url response; source text independently read by reviewer",
+      "recorded_message_index_zero_based": 6,
+      "retrieved_at": 1795421742.293858,
+      "excerpt": "4.92%\n-12.00 bps\nAt market close Fri Nov 20, 2026",
+      "record_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/state.json"
+    },
+    {
+      "claim": "VOO expense ratio 0.03%; supports low-cost core rationale",
+      "source_url": "https://stockanalysis.com/etf/voo/",
+      "verification": "corroborated by recorded successful fetch_url response; source text independently read by reviewer",
+      "recorded_message_index_zero_based": 11,
+      "retrieved_at": 1795421983.851254,
+      "excerpt": "Expense Ratio0.03%",
+      "record_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/state.json"
+    },
+    {
+      "claim": "SOXX expense ratio 0.33%, forward P/E 12.55",
+      "source_url": "https://stockanalysis.com/etf/soxx/",
+      "verification": "corroborated by recorded successful fetch_url response; source text independently read by reviewer",
+      "recorded_message_index_zero_based": 10,
+      "retrieved_at": 1795421970.652102,
+      "excerpt": "Expense Ratio0.33%\nPE Ratio21.80\nForward PE12.55",
+      "record_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/state.json"
+    },
+    {
+      "claim": "SOXX has 34 holdings in recorded page; NVDA weight 6.25%",
+      "source_url": "https://stockanalysis.com/etf/soxx/",
+      "verification": "corroborated by recorded successful fetch_url response; source text independently read by reviewer",
+      "recorded_message_index_zero_based": 10,
+      "retrieved_at": 1795421970.652102,
+      "excerpt": "NVIDIA CorporationNVDA6.25%",
+      "record_path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/state.json"
+    }
+  ],
+  "caveats": [
+    "The risk probabilities (3–4% annual loss beyond 25%, 20–30% over 5–10 years) are explicitly assumptions, but no distribution or calculation is supplied and calendar-year loss differs from peak-to-trough drawdown. They should not be presented as empirically validated estimates.",
+    "The moderate stress calculation -20.8% is arithmetically consistent with 72% broad equity at -25%, 8% semiconductor sleeve at -40%, and 20% bonds at +2%. It does not separately stress all estimated 16–17% look-through semiconductor exposure. The severe-loss disclosure remains clear.",
+    "The main proposal makes buying back to target after a 22% decline conditional on renewed risk acceptance; the short introduction and HTML omit that condition in their numbered next steps, although both elsewhere require the client to accept risk beyond 25%. This is a communication inconsistency.",
+    "Tax discussion is approximate and flagged for verification. The suggestion that an unspecified Hong Kong broker structure mitigates US estate-tax exposure is not substantiated; the report does not verify it. It is not relied upon for the pass.",
+    "The duplicated root client_intro.md says its HTML is in the same folder, but HTML is under inbox/marketing. The README and final output give the correct location.",
+    "Some event narrative is sourced from a secondary news-feed excerpt rather than an independently opened primary article. Numeric source corroboration here is stronger than the supporting news narrative."
+  ],
+  "verification_limits": [
+    "No new web requests were made: the rubric permits independently inspecting recorded retrieved evidence, which is preserved in the immutable task snapshot.",
+    "No generated model artifacts were modified or supplemented.",
+    "HTML intro was inspected statically, not browser-tested; HTML navigation is not mandatory for fund-1.",
+    "This evaluation concerns a hypothetical fixture, not advice for the human user."
+  ],
+  "artifact_manifest": [
+    {
+      "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/agents/fund_manager/workspace/portfolio_proposal.md",
+      "bytes": 7454,
+      "sha256": "8c86eccd571f7b6a07bb9b8fdcaef8741ac5b4a433453627914e6e69cf03fd3d"
+    },
+    {
+      "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/agents/fund_manager/workspace/README.md",
+      "bytes": 5139,
+      "sha256": "1882d8fbb062ba8a3047b1da2e6f2008dcf1d5a663e68792891332f95c8f47b4"
+    },
+    {
+      "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/agents/fund_manager/workspace/client_intro.md",
+      "bytes": 3222,
+      "sha256": "ef79fdddd65db18f0bce9319f51c713c0ea1c8025449a6e2f7d33508c1bb84a6"
+    },
+    {
+      "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/agents/fund_manager/workspace/inbox/marketing/client_intro.md",
+      "bytes": 3222,
+      "sha256": "ef79fdddd65db18f0bce9319f51c713c0ea1c8025449a6e2f7d33508c1bb84a6"
+    },
+    {
+      "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/agents/fund_manager/workspace/inbox/marketing/client_intro.html",
+      "bytes": 13827,
+      "sha256": "ed1292fb786b67d534407a68669efdd4ea64772cf6125c0abbef36cca59a8549"
+    },
+    {
+      "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/agents/fund_manager/workspace/inbox/research/research_memo.md",
+      "bytes": 8474,
+      "sha256": "8704ebebe5c4b7073640a96c35ca90faacaf6726aeb884ffe6f8be8c9140e30a"
+    },
+    {
+      "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-1/agents/fund_manager/workspace/inbox/research/inbox/research/assumptions.json",
+      "bytes": 4309,
+      "sha256": "ec75f5380ee1d6c6346b0d122f2a79f242585c72c08f765e6cbc68eea04ee81c"
+    }
+  ]
+}

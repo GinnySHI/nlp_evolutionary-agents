@@ -1,0 +1,23 @@
+{
+  "label": "Resume follow-up: parser ambiguity and reproducible default configuration",
+  "recorded_at": "2026-11-23T12:21:56.659105+00:00",
+  "baseline_tests": 296,
+  "files_before": {
+    "evoagents/engine.py": "4db4bf6e6828c535c4bcda7e02d2f4d8a426006281732c428f32388bb1be9d90",
+    "tests/test_response_recovery.py": "bc84423494783ea739822e9326fad8ef0072035aaac65d404a6f93d86f0ebb78",
+    ".env.example": "fbe3fd24bdfaab67ba144ca5ab60b2c96709854fecc546a805e94549338ad7bb",
+    "README.md": "db990ecd5fb664cab65ad0d2cd52086f63253e74d720258d4fa5ac1883267457"
+  },
+  "note": "software-2 was already running in a process that loaded the earlier engine. Newly started processes load these changes; task measurements span revisions.",
+  "completed_at": "2026-11-23T12:22:26.012223+00:00",
+  "files_after": {
+    "evoagents/engine.py": "b1d54bd23b11f1b475cc0ade8a6d357bde7f3ea072c8610e419c7a1e1768d1c7",
+    "tests/test_response_recovery.py": "90968b9a27a127c298c38c5f17cf90dc34c88f87cb14ee5f5d92b452b946d7d1",
+    ".env.example": "8a5836ac44ad6f91a48c4e1777d2b24853487da46dcd64bf565ab43c176b4fee",
+    "README.md": "43c9c36681dcfa462d2873484ca3864fbc84727103b8fba63dd24fd393570f4c"
+  },
+  "test_output": "reports/course-deepseek-20261123/unit-tests.txt",
+  "final_tests_passed": 301,
+  "tests_added_this_followup": 5,
+  "test_seconds": 4.35
+}

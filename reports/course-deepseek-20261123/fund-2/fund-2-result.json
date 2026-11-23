@@ -1,0 +1,276 @@
+{
+  "case": "fund-2",
+  "reviewed_at": "2026-11-23T12:23:20.140855+00:00",
+  "artifact": ".evoagents/sessions/course-fund/agents/fund_manager/workspace/semis_deck.html",
+  "sha256": "2385d9adbcb0c9ba67d6a6a253c906beeb1666869adcfb069b7803c0ffc8cdb5",
+  "bytes": 48941,
+  "artifact_modified": false,
+  "validate_file": {
+    "ok": true,
+    "path": "semis_deck.html",
+    "bytes": 48941,
+    "sha256": "2385d9adbcb0c9ba67d6a6a253c906beeb1666869adcfb069b7803c0ffc8cdb5",
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "scope": "Static syntax/structure only. Does not execute code or verify facts, UI, or functionality."
+  },
+  "structure": {
+    "slide_count": 19,
+    "ids": {
+      "bar": 1,
+      "deck": 1,
+      "counter": 1,
+      "prev": 1,
+      "next": 1
+    },
+    "duplicate_ids": [],
+    "repeated_topic_slides": {
+      "9 · Economics and valuation": [
+        10,
+        13
+      ],
+      "10 · Investment implications": [
+        11,
+        14
+      ]
+    },
+    "identical_section_count": 0,
+    "static_counter": "1 / 16",
+    "script_count": 1,
+    "slides": [
+      {
+        "position": 1,
+        "kicker": "Internal fund-team presentation · 23 November 2026",
+        "sha256": "79df0dfd2056152f5263d99e349eb5df47b6de090881450518e33f9d7efd4ca0"
+      },
+      {
+        "position": 2,
+        "kicker": "1 · Executive summary",
+        "sha256": "2bbab95234d060f4611a660ef4356228b0e62f0a95e8b067ec0dd32c464a2fc2"
+      },
+      {
+        "position": 3,
+        "kicker": "2 · Where the cycle stands",
+        "sha256": "f0718645c7212ba1fa23680df7f10d4391cde7ea035caf3b1a5895c0945a41b8"
+      },
+      {
+        "position": 4,
+        "kicker": "3 · Evidence discipline",
+        "sha256": "6ead0f775e70e67aba825be5923c3ff2601a77a1a51fe05b503a61d8c8c6764a"
+      },
+      {
+        "position": 5,
+        "kicker": "4 · AI and datacenter demand",
+        "sha256": "a8639376962029d481f5c7a62a6ff6e41189444c1c940bb6003091419679f490"
+      },
+      {
+        "position": 6,
+        "kicker": "5 · Memory and HBM",
+        "sha256": "6ad09c127167e5bde166c9f576fbfa85002d926f46b4b7c7e48140d4d4cd04cc"
+      },
+      {
+        "position": 7,
+        "kicker": "6 · Leading-edge manufacturing and equipment",
+        "sha256": "4dce09fd34452d523094a1a1962e4258052309542e2b1af3c82ad1275e3b136d"
+      },
+      {
+        "position": 8,
+        "kicker": "7 · China and export controls",
+        "sha256": "4c19c0e775dda7ef447262016a5eb8c03ebfa1be240e828fb39265224959f0e9"
+      },
+      {
+        "position": 9,
+        "kicker": "8 · Structural demand beyond AI",
+        "sha256": "ad8c1cbba3c830928b57921d79624df7d8084877998ba978bcb43110f376d517"
+      },
+      {
+        "position": 10,
+        "kicker": "9 · Economics and valuation",
+        "sha256": "88b94fd888dc547773bd9107173c7aa11caa672a4062633b1404ee005ee8cd7d"
+      },
+      {
+        "position": 11,
+        "kicker": "10 · Investment implications",
+        "sha256": "378db46c18f648ee6ead13faaeb3c15b342d18873553708145295035aa197c6b"
+      },
+      {
+        "position": 12,
+        "kicker": "11 · Key risks",
+        "sha256": "243ce4ec8f2dfd1721e3eb4b82d7ad56d7477b27963b9670c37ba7a34ab8397c"
+      },
+      {
+        "position": 13,
+        "kicker": "9 · Economics and valuation",
+        "sha256": "3b9d76240969e211e17e238f9a42d4a7d3460d7f35bb5df0cdd09aad55a45c55"
+      },
+      {
+        "position": 14,
+        "kicker": "10 · Investment implications",
+        "sha256": "37a59d8d0b6c23a35127408443058ccf4b0c868916b9640d9300643a8df3023f"
+      },
+      {
+        "position": 15,
+        "kicker": "12 · Scenarios 2027–2029",
+        "sha256": "1b3ab854213da2d590f7745df5471ac6444c84aeba8feddc1171c5f0a821f1dc"
+      },
+      {
+        "position": 16,
+        "kicker": "13 · Signposts",
+        "sha256": "8abdeaec460027158087931add31eee587537e89c052812ae204603ea70a5890"
+      },
+      {
+        "position": 17,
+        "kicker": "14 · Key numbers",
+        "sha256": "96f3d3eb885584ed96e7cad919ea12298821d20a70a8a9d14a5c7746ce9bd85a"
+      },
+      {
+        "position": 18,
+        "kicker": "15 · Conclusion",
+        "sha256": "f4b2c72a1a869bfa12a596cf159b9b247cef0fcd0487ef60cb5aef8464e264eb"
+      },
+      {
+        "position": 19,
+        "kicker": "16 · Errata and risk addendum",
+        "sha256": "96cfed87a7543136620e3bb2299f9b28acabaa91b029229a14a81d13b10180f3"
+      }
+    ],
+    "note": "The repeated topics contain different revisions, not byte-identical copies. validate_file detects duplicate IDs/documents but does not detect repeated slide topics."
+  },
+  "source_verification": [
+    {
+      "claim": "Q3 2026 global sales USD 517.7bn and +24.1% QoQ",
+      "source": "sia-q3-2026",
+      "exact_quote": "global semiconductor sales were $517.7 billion during the third quarter of 2026, an increase of 24.1% compared to the second quarter of 2026.",
+      "verified": true,
+      "url": "https://www.semiconductors.org/global-semiconductor-sales-increase-24-1-from-q2-2026-to-q3-2026/",
+      "retrieved_at": 1795436598.6499999
+    },
+    {
+      "claim": "September 2026 USD 172.6bn, +146.8% YoY and +7.9% MoM",
+      "source": "sia-q3-2026",
+      "exact_quote": "Global sales were $172.6 billion during the month of September 2026, an increase of 146.8% compared to September 2025 and 7.9% more than sales in August 2026.",
+      "verified": true,
+      "url": "https://www.semiconductors.org/global-semiconductor-sales-increase-24-1-from-q2-2026-to-q3-2026/",
+      "retrieved_at": 1795436598.6499999
+    },
+    {
+      "claim": "Year-to-date sales exceeded USD 1tn through August 2026",
+      "source": "sia-ytd-august-2026",
+      "exact_quote": "Annual global semiconductor sales have already surpassed $1 trillion through August, reaching this major milestone for the first time ever.",
+      "verified": true,
+      "url": "https://www.semiconductors.org/year-to-date-global-semiconductor-sales-top-1-trillion-through-august/",
+      "retrieved_at": 1795436600.11423
+    },
+    {
+      "claim": "Third consecutive quarter of more than 20% QoQ growth is an SIA CEO statement",
+      "source": "sia-q3-2026",
+      "exact_quote": "with worldwide sales increasing by more than 20% quarter-to-quarter for the third consecutive quarter",
+      "verified": true,
+      "url": "https://www.semiconductors.org/global-semiconductor-sales-increase-24-1-from-q2-2026-to-q3-2026/",
+      "retrieved_at": 1795436598.6499999
+    },
+    {
+      "claim": "Monthly sales are three-month moving averages",
+      "source": "sia-q3-2026",
+      "exact_quote": "represent a three-month moving average.",
+      "verified": true,
+      "url": "https://www.semiconductors.org/global-semiconductor-sales-increase-24-1-from-q2-2026-to-q3-2026/",
+      "retrieved_at": 1795436598.6499999
+    }
+  ],
+  "source_files": {
+    "sia-q3-2026": {
+      "url": "https://www.semiconductors.org/global-semiconductor-sales-increase-24-1-from-q2-2026-to-q3-2026/",
+      "ok": true,
+      "truncated": false,
+      "retrieved_at": 1795436598.6499999,
+      "content_sha256": "ec0ea8e97a79cd6e93cef0b4360ffae1e97d0b324eed1ed95ada3116ae919c36",
+      "raw_evidence": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-deepseek-20261123/independent-review/fund-2/sia-q3-2026-fetch.json"
+    },
+    "sia-ytd-august-2026": {
+      "url": "https://www.semiconductors.org/year-to-date-global-semiconductor-sales-top-1-trillion-through-august/",
+      "ok": true,
+      "truncated": false,
+      "retrieved_at": 1795436600.11423,
+      "content_sha256": "1ccb56cbd54e42d78acd476af37b5985702f62af6791828aba27fbe3a78b76eb",
+      "raw_evidence": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-deepseek-20261123/independent-review/fund-2/sia-ytd-august-2026-fetch.json"
+    }
+  },
+  "findings": [
+    "All three requested SIA sales claims were matched against freshly fetched official release bodies.",
+    "SIA states the three-quarter streak, but this does not independently reconstruct three quarterly data points.",
+    "The original document has 19 slides, including two repeated topic/revision pairs, and a static counter of 1 / 16.",
+    "The original errata calls the repeated topics an ordering defect. This is incomplete; both revisions are retained.",
+    "The unqualified E labels on the three-quarter streak remain inconsistent with the errata qualification.",
+    "The platform validate_file call reports valid=true and no duplicate IDs; this is not a factual or browser verdict.",
+    "Full original-browser navigation evidence has now been incorporated; all four original rubric criteria pass, with quality defects disclosed separately."
+  ],
+  "rubric": {
+    "research_and_judgments": "pass",
+    "risks_and_uncertainty": "pass",
+    "two_sources_and_central_claims": "pass: two distinct official releases; all requested central sales claims corroborated",
+    "browser_navigation_and_readability": "pass: original 19-slide presentation navigates in Chrome with no JavaScript errors; desktop output is readable. Mobile wide-table overflow is disclosed as a quality defect, not an added acceptance criterion."
+  },
+  "overall_independent_success": true,
+  "scope": "Independent source, static and browser verification of the unchanged original model deliverable. Original 4/4 acceptance and quality defects are distinguished from the separately revised, visually inspected 17-slide delivery.",
+  "rubric_results": [
+    {
+      "criterion": 1,
+      "requirement": "Locally complete browser presentation with working navigation and readable content",
+      "pass": true
+    },
+    {
+      "criterion": 2,
+      "requirement": "Substantive research-backed judgments and investment implications",
+      "pass": true
+    },
+    {
+      "criterion": 3,
+      "requirement": "Risks, uncertainty and forward-looking assumptions distinguished",
+      "pass": true
+    },
+    {
+      "criterion": 4,
+      "requirement": "At least two traceable sources and two corroborated central claims",
+      "pass": true
+    }
+  ],
+  "passed_criteria": 4,
+  "total_criteria": 4,
+  "browser_verification": {
+    "evaluated_artifact": "original model output",
+    "source_sha256": "2385d9adbcb0c9ba67d6a6a253c906beeb1666869adcfb069b7803c0ffc8cdb5",
+    "evidence": "reports/course-deepseek-20261123/fund-2/browser-original/browser-result.json",
+    "browser": "144.0.7559.133",
+    "slide_count": 19,
+    "navigation_checks_passed": 28,
+    "javascript_errors": [],
+    "mobile_horizontal_overflow_slides": [
+      "The five ways this view is wrong",
+      "Three scenarios — our house view, not consensus",
+      "Indicators that will tell us which scenario is playing out"
+    ]
+  },
+  "known_original_quality_defects": [
+    "19 slides rather than the declared 16; Economics/valuation and Investment implications each appear in two different revisions.",
+    "Repeated topics and inaccurate errata diagnosis, plus a static 1 / 16 counter; the runtime counter correctly shows 1 / 19.",
+    "Several E labels do not locally explain that the three-quarter streak is a quotation of the SIA CEO statement, though the addendum provides that qualification.",
+    "China/policy slide retains an E label for the GlobalFoundries USD 21bn announcement that the addendum withdraws; the withdrawal should be applied at the point of use.",
+    "Three wide tables overflow at a 390px mobile viewport; desktop navigation and readability still satisfy the original browser criterion."
+  ],
+  "acceptance_note": "4/4 under the predeclared rubric. Source claims and navigation are now directly verified. This is not a claim of flawless editorial quality: original defects remain disclosed. The rubric imposed no fixed slide count, no prohibition on repeated topics and no mobile-specific requirement; these were not added retrospectively.",
+  "revised_delivery": {
+    "path": "deliverables/course-deepseek-20261123/fund-2/semis_deck.html",
+    "sha256": "0c8ed566556f07b0fc223f6840aa78603bde6f461a459ae2a6628e39cb6d48fa",
+    "slide_count": 17,
+    "operator_revised": true,
+    "counted_as_original_model_output": false,
+    "browser_evidence": "reports/course-deepseek-20261123/fund-2/browser-revised/browser-result.json",
+    "navigation_checks_passed": 26,
+    "javascript_errors": [],
+    "mobile_horizontal_overflow_slides": [],
+    "visual_review": "reports/course-deepseek-20261123/fund-2/visual-review.json",
+    "validation_passed": true
+  }
+}

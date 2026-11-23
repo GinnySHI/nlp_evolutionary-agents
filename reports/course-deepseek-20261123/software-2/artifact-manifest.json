@@ -1,0 +1,12 @@
+{
+  "source_checkpoint": "checkpoint-120",
+  "files": {
+    "booking.py": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee",
+    "server.py": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1",
+    "index.html": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6",
+    "selftest.py": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f",
+    "dashboard.html": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602",
+    "NOTES-dashboard.md": "af24150c3c04017fdbffdf5e5756d57ea522bac52361bcb55269032e62ec90c0",
+    "README.md": "a4d8ed8a3c5d5bf0cfe11979b5205edcc2f7972be0a6029858e7481f95b3b2e8"
+  }
+}

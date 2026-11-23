@@ -1,0 +1,356 @@
+{
+  "source": "/Users/agiuser/Documents/ChatGPT/NLP/evolutionary-agents/deliverables/course-deepseek-20261123/fund-2/semis_deck.html",
+  "browser": "144.0.7559.133",
+  "count": 17,
+  "checks": [
+    {
+      "label": "initial",
+      "pass": true,
+      "active": 0,
+      "activeCount": 1,
+      "counter": "1 / 17",
+      "progress": "5.88235%"
+    },
+    {
+      "label": "next 1",
+      "pass": true,
+      "active": 1,
+      "activeCount": 1,
+      "counter": "2 / 17",
+      "progress": "11.7647%"
+    },
+    {
+      "label": "next 2",
+      "pass": true,
+      "active": 2,
+      "activeCount": 1,
+      "counter": "3 / 17",
+      "progress": "17.6471%"
+    },
+    {
+      "label": "next 3",
+      "pass": true,
+      "active": 3,
+      "activeCount": 1,
+      "counter": "4 / 17",
+      "progress": "23.5294%"
+    },
+    {
+      "label": "next 4",
+      "pass": true,
+      "active": 4,
+      "activeCount": 1,
+      "counter": "5 / 17",
+      "progress": "29.4118%"
+    },
+    {
+      "label": "next 5",
+      "pass": true,
+      "active": 5,
+      "activeCount": 1,
+      "counter": "6 / 17",
+      "progress": "35.2941%"
+    },
+    {
+      "label": "next 6",
+      "pass": true,
+      "active": 6,
+      "activeCount": 1,
+      "counter": "7 / 17",
+      "progress": "41.1765%"
+    },
+    {
+      "label": "next 7",
+      "pass": true,
+      "active": 7,
+      "activeCount": 1,
+      "counter": "8 / 17",
+      "progress": "47.0588%"
+    },
+    {
+      "label": "next 8",
+      "pass": true,
+      "active": 8,
+      "activeCount": 1,
+      "counter": "9 / 17",
+      "progress": "52.9412%"
+    },
+    {
+      "label": "next 9",
+      "pass": true,
+      "active": 9,
+      "activeCount": 1,
+      "counter": "10 / 17",
+      "progress": "58.8235%"
+    },
+    {
+      "label": "next 10",
+      "pass": true,
+      "active": 10,
+      "activeCount": 1,
+      "counter": "11 / 17",
+      "progress": "64.7059%"
+    },
+    {
+      "label": "next 11",
+      "pass": true,
+      "active": 11,
+      "activeCount": 1,
+      "counter": "12 / 17",
+      "progress": "70.5882%"
+    },
+    {
+      "label": "next 12",
+      "pass": true,
+      "active": 12,
+      "activeCount": 1,
+      "counter": "13 / 17",
+      "progress": "76.4706%"
+    },
+    {
+      "label": "next 13",
+      "pass": true,
+      "active": 13,
+      "activeCount": 1,
+      "counter": "14 / 17",
+      "progress": "82.3529%"
+    },
+    {
+      "label": "next 14",
+      "pass": true,
+      "active": 14,
+      "activeCount": 1,
+      "counter": "15 / 17",
+      "progress": "88.2353%"
+    },
+    {
+      "label": "next 15",
+      "pass": true,
+      "active": 15,
+      "activeCount": 1,
+      "counter": "16 / 17",
+      "progress": "94.1176%"
+    },
+    {
+      "label": "next 16",
+      "pass": true,
+      "active": 16,
+      "activeCount": 1,
+      "counter": "17 / 17",
+      "progress": "100%"
+    },
+    {
+      "label": "next 17",
+      "pass": true,
+      "active": 0,
+      "activeCount": 1,
+      "counter": "1 / 17",
+      "progress": "5.88235%"
+    },
+    {
+      "label": "previous wraps",
+      "pass": true,
+      "active": 16,
+      "activeCount": 1,
+      "counter": "17 / 17",
+      "progress": "100%"
+    },
+    {
+      "label": "home",
+      "pass": true,
+      "active": 0,
+      "activeCount": 1,
+      "counter": "1 / 17",
+      "progress": "5.88235%"
+    },
+    {
+      "label": "right",
+      "pass": true,
+      "active": 1,
+      "activeCount": 1,
+      "counter": "2 / 17",
+      "progress": "11.7647%"
+    },
+    {
+      "label": "left",
+      "pass": true,
+      "active": 0,
+      "activeCount": 1,
+      "counter": "1 / 17",
+      "progress": "5.88235%"
+    },
+    {
+      "label": "space",
+      "pass": true,
+      "active": 1,
+      "activeCount": 1,
+      "counter": "2 / 17",
+      "progress": "11.7647%"
+    },
+    {
+      "label": "page down",
+      "pass": true,
+      "active": 2,
+      "activeCount": 1,
+      "counter": "3 / 17",
+      "progress": "17.6471%"
+    },
+    {
+      "label": "page up",
+      "pass": true,
+      "active": 1,
+      "activeCount": 1,
+      "counter": "2 / 17",
+      "progress": "11.7647%"
+    },
+    {
+      "label": "end",
+      "pass": true,
+      "active": 16,
+      "activeCount": 1,
+      "counter": "17 / 17",
+      "progress": "100%"
+    }
+  ],
+  "errors": [],
+  "mobileLayout": [
+    {
+      "title": "Semiconductors at End-2026",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 844
+    },
+    {
+      "title": "Our view in five lines",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 844
+    },
+    {
+      "title": "The three hard numbers we actually hold",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1193
+    },
+    {
+      "title": "What we can verify — and what we cannot",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1232
+    },
+    {
+      "title": "AI is the engine — our evidence is directional, not quantitative",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1105
+    },
+    {
+      "title": "HBM improves the quality of memory earnings — it does not repeal the cycle",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 978
+    },
+    {
+      "title": "The bottleneck map is the investment case",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1030
+    },
+    {
+      "title": "Policy is a permanent haircut, not a probability-weighted event",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1051
+    },
+    {
+      "title": "The non-AI half of the industry is the option value",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1048
+    },
+    {
+      "title": "Where the margin sits — and why we refuse to quote a multiple",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1043
+    },
+    {
+      "title": "Own the chokepoints, not the industry",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1084
+    },
+    {
+      "title": "The five ways this view is wrong",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1037
+    },
+    {
+      "title": "Three scenarios — our house view, not consensus",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 897
+    },
+    {
+      "title": "Indicators that will tell us which scenario is playing out",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 852
+    },
+    {
+      "title": "The ten numbers to carry into the meeting",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1141
+    },
+    {
+      "title": "What we would actually do on Monday",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1095
+    },
+    {
+      "title": "Evidence scope and additional risks",
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false,
+      "height": 844,
+      "scrollHeight": 1202
+    }
+  ],
+  "navigationPassed": true,
+  "horizontalOverflowSlides": []
+}

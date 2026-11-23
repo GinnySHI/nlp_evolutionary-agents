@@ -1,0 +1,425 @@
+{
+  "run_id": "course-deepseek-20261123",
+  "updated_at": "2026-11-23T13:12:29.975581+00:00",
+  "counts": {
+    "engine_completed": 6,
+    "independent_artifacts_verified": 6,
+    "common_120_turn_successes": 5,
+    "total": 6
+  },
+  "software_followup": {
+    "initial_paused_turn": 53,
+    "initial_budget": 120,
+    "budget_extensions": [
+      60,
+      20
+    ],
+    "final_turns": 198,
+    "billing_pause_turn": 152,
+    "billing_resumed_after_user_topup": true,
+    "interventions": "Operator approved reviewed workspace-only sandbox operations, fed back the undefined dashboard path and QA harness errors. No reviewer rewrote software delivery source. All interventions remain in the session audit.",
+    "test_failures": "Early top-days expectations, QA import/constructor/query mismatches, and incorrect utilisation fixture expectations were retained. The corrected v2 selftest has 54 passing checks; independent acceptance has 7/7."
+  },
+  "unit_tests": {
+    "passed": 301,
+    "added_this_followup": 5
+  },
+  "cost": "Final charges not independently reconciled; per-process usage undercounts resumed tasks.",
+  "cases": [
+    {
+      "case": "software-1",
+      "task_id": "28c5a0a7b4454845bb6aaec684d25a84",
+      "engine_status": "completed",
+      "metrics": {
+        "elapsed_seconds": 1244.7468700408936,
+        "active_seconds": 623.2234299168922,
+        "agent_turns": 116,
+        "tool_calls": 73,
+        "fatal_errors": 0,
+        "tool_errors": 3,
+        "invalid_actions": 22,
+        "subtasks_total": 3,
+        "subtasks_accepted": 3,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "lead": {
+            "group_entries": 2,
+            "lessons": 1,
+            "successes": 0,
+            "failures": 0
+          },
+          "dev": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          },
+          "qa": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          },
+          "release": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          }
+        },
+        "provider": {
+          "active_provider": "deepseek",
+          "calls": 25,
+          "completion_tokens": 26733,
+          "prompt_tokens": 658167,
+          "reasoning_tokens": 12450,
+          "requests": 25,
+          "total_tokens": 684900
+        },
+        "recovered_responses": 5,
+        "normalized_actions": 1,
+        "checkpoints": 8
+      },
+      "independent_artifact_success": true,
+      "within_120_turn_budget": true,
+      "independent_evidence": "Previously completed independent check described in docs/test-report-20261123.md; not rerun in this follow-up."
+    },
+    {
+      "case": "software-2",
+      "task_id": "12c9c6be49894f2a994698bdb0f1b313",
+      "engine_status": "completed",
+      "metrics": {
+        "elapsed_seconds": 5605.262032985687,
+        "active_seconds": 1450.0505764591508,
+        "agent_turns": 198,
+        "tool_calls": 136,
+        "fatal_errors": 0,
+        "tool_errors": 8,
+        "invalid_actions": 22,
+        "subtasks_total": 7,
+        "subtasks_accepted": 6,
+        "subtask_completion_rate": 0.8571428571428571,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "lead": {
+            "group_entries": 5,
+            "lessons": 2,
+            "successes": 0,
+            "failures": 1
+          },
+          "dev": {
+            "group_entries": 11,
+            "lessons": 2,
+            "successes": 6,
+            "failures": 1
+          },
+          "qa": {
+            "group_entries": 8,
+            "lessons": 2,
+            "successes": 2,
+            "failures": 2
+          },
+          "release": {
+            "group_entries": 6,
+            "lessons": 2,
+            "successes": 1,
+            "failures": 1
+          }
+        },
+        "provider": {
+          "active_provider": "deepseek",
+          "calls": 12,
+          "completion_tokens": 10476,
+          "prompt_tokens": 472109,
+          "reasoning_tokens": 4681,
+          "requests": 12,
+          "total_tokens": 482585
+        },
+        "recovered_responses": 9,
+        "checkpoints": 12,
+        "normalized_actions": 5,
+        "provider_pauses": 1
+      },
+      "independent_artifact_success": true,
+      "within_120_turn_budget": false,
+      "independent_evidence": "software-2/checkpoint-120/combined-software-2-result.json"
+    },
+    {
+      "case": "newsroom-1",
+      "task_id": "f7b2cf40cb53409ba20049818fbb9876",
+      "engine_status": "completed",
+      "metrics": {
+        "elapsed_seconds": 652.6013853549957,
+        "active_seconds": 569.6931618750095,
+        "agent_turns": 85,
+        "tool_calls": 57,
+        "fatal_errors": 0,
+        "tool_errors": 1,
+        "invalid_actions": 10,
+        "subtasks_total": 3,
+        "subtasks_accepted": 3,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "chief_editor": {
+            "group_entries": 2,
+            "lessons": 1,
+            "successes": 0,
+            "failures": 0
+          },
+          "reporter": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          },
+          "fact_checker": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          },
+          "editor": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          }
+        },
+        "provider": {
+          "active_provider": "deepseek",
+          "calls": 88,
+          "completion_tokens": 76936,
+          "invalid_responses": 1,
+          "prompt_tokens": 1352754,
+          "protocol_retries": 1,
+          "reasoning_tokens": 59114,
+          "requests": 89,
+          "total_tokens": 1429690
+        },
+        "recovered_responses": 9,
+        "checkpoints": 5,
+        "normalized_actions": 3
+      },
+      "independent_artifact_success": true,
+      "within_120_turn_budget": true,
+      "independent_evidence": "Previously completed independent check described in docs/test-report-20261123.md; not rerun in this follow-up."
+    },
+    {
+      "case": "newsroom-2",
+      "task_id": "346eddcd20414e96bfcf19cace1356e4",
+      "engine_status": "completed",
+      "metrics": {
+        "elapsed_seconds": 644.9285409450531,
+        "active_seconds": 644.9195526661351,
+        "agent_turns": 81,
+        "tool_calls": 58,
+        "fatal_errors": 0,
+        "tool_errors": 7,
+        "invalid_actions": 4,
+        "subtasks_total": 4,
+        "subtasks_accepted": 4,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "chief_editor": {
+            "group_entries": 4,
+            "lessons": 2,
+            "successes": 0,
+            "failures": 0
+          },
+          "reporter": {
+            "group_entries": 6,
+            "lessons": 2,
+            "successes": 2,
+            "failures": 0
+          },
+          "fact_checker": {
+            "group_entries": 7,
+            "lessons": 2,
+            "successes": 3,
+            "failures": 0
+          },
+          "editor": {
+            "group_entries": 6,
+            "lessons": 2,
+            "successes": 2,
+            "failures": 0
+          }
+        },
+        "provider": {
+          "active_provider": "deepseek",
+          "calls": 85,
+          "completion_tokens": 102931,
+          "invalid_responses": 1,
+          "prompt_tokens": 2260747,
+          "protocol_retries": 1,
+          "reasoning_tokens": 77783,
+          "requests": 86,
+          "total_tokens": 2363678
+        },
+        "recovered_responses": 2,
+        "checkpoints": 6,
+        "normalized_actions": 1
+      },
+      "independent_artifact_success": true,
+      "within_120_turn_budget": true,
+      "independent_evidence": "Previously completed independent check described in docs/test-report-20261123.md; not rerun in this follow-up."
+    },
+    {
+      "case": "fund-1",
+      "task_id": "86b1911b96534215a32967fb138fd695",
+      "engine_status": "completed",
+      "metrics": {
+        "elapsed_seconds": 1122.5915670394897,
+        "active_seconds": 961.377981166821,
+        "agent_turns": 93,
+        "tool_calls": 58,
+        "fatal_errors": 0,
+        "tool_errors": 4,
+        "invalid_actions": 14,
+        "subtasks_total": 3,
+        "subtasks_accepted": 3,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "fund_manager": {
+            "group_entries": 2,
+            "lessons": 1,
+            "successes": 0,
+            "failures": 0
+          },
+          "research": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          },
+          "risk": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          },
+          "marketing": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          }
+        },
+        "provider": {
+          "active_provider": "deepseek",
+          "calls": 77,
+          "completion_tokens": 138003,
+          "invalid_responses": 2,
+          "prompt_tokens": 1614640,
+          "protocol_retries": 2,
+          "reasoning_tokens": 96150,
+          "requests": 79,
+          "total_tokens": 1752643
+        },
+        "normalized_actions": 7,
+        "checkpoints": 4,
+        "recovered_responses": 6
+      },
+      "independent_artifact_success": true,
+      "within_120_turn_budget": true,
+      "independent_evidence": "Previously completed independent check described in docs/test-report-20261123.md; not rerun in this follow-up."
+    },
+    {
+      "case": "fund-2",
+      "task_id": "cebcac61d6584f2d9662ca3bb838978b",
+      "engine_status": "completed",
+      "metrics": {
+        "elapsed_seconds": 1089.1878390312195,
+        "active_seconds": 1089.176000750158,
+        "agent_turns": 120,
+        "tool_calls": 95,
+        "fatal_errors": 0,
+        "tool_errors": 2,
+        "invalid_actions": 8,
+        "subtasks_total": 3,
+        "subtasks_accepted": 3,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "fund_manager": {
+            "group_entries": 5,
+            "lessons": 2,
+            "successes": 0,
+            "failures": 1
+          },
+          "research": {
+            "group_entries": 9,
+            "lessons": 2,
+            "successes": 4,
+            "failures": 1
+          },
+          "risk": {
+            "group_entries": 8,
+            "lessons": 2,
+            "successes": 3,
+            "failures": 1
+          },
+          "marketing": {
+            "group_entries": 6,
+            "lessons": 2,
+            "successes": 1,
+            "failures": 1
+          }
+        },
+        "provider": {
+          "active_provider": "deepseek",
+          "calls": 124,
+          "completion_tokens": 178598,
+          "invalid_responses": 5,
+          "prompt_tokens": 4561653,
+          "protocol_retries": 5,
+          "reasoning_tokens": 111044,
+          "requests": 129,
+          "total_tokens": 4740251
+        },
+        "recovered_responses": 16,
+        "normalized_actions": 5,
+        "checkpoints": 5
+      },
+      "independent_artifact_success": true,
+      "within_120_turn_budget": true,
+      "independent_evidence": "fund-2/fund-2-result.json"
+    }
+  ],
+  "source_sha256": {
+    "evoagents/__init__.py": "780fa86d5883112c8eea96620fbaf71b72a90750042cb701831ec601dd49b58a",
+    "evoagents/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "evoagents/cli.py": "f0435ac2ec02ee9c7e8cff490e81b9a4b260dc7c816763593f7937edfd7d7796",
+    "evoagents/config.py": "74930ed4e29d7bc58275b0c8c688edcb7df48b3ee301fdc53465e62f7d0bc253",
+    "evoagents/engine.py": "b1d54bd23b11f1b475cc0ade8a6d357bde7f3ea072c8610e419c7a1e1768d1c7",
+    "evoagents/evaluation.py": "63546fd8197dbb1c044d3401261821534efcdd626c62f11c3456df3caaecf81c",
+    "evoagents/memory.py": "00015eb5ef2f16ef8e02b87b629a8173e0c4320385be8058bfdc71b2881f5ac3",
+    "evoagents/provider.py": "27efacd2d062f1ebdcbbbf986bba5023e1630b97938d9fc45116d7c3495dac0c",
+    "evoagents/sandbox.py": "6e2597c0137f1d1fc6044a34d7ec1d4df7aac17e6ef608370982b89ab7aaaa56",
+    "evoagents/scenarios.py": "1045f4fdf1ee94c42b570e8fa9e83bd92e97aecfa60ee2150c3cb38162fd5f85",
+    "evoagents/tools.py": "991a70a2b6bcdb7b68131f78079bce59ff9ea4b68eaf369990df5df9c87e5667",
+    "evoagents/validation.py": "deca484713b1b921fe3b54f102ab995ac5327f9e79137afc02cd456401922468"
+  }
+}

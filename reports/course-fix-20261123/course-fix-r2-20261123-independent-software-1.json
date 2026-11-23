@@ -1,0 +1,69 @@
+{
+  "run_id": "course-fix-r2-20261123",
+  "task_id": "software-1",
+  "engine_status": "completed",
+  "artifact_success": true,
+  "course_task_success": true,
+  "validation_status": "independently_verified",
+  "rubric": "../course-comparison-20261123/software-rubric.md",
+  "mandatory_criteria_passed": 7,
+  "mandatory_criteria_total": 7,
+  "checks_passed": 30,
+  "checks_total": 30,
+  "restart_checks_passed": 3,
+  "criteria": [
+    {
+      "id": "runnable_delivery",
+      "status": "pass",
+      "evidence": "Actual booking_core.py and booking_cli.py run in macOS Sandbox. README launch/use examples map to tested CLI entry points; optional browser UI not needed for the CLI-allowed rubric."
+    },
+    {
+      "id": "booking_correctness",
+      "status": "pass",
+      "evidence": "Created and retrieved A 09:00\u201310:00 and B at the same date/time."
+    },
+    {
+      "id": "collision_protection",
+      "status": "pass",
+      "evidence": "Rejected A 09:30\u201310:30 and contained 09:15\u201309:45 without mutation; accepted adjacent A 10:00\u201312:00."
+    },
+    {
+      "id": "availability_correctness",
+      "status": "pass",
+      "evidence": "Occupied query rejected, free query allowed, cancellation releases query. Default 09:00\u201318:00 range returns A 12:00\u201318:00 and B 10:00\u201318:00 for fixture. Additional after-hours formatting defect is recorded below."
+    },
+    {
+      "id": "cancellation_correctness",
+      "status": "pass",
+      "evidence": "Cancellation retained history/timestamp, freed the slot, preserved the other room and adjacent booking; unknown/double cancellation rejected without mutation."
+    },
+    {
+      "id": "durable_records",
+      "status": "pass",
+      "evidence": "save/load equality passed. Three separate sandbox process invocations subsequently read the retained cancelled booking, confirmed its free slot, and retrieved unaffected active records."
+    },
+    {
+      "id": "basic_input_integrity",
+      "status": "pass",
+      "evidence": "Missing/unknown room rejected at CLI; empty, None and unknown rooms rejected at core; zero/reversed interval rejected without saved-data mutation."
+    }
+  ],
+  "review_source": "independent-review/software-1",
+  "runner": "independent-review/software-1/run_review.py",
+  "execution_evidence": "independent-review/software-1/sandbox-check.json",
+  "source_hashes": {
+    "booking_core.py": "24e1628be9804f9f781c459a512294f0028ed47f40b12f3c4c030827ef4823d7",
+    "booking_cli.py": "e5201441394a79e80564c6d8cdba22f4675c069de2652162d657e1ada0e0bd5b",
+    "README.md": "066e1bcd84bace68b24366ecc7d4811a42d13389f8a24f5b38befda552d7651f",
+    "index.html": "a6e367f7225a8ee0376fe4e2cd16eb15dee4b0b15a6c5df5fbe829544213f2d2",
+    "bookings.json": "aa6c542a3144f4ad43816fa05e7f69d3069bafc371c7444a6f0b808427938eb8"
+  },
+  "environment": "macOS project Sandbox; no network, credentials or subprocess access for generated code. Source copied unchanged; independent reviewer code runs in-process entry points plus separate sandbox process launches.",
+  "limitations": [
+    {
+      "type": "verified_extra_edge_defect",
+      "detail": "Two valid after-hours reservations (A 19:00\u201320:00 and 21:00\u201322:00) cause the optional 09:00\u201318:00 free-range view to emit a superfluous impossible interval 20:00\u201318:00 after the correct 09:00\u201318:00 interval. Exact-slot availability remains correct. This edge case is outside the pre-fixed fixture and is not hidden; the mandatory rubric fixture and slot checks pass."
+    }
+  ],
+  "approval_history": "Initial sandbox requests were blocked by approval-service decoding failure; parent later executed the identical reviewer successfully through approved macOS Sandbox."
+}

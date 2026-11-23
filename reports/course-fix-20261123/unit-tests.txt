@@ -1,0 +1,536 @@
+........................................................................ [ 30%]
+........................................................................ [ 60%]
+........................................................................ [ 90%]
+.......................                                                  [100%]
+==================================== PASSES ====================================
+__________________ test_init_persists_custom_tool_allowlists ___________________
+----------------------------- Captured stdout call -----------------------------
+Created session: team
+Location: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_init_persists_custom_tool0/runtime/sessions/team
+Next: evo chat team
+_________ test_pending_approval_is_not_auto_approved_and_can_be_denied _________
+----------------------------- Captured stdout call -----------------------------
+Created session: team
+Location: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_pending_approval_is_not_a0/runtime/sessions/team
+Next: evo chat team
+[human] message
+Run a script
+[system] task_started
+[lead] agent_turn
+[lead] message
+Run job.py
+[lead] action_applied: message
+[dev] agent_turn
+[dev] approval_requested
+[dev] action_applied: tool
+
+Status: waiting_human
+
+Human input required:
+{
+  "type": "tool_approval",
+  "id": "4bedd0f8ae2d471abc39432f260b0998",
+  "agent_id": "dev",
+  "question": "Allow dev to execute run_python?",
+  "reason": "This critical operation requires explicit human approval.",
+  "tool": {
+    "name": "run_python",
+    "arguments": {
+      "path": "job.py"
+    }
+  },
+  "workspace_fingerprint": "2b5d1cbba56127f54ae7c919a1fb4e57bba4017c6bb81956841a919fb0404df7",
+  "operation_digest": "fbe961a0f3a764409517bd1304a3643678e8131f3860a059c452b385dc9df68c"
+}
+
+Metrics:
+{
+  "elapsed_seconds": 0.016728639602661133,
+  "active_seconds": 0.00397191708907485,
+  "agent_turns": 2,
+  "tool_calls": 0,
+  "fatal_errors": 0,
+  "tool_errors": 0,
+  "invalid_actions": 0,
+  "subtasks_total": 0,
+  "subtasks_accepted": 0,
+  "subtask_completion_rate": 0.0,
+  "model_claimed_success": null,
+  "peer_reviewed_completion": false,
+  "reflection_calls": 0,
+  "reflection_failures": 0,
+  "memory": {
+    "lead": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    },
+    "dev": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    },
+    "qa": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    },
+    "release": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    }
+  }
+}
+Session files: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_pending_approval_is_not_a0/runtime/sessions/team
+[human] message
+Denied operation 4bedd0f8ae2d471abc39432f260b0998. Do not run
+[dev] approval_resolved
+[dev] agent_turn
+[dev] message
+User declined code execution.
+[dev] action_applied: message
+[lead] agent_turn
+[lead] message
+User declined code execution.
+[system] task_finished
+[lead] action_applied: finish
+
+Status: failed
+
+Final output:
+User declined code execution.
+
+Metrics:
+{
+  "elapsed_seconds": 0.031085729598999023,
+  "active_seconds": 0.013335292227566242,
+  "agent_turns": 4,
+  "tool_calls": 0,
+  "fatal_errors": 0,
+  "tool_errors": 0,
+  "invalid_actions": 0,
+  "subtasks_total": 0,
+  "subtasks_accepted": 0,
+  "subtask_completion_rate": 0.0,
+  "model_claimed_success": false,
+  "peer_reviewed_completion": false,
+  "reflection_calls": 4,
+  "reflection_failures": 0,
+  "memory": {
+    "lead": {
+      "group_entries": 2,
+      "lessons": 1,
+      "successes": 0,
+      "failures": 0
+    },
+    "dev": {
+      "group_entries": 2,
+      "lessons": 1,
+      "successes": 0,
+      "failures": 0
+    },
+    "qa": {
+      "group_entries": 2,
+      "lessons": 1,
+      "successes": 0,
+      "failures": 0
+    },
+    "release": {
+      "group_entries": 2,
+      "lessons": 1,
+      "successes": 0,
+      "failures": 0
+    }
+  }
+}
+Session files: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_pending_approval_is_not_a0/runtime/sessions/team
+_________________ test_step_budget_requires_explicit_extension _________________
+----------------------------- Captured stdout call -----------------------------
+Created session: team
+Location: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_step_budget_requires_expl0/runtime/sessions/team
+Next: evo chat team
+[human] message
+A bounded task
+[system] task_started
+[lead] agent_turn
+[lead] message
+{"id": "subtask-1", "description": "Confirm the answer", "success_criteria": "Peer checks the answer", "assignee": "dev", "delegator": "lead", "status": "assigned", "model_claimed_success": null, "summary": null, "artifacts": [], "review": null, "retry_of": null}
+[lead] action_applied: delegate
+[dev] agent_turn
+[dev] message
+{"id": "subtask-1", "description": "Confirm the answer", "success_criteria": "Peer checks the answer", "assignee": "dev", "delegator": "lead", "status": "submitted", "model_claimed_success": true, "summary": "The answer is 42.", "artifacts": [], "review": null, "retry_of": null}
+[dev] action_applied: complete
+[system] budget_exhausted
+
+Status: budget_exhausted
+
+Metrics:
+{
+  "elapsed_seconds": 0.006506681442260742,
+  "active_seconds": 0.0037166252732276917,
+  "agent_turns": 2,
+  "tool_calls": 0,
+  "fatal_errors": 0,
+  "tool_errors": 0,
+  "invalid_actions": 0,
+  "subtasks_total": 1,
+  "subtasks_accepted": 0,
+  "subtask_completion_rate": 0.0,
+  "model_claimed_success": null,
+  "peer_reviewed_completion": false,
+  "reflection_calls": 0,
+  "reflection_failures": 0,
+  "memory": {
+    "lead": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    },
+    "dev": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    },
+    "qa": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    },
+    "release": {
+      "group_entries": 0,
+      "lessons": 0,
+      "successes": 0,
+      "failures": 0
+    }
+  }
+}
+Session files: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_step_budget_requires_expl0/runtime/sessions/team
+[lead] agent_turn
+[lead] message
+{"task_id": "subtask-1", "reviewer": "lead", "accepted": true, "reason": "Checked the stated answer.", "time": "2026-11-23T09:30:55.333618+00:00"}
+[lead] action_applied: review
+[lead] agent_turn
+[lead] message
+Verified answer: 42.
+[system] task_finished
+[lead] action_applied: finish
+
+Status: completed
+
+Final output:
+Verified answer: 42.
+
+Metrics:
+{
+  "elapsed_seconds": 0.023477792739868164,
+  "active_seconds": 0.015485291834920645,
+  "agent_turns": 4,
+  "tool_calls": 0,
+  "fatal_errors": 0,
+  "tool_errors": 0,
+  "invalid_actions": 0,
+  "subtasks_total": 1,
+  "subtasks_accepted": 1,
+  "subtask_completion_rate": 1.0,
+  "model_claimed_success": true,
+  "peer_reviewed_completion": true,
+  "reflection_calls": 4,
+  "reflection_failures": 0,
+  "memory": {
+    "lead": {
+      "group_entries": 2,
+      "lessons": 1,
+      "successes": 0,
+      "failures": 0
+    },
+    "dev": {
+      "group_entries": 3,
+      "lessons": 1,
+      "successes": 1,
+      "failures": 0
+    },
+    "qa": {
+      "group_entries": 2,
+      "lessons": 1,
+      "successes": 0,
+      "failures": 0
+    },
+    "release": {
+      "group_entries": 2,
+      "lessons": 1,
+      "successes": 0,
+      "failures": 0
+    }
+  }
+}
+Session files: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_step_budget_requires_expl0/runtime/sessions/team
+________ test_noninteractive_private_message_does_not_enter_group_state ________
+----------------------------- Captured stdout call -----------------------------
+Created session: team
+Location: /private/var/folders/0r/dyr6zyxn78g0ng_lyq6ytj0h0000kt/T/pytest-of-agiuser/pytest-62/test_noninteractive_private_me0/runtime/sessions/team
+Next: evo chat team
+Acknowledged privately.
+_____ test_mixed_cases_distinguish_peer_completion_from_independent_truth ______
+----------------------------- Captured stdout call -----------------------------
+Evaluating correct (session: correct)...
+Evaluating incorrect (session: incorrect)...
+Evaluating manual (session: manual)...
+______ test_same_session_two_tasks_keep_memory_history_and_old_artifacts _______
+----------------------------- Captured stdout call -----------------------------
+Evaluating first (session: same-team)...
+Evaluating second (session: same-team)...
+__________ test_batch_never_automatically_approves_critical_operation __________
+----------------------------- Captured stdout call -----------------------------
+Evaluating requires-approval (session: same-team)...
+Evaluating blocked (session: same-team)...
+_____ test_clarification_response_is_used_without_treating_it_as_approval ______
+----------------------------- Captured stdout call -----------------------------
+Evaluating clarification (session: clarification)...
+=========================== short test summary info ============================
+PASSED tests/test_cli.py::test_help_is_english_and_documents_commands
+PASSED tests/test_cli.py::test_init_status_and_sessions_do_not_require_key_or_model
+PASSED tests/test_cli.py::test_init_persists_custom_tool_allowlists
+PASSED tests/test_cli.py::test_bad_session_names_are_rejected[../outside]
+PASSED tests/test_cli.py::test_bad_session_names_are_rejected[folder/name]
+PASSED tests/test_cli.py::test_bad_session_names_are_rejected[team name]
+PASSED tests/test_cli.py::test_bad_session_names_are_rejected[]
+PASSED tests/test_cli.py::test_bad_session_names_are_rejected[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
+PASSED tests/test_cli.py::test_session_symlink_is_rejected
+PASSED tests/test_cli.py::test_run_question_and_respond_resume_persisted_session
+PASSED tests/test_cli.py::test_pending_approval_is_not_auto_approved_and_can_be_denied
+PASSED tests/test_cli.py::test_invalid_document_format_never_calls_model
+PASSED tests/test_cli.py::test_step_budget_requires_explicit_extension
+PASSED tests/test_cli.py::test_noninteractive_private_message_does_not_enter_group_state
+PASSED tests/test_engine.py::test_reviewer_can_read_but_cannot_write_or_request_code_execution
+PASSED tests/test_engine.py::test_approval_rechecks_the_persisted_allowlist
+PASSED tests/test_engine.py::test_invalid_tool_allowlists_are_rejected[read_file]
+PASSED tests/test_engine.py::test_invalid_tool_allowlists_are_rejected[tools1]
+PASSED tests/test_engine.py::test_invalid_tool_allowlists_are_rejected[tools2]
+PASSED tests/test_engine.py::test_cooperation_review_and_memory_survive_new_task
+PASSED tests/test_engine.py::test_wait_resume_exact_approval_and_no_replay
+PASSED tests/test_engine.py::test_changed_file_invalidates_approval
+PASSED tests/test_engine.py::test_denial_does_not_execute_tool
+PASSED tests/test_engine.py::test_human_question_preserves_execution_and_wait_is_not_active
+PASSED tests/test_engine.py::test_private_conversation_never_enters_shared_context
+PASSED tests/test_engine.py::test_self_review_and_unverified_finish_cannot_succeed
+PASSED tests/test_engine.py::test_budget_can_be_explicitly_extended
+PASSED tests/test_engine.py::test_failed_attempt_can_be_replaced_without_erasing_evidence
+PASSED tests/test_engine.py::test_malformed_actions_are_bounded_and_ui_error_is_nonfatal
+PASSED tests/test_engine.py::test_interrupted_tool_requires_reconciliation_without_replay
+PASSED tests/test_engine.py::test_nonexistent_artifacts_rejected_and_real_artifacts_hashed
+PASSED tests/test_engine.py::test_invalid_tool_argument_never_executes
+PASSED tests/test_engine.py::test_other_agents_cannot_see_private_tool_output
+PASSED tests/test_engine.py::test_changed_submission_cannot_pass_review
+PASSED tests/test_engine.py::test_unhashable_action_is_recoverable
+PASSED tests/test_engine.py::test_nested_protocol_is_rejected_with_explicit_correction_and_safe_audit
+PASSED tests/test_engine.py::test_failed_task_timing_includes_failure_bookkeeping
+PASSED tests/test_engine.py::test_long_message_audit_is_complete_but_context_explicitly_truncated
+PASSED tests/test_engine.py::test_fingerprint_and_artifact_reject_fifo_without_opening_it
+PASSED tests/test_engine.py::test_fingerprint_and_artifact_reject_hardlinks
+PASSED tests/test_engine.py::test_chmod_changes_fingerprint_and_invalidates_approval
+PASSED tests/test_engine.py::test_unreadable_file_is_recoverable_action_error
+PASSED tests/test_engine.py::test_unreadable_file_during_approval_preserves_pending_request
+PASSED tests/test_evaluation.py::test_independent_checks_use_actual_file_content_and_reject_unknown_targets
+PASSED tests/test_evaluation.py::test_mixed_cases_distinguish_peer_completion_from_independent_truth
+PASSED tests/test_evaluation.py::test_same_session_two_tasks_keep_memory_history_and_old_artifacts
+PASSED tests/test_evaluation.py::test_batch_never_automatically_approves_critical_operation
+PASSED tests/test_evaluation.py::test_clarification_response_is_used_without_treating_it_as_approval
+PASSED tests/test_evaluation.py::test_bad_case_identifiers_and_schema_rejected_before_model_calls[cases0]
+PASSED tests/test_evaluation.py::test_bad_case_identifiers_and_schema_rejected_before_model_calls[cases1]
+PASSED tests/test_evaluation.py::test_bad_case_identifiers_and_schema_rejected_before_model_calls[cases2]
+PASSED tests/test_evaluation.py::test_bad_case_identifiers_and_schema_rejected_before_model_calls[cases3]
+PASSED tests/test_evaluation.py::test_bad_case_identifiers_and_schema_rejected_before_model_calls[cases4]
+PASSED tests/test_evaluation.py::test_bad_case_identifiers_and_schema_rejected_before_model_calls[cases5]
+PASSED tests/test_evaluation.py::test_invalid_check_schema_is_rejected_before_model_calls[None]
+PASSED tests/test_evaluation.py::test_invalid_check_schema_is_rejected_before_model_calls[not an object]
+PASSED tests/test_evaluation.py::test_invalid_check_schema_is_rejected_before_model_calls[bad_check2]
+PASSED tests/test_evaluation.py::test_dataset_root_must_be_an_object
+PASSED tests/test_file_chunks.py::test_unicode_chunks_and_retry_cannot_append_twice
+PASSED tests/test_file_chunks.py::test_read_hash_covers_full_file_even_if_content_is_truncated
+PASSED tests/test_file_chunks.py::test_append_size_limits_preserve_original
+PASSED tests/test_file_chunks.py::test_append_requires_actual_hash[]
+PASSED tests/test_file_chunks.py::test_append_requires_actual_hash[invalid]
+PASSED tests/test_file_chunks.py::test_append_requires_actual_hash[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]
+PASSED tests/test_file_chunks.py::test_append_requires_actual_hash[0000000000000000000000000000000000000000000000000000000000000000]
+PASSED tests/test_file_chunks.py::test_append_requires_existing_file_and_exact_arguments
+PASSED tests/test_file_chunks.py::test_append_rejects_links_and_special_files
+PASSED tests/test_file_chunks.py::test_append_rejects_changed_target_before_atomic_replace
+PASSED tests/test_file_chunks.py::test_replace_unicode_unique_span_and_stale_retry
+PASSED tests/test_file_chunks.py::test_replace_rejects_overlapping_ambiguous_matches
+PASSED tests/test_file_chunks.py::test_replace_rejects_ambiguous_or_oversized_spans[-x]
+PASSED tests/test_file_chunks.py::test_replace_rejects_ambiguous_or_oversized_spans[missing-x]
+PASSED tests/test_file_chunks.py::test_replace_rejects_ambiguous_or_oversized_spans[twice-x]
+PASSED tests/test_file_chunks.py::test_replace_rejects_ambiguous_or_oversized_spans[old3-x]
+PASSED tests/test_file_chunks.py::test_replace_rejects_ambiguous_or_oversized_spans[tail-new4]
+PASSED tests/test_file_chunks.py::test_replace_links_races_and_total_limit
+PASSED tests/test_file_chunks.py::test_paged_read_keeps_full_hash_and_can_inspect_footer
+PASSED tests/test_file_chunks.py::test_literal_escapes_warn_without_modifying_content
+PASSED tests/test_loop_guard.py::test_three_identical_failures_pause_and_human_can_resume
+PASSED tests/test_loop_guard.py::test_failure_streak_survives_session_reload
+PASSED tests/test_loop_guard.py::test_different_arguments_errors_and_agents_do_not_share_streak
+PASSED tests/test_loop_guard.py::test_success_and_strategy_change_reset_streak
+PASSED tests/test_loop_guard.py::test_new_task_and_old_session_without_streak_field_are_supported
+PASSED tests/test_loop_guard.py::test_signature_ignores_argument_key_order
+PASSED tests/test_loop_guard.py::test_loop_recovery_does_not_grant_critical_tool_approval
+PASSED tests/test_memory.py::test_scoped_retrieval_and_persistence
+PASSED tests/test_memory.py::test_corrupt_tail_does_not_discard_old_memory
+PASSED tests/test_memory.py::test_chinese_relevance
+PASSED tests/test_memory.py::test_unrelated_or_empty_queries_do_not_inject_old_memory[unrelated topic]
+PASSED tests/test_memory.py::test_unrelated_or_empty_queries_do_not_inject_old_memory[]
+PASSED tests/test_memory.py::test_unrelated_or_empty_queries_do_not_inject_old_memory[?!]
+PASSED tests/test_memory.py::test_unrelated_or_empty_queries_do_not_inject_old_memory[\u4f1a\u8bae\u5ba4\u51b2\u7a81]
+PASSED tests/test_memory.py::test_weakly_relevant_episode_ranks_above_unrelated_lessons
+PASSED tests/test_memory.py::test_lesson_bonus_does_not_override_stronger_relevance
+PASSED tests/test_memory.py::test_equal_relevance_prefers_lessons_then_recent_records
+PASSED tests/test_memory.py::test_redaction_and_atomic_save
+PASSED tests/test_memory.py::test_memory_scope_validation
+PASSED tests/test_memory.py::test_retrieval_deduplicates_experience_without_changing_audit
+PASSED tests/test_memory.py::test_deduplication_preserves_scope_kind_and_outcome
+PASSED tests/test_memory.py::test_duplicate_provenance_is_bounded_and_survives_reload
+PASSED tests/test_protocol_recovery.py::test_shorthand_write_and_read_execute_through_normal_validation
+PASSED tests/test_protocol_recovery.py::test_shorthand_cannot_bypass_role_permissions
+PASSED tests/test_protocol_recovery.py::test_shorthand_critical_tool_still_requires_exact_approval
+PASSED tests/test_protocol_recovery.py::test_shorthand_never_drops_unknown_or_conflicting_arguments[action0]
+PASSED tests/test_protocol_recovery.py::test_shorthand_never_drops_unknown_or_conflicting_arguments[action1]
+PASSED tests/test_protocol_recovery.py::test_shorthand_never_drops_unknown_or_conflicting_arguments[action2]
+PASSED tests/test_protocol_recovery.py::test_multiple_or_truncated_actions_are_not_guessed[{}\n{}]
+PASSED tests/test_protocol_recovery.py::test_multiple_or_truncated_actions_are_not_guessed[[{"action":"finish"}]]
+PASSED tests/test_protocol_recovery.py::test_multiple_or_truncated_actions_are_not_guessed[{"action":"tool","name":"write_file","arguments":{"content":"unterminated]
+PASSED tests/test_protocol_recovery.py::test_output_limit_recovers_without_executing_partial_output
+PASSED tests/test_protocol_recovery.py::test_output_limit_recovery_is_bounded_and_persisted
+PASSED tests/test_protocol_recovery.py::test_redundant_self_routing_is_audited_without_changing_dispatch
+PASSED tests/test_protocol_recovery.py::test_annotations_never_hide_cross_agent_routing_or_approval[extra0]
+PASSED tests/test_protocol_recovery.py::test_annotations_never_hide_cross_agent_routing_or_approval[extra1]
+PASSED tests/test_protocol_recovery.py::test_annotations_never_hide_cross_agent_routing_or_approval[extra2]
+PASSED tests/test_protocol_recovery.py::test_annotations_never_hide_cross_agent_routing_or_approval[extra3]
+PASSED tests/test_protocol_recovery.py::test_large_file_hash_precedes_context_truncation
+PASSED tests/test_protocol_recovery.py::test_readonly_roles_receive_usable_reporting_guidance
+PASSED tests/test_protocol_recovery.py::test_unambiguous_schema_fields_have_one_canonical_location[action0]
+PASSED tests/test_protocol_recovery.py::test_unambiguous_schema_fields_have_one_canonical_location[action1]
+PASSED tests/test_protocol_recovery.py::test_unambiguous_schema_fields_have_one_canonical_location[action2]
+PASSED tests/test_protocol_recovery.py::test_send_file_recipient_is_argument_not_self_routing
+PASSED tests/test_protocol_recovery.py::test_working_context_stays_bounded_preserves_recent_evidence_and_isolates_tasks
+PASSED tests/test_protocol_recovery.py::test_prompt_file_example_decodes_to_actual_newlines
+PASSED tests/test_protocol_recovery.py::test_low_budget_reminder_preserves_gates_and_correction_order
+PASSED tests/test_provider.py::test_request_uses_configured_hkgai_and_counts_usage
+PASSED tests/test_provider.py::test_server_error_body_cannot_expose_secret
+PASSED tests/test_provider.py::test_nullable_usage_does_not_discard_valid_response
+PASSED tests/test_provider.py::test_v1_not_duplicated_and_truncation_rejected
+PASSED tests/test_provider.py::test_dotenv_no_global_mutation
+PASSED tests/test_provider.py::test_prohibited_provider_rejected[https://api.openai.com]
+PASSED tests/test_provider.py::test_prohibited_provider_rejected[https://api.anthropic.com]
+PASSED tests/test_provider.py::test_prohibited_provider_rejected[http://api1.hkgai.net]
+PASSED tests/test_provider.py::test_prohibited_provider_rejected[https://api1.hkgai.net.evil.test]
+PASSED tests/test_provider.py::test_prohibited_provider_rejected[https://api1.hkgai.net:invalid]
+PASSED tests/test_provider.py::test_prohibited_provider_rejected[https://api1.hkgai.net:444]
+PASSED tests/test_provider.py::test_rate_limit_respects_retry_after_with_bounded_jitter[4-4.25]
+PASSED tests/test_provider.py::test_rate_limit_respects_retry_after_with_bounded_jitter[invalid-0.75]
+PASSED tests/test_provider.py::test_rate_limit_respects_retry_after_with_bounded_jitter[-1-0.75]
+PASSED tests/test_provider.py::test_rate_limit_respects_retry_after_with_bounded_jitter[nan-0.75]
+PASSED tests/test_provider.py::test_rate_limit_respects_retry_after_with_bounded_jitter[999999-30]
+PASSED tests/test_provider.py::test_retry_after_http_date
+PASSED tests/test_provider.py::test_retries_are_bounded_for_server_and_network_failures[False]
+PASSED tests/test_provider.py::test_retries_are_bounded_for_server_and_network_failures[True]
+PASSED tests/test_provider.py::test_json_mode_requests_structured_output_and_private_chat_does_not
+PASSED tests/test_provider.py::test_explicit_unsupported_json_format_falls_back_once_and_is_remembered
+PASSED tests/test_provider.py::test_json_fallback_never_retries_unrelated_rejections[error0]
+PASSED tests/test_provider.py::test_json_fallback_never_retries_unrelated_rejections[error1]
+PASSED tests/test_provider.py::test_json_fallback_never_retries_unrelated_rejections[error2]
+PASSED tests/test_provider.py::test_malformed_successful_responses_are_retried_but_bounded[bad_response0-root_not_object]
+PASSED tests/test_provider.py::test_malformed_successful_responses_are_retried_but_bounded[bad_response1-missing_choice]
+PASSED tests/test_provider.py::test_malformed_successful_responses_are_retried_but_bounded[bad_response2-missing_choice]
+PASSED tests/test_provider.py::test_malformed_successful_responses_are_retried_but_bounded[bad_response3-missing_message]
+PASSED tests/test_provider.py::test_malformed_successful_responses_are_retried_but_bounded[bad_response4-nontext_content]
+PASSED tests/test_provider.py::test_malformed_successful_responses_are_retried_but_bounded[bad_response5-empty_content]
+PASSED tests/test_provider.py::test_empty_response_recovers_and_records_usage_from_both_responses
+PASSED tests/test_provider.py::test_truncation_is_typed_counted_and_never_returned_or_retried
+PASSED tests/test_provider.py::test_explicit_refusal_is_not_retried[choice0]
+PASSED tests/test_provider.py::test_explicit_refusal_is_not_retried[choice1]
+PASSED tests/test_provider.py::test_invalid_json_error_has_safe_diagnostic_and_no_response_body
+PASSED tests/test_provider.py::test_fallback_and_transient_failures_share_three_request_budget
+PASSED tests/test_provider.py::test_usage_ignores_negative_values_and_boolean_counts
+PASSED tests/test_regressions.py::test_truncated_read_cannot_prove_full_text_equality
+PASSED tests/test_regressions.py::test_custom_agent_types_fail_cleanly_before_creating_session
+PASSED tests/test_sandbox.py::test_python_can_read_write_own_workspace
+PASSED tests/test_sandbox.py::test_other_workspace_host_secret_and_environment_are_denied
+PASSED tests/test_sandbox.py::test_network_and_child_process_creation_denied
+PASSED tests/test_sandbox.py::test_wall_timeout_kills_execution_and_no_detached_children
+PASSED tests/test_sandbox.py::test_output_is_bounded
+PASSED tests/test_sandbox.py::test_hard_file_size_limit
+PASSED tests/test_sandbox.py::test_invalid_script_paths_rejected[../escape.py]
+PASSED tests/test_sandbox.py::test_invalid_script_paths_rejected[/tmp/escape.py]
+PASSED tests/test_sandbox.py::test_invalid_script_paths_rejected[bad.txt]
+PASSED tests/test_sandbox.py::test_invalid_script_paths_rejected[bad\x00.py]
+PASSED tests/test_sandbox.py::test_symlink_script_rejected
+PASSED tests/test_sandbox.py::test_invalid_timeout_rejected[0]
+PASSED tests/test_sandbox.py::test_invalid_timeout_rejected[-1]
+PASSED tests/test_sandbox.py::test_invalid_timeout_rejected[nan]
+PASSED tests/test_sandbox.py::test_invalid_timeout_rejected[inf]
+PASSED tests/test_sandbox.py::test_invalid_timeout_rejected[121]
+PASSED tests/test_sandbox.py::test_invalid_timeout_rejected[True]
+PASSED tests/test_sandbox.py::test_invalid_timeout_rejected[30]
+PASSED tests/test_sandbox.py::test_unavailable_backend_never_executes_host_code
+PASSED tests/test_sandbox.py::test_docker_command_has_required_isolation_flags
+PASSED tests/test_sandbox.py::test_docker_service_failure_is_clear
+PASSED tests/test_sandbox.py::test_docker_cleanup_distinguishes_removed_from_daemon_failure
+PASSED tests/test_tools.py::test_roundtrip_nested_utf8_and_list
+PASSED tests/test_tools.py::test_path_escape_rejected[../qa/workspace/secret.txt]
+PASSED tests/test_tools.py::test_path_escape_rejected[/etc/passwd]
+PASSED tests/test_tools.py::test_path_escape_rejected[src/../../x.py]
+PASSED tests/test_tools.py::test_path_escape_rejected[C:\\secret.txt]
+PASSED tests/test_tools.py::test_path_escape_rejected[.git/config]
+PASSED tests/test_tools.py::test_path_escape_rejected[x/../y.txt]
+PASSED tests/test_tools.py::test_unsupported_document_types_rejected[report.pdf]
+PASSED tests/test_tools.py::test_unsupported_document_types_rejected[essay.docx]
+PASSED tests/test_tools.py::test_unsupported_document_types_rejected[talk.pptx]
+PASSED tests/test_tools.py::test_unsupported_document_types_rejected[data.xlsx]
+PASSED tests/test_tools.py::test_unsupported_document_types_rejected[image.png]
+PASSED tests/test_tools.py::test_unsupported_document_types_rejected[.env]
+PASSED tests/test_tools.py::test_symlink_and_hardlink_boundaries
+PASSED tests/test_tools.py::test_fifo_rejected_without_blocking
+PASSED tests/test_tools.py::test_files_have_size_limit
+PASSED tests/test_tools.py::test_approval_is_required_for_all_critical_operations
+PASSED tests/test_tools.py::test_exact_schema_and_agent_validation
+PASSED tests/test_tools.py::test_share_explicit_file_only_with_audited_hash
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses0]
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses1]
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses2]
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses3]
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses4]
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses5]
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses6]
+PASSED tests/test_tools.py::test_private_or_mixed_dns_answers_blocked[addresses7]
+PASSED tests/test_tools.py::test_public_dns_is_pinned_and_tls_retains_original_hostname
+PASSED tests/test_tools.py::test_invalid_network_urls_blocked[file:///etc/passwd]
+PASSED tests/test_tools.py::test_invalid_network_urls_blocked[https://user:pass@example.org]
+PASSED tests/test_tools.py::test_invalid_network_urls_blocked[http://example.org:9999]
+PASSED tests/test_tools.py::test_invalid_network_urls_blocked[ftp://example.org/x]
+PASSED tests/test_tools.py::test_invalid_network_urls_blocked[https://example.org/\nheader]
+PASSED tests/test_tools.py::test_redirect_is_revalidated_and_local_destination_never_requested
+PASSED tests/test_tools.py::test_fetch_strips_script_and_marks_evidence_untrusted
+PASSED tests/test_tools.py::test_binary_and_unexpected_compression_rejected[headers0-%PDF]
+PASSED tests/test_tools.py::test_binary_and_unexpected_compression_rejected[headers1-]
+PASSED tests/test_tools.py::test_search_returns_citable_rss_items
+PASSED tests/test_tools.py::test_run_python_uses_sandbox_only
+PASSED tests/test_tools.py::test_git_init_commit_status_and_diff
+PASSED tests/test_tools.py::test_git_hooks_and_environment_credentials_are_not_inherited
+PASSED tests/test_tools.py::test_malicious_git_config_rejected_before_commands
+PASSED tests/test_tools.py::test_push_restricts_remote_and_ref[file:///tmp/repo-main]
+PASSED tests/test_tools.py::test_push_restricts_remote_and_ref[https://github.com.evil.test/a/b-main]
+PASSED tests/test_tools.py::test_push_restricts_remote_and_ref[https://token@github.com/a/b-main]
+PASSED tests/test_tools.py::test_push_restricts_remote_and_ref[https://github.com/a/b---force]
+PASSED tests/test_tools.py::test_push_restricts_remote_and_ref[https://github.com/a/b-bad..branch]
+PASSED tests/test_tools.py::test_push_without_token_explains_configuration
+PASSED tests/test_tools.py::test_sanitized_error_does_not_expose_token
+PASSED tests/test_tools.py::test_interrupted_git_process_is_killed_and_reaped
+PASSED tests/test_tools.py::test_search_warns_about_irrelevant_successful_hits_without_hiding_them
+PASSED tests/test_tools.py::test_search_relevant_hits_do_not_warn
+PASSED tests/test_tools.py::test_search_empty_results_suggest_another_strategy

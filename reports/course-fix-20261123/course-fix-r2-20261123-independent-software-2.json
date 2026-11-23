@@ -1,0 +1,77 @@
+{
+  "run_id": "course-fix-r2-20261123",
+  "task_id": "software-2",
+  "engine_status": "completed",
+  "agent_turns": 68,
+  "artifact_success": false,
+  "course_task_success": false,
+  "validation_status": "partial_verified_with_static_defect_and_browser_block",
+  "rubric": "../course-comparison-20261123/software-rubric.md",
+  "mandatory_criteria_passed": 6,
+  "mandatory_criteria_total": 7,
+  "checks_passed": 24,
+  "checks_total": 24,
+  "criteria": [
+    {
+      "id": "existing_system",
+      "status": "pass",
+      "evidence": "Loads actual records created and cancelled through unchanged booking_core, roundtrip persistence and preserved overlap/availability passed."
+    },
+    {
+      "id": "interactive_dates",
+      "status": "pass",
+      "evidence": "CLI date range parameters recalculated metrics for day3 and empty ranges; HTML has From/To listeners. Frozen rubric permits rerun/interactive CLI."
+    },
+    {
+      "id": "per_room_count",
+      "status": "pass",
+      "evidence": "Fixed fixture A=2, B=1; changed range represents unused A as zero."
+    },
+    {
+      "id": "per_room_duration",
+      "status": "pass",
+      "evidence": "Fixed fixture A=3h, B=1h; cancelled records excluded; start-date policy disclosed."
+    },
+    {
+      "id": "busiest_days_times",
+      "status": "fail",
+      "evidence": "Python fixed fixture passes. Source uses local midnight followed by toISOString for chart-day labels: in HKT this emits the preceding date, missing the last selected day. Exact-script isolated UTC test passes but cannot refute HKT defect. Browser execution blocked; visual rendering unverified."
+    },
+    {
+      "id": "cancellation_frequency",
+      "status": "pass",
+      "evidence": "A=1, B=0 cancellations; overall rate 1/4 with clear denominator."
+    },
+    {
+      "id": "charts_summaries",
+      "status": "pass",
+      "evidence": "Self-contained HTML has generated inline SVG chart implementation with per-room count/hours, day/hour bars, KPIs and most/least-use summary; CLI summary correct."
+    }
+  ],
+  "source_hashes": {
+    "booking_core.py": "24e1628be9804f9f781c459a512294f0028ed47f40b12f3c4c030827ef4823d7",
+    "booking_cli.py": "e5201441394a79e80564c6d8cdba22f4675c069de2652162d657e1ada0e0bd5b",
+    "dashboard.py": "0915ddd06841be9516cb604f0637405999fc474d5559e6ec9b5a3ebf3f1d8456",
+    "dashboard.html": "43eb74330ffdd89b7c8810b0325099d2fc845c18348254ab26d73fcb8271ecf4",
+    "README.md": "09ab63afe0cf124ca207454dfffa1e6769b02fdaa0f29746c23d8c759161c77f",
+    "bookings.json": "aa6c542a3144f4ad43816fa05e7f69d3069bafc371c7444a6f0b808427938eb8"
+  },
+  "execution_evidence": "independent-review/software-2/sandbox-check.json",
+  "browser_fixture": "independent-review/software-2/fixture-dashboard.html",
+  "source_review_findings": [
+    {
+      "type": "timezone_day_chart",
+      "detail": "dashboard.py:221 builds local-midnight Date, then toISOString().slice(0,10), which shifts dates backward in HKT. Expected fixture dates01-05/01-06 become01-04/01-05, omitting last-day bar."
+    },
+    {
+      "type": "documented_command_error",
+      "detail": "README and final_output recommend python3 dashboard.py --html without required argument. Independently exits2. final_output provides functioning alternative python3 gen_dashboard.py; --html dashboard.html also works."
+    }
+  ],
+  "environment": "Generated Python executed only in macOS Sandbox; isolated JavaScriptCore with DOM stubs passed in UTC. Browser local file URL rejected by browser security policy; no workaround used. HKT runtime was not achieved (actual offset remained 0); explicit setTimeZone probe unsupported.",
+  "additional_evidence": [
+    "independent-review/software-2/js-review-results.json",
+    "independent-review/software-2/js-review-hkt-results.json",
+    "independent-review/software-2/js-review-explicit-hkt-results.json"
+  ]
+}

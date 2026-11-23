@@ -1,0 +1,207 @@
+{
+  "task_id": "software-2",
+  "rubric": "software-rubric.md",
+  "artifact_hashes": {
+    "NOTES-dashboard.md": "af24150c3c04017fdbffdf5e5756d57ea522bac52361bcb55269032e62ec90c0",
+    "server.py": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1",
+    "index.html": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6",
+    "booking.py": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee",
+    "dashboard.html": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602",
+    "README.md": "a4d8ed8a3c5d5bf0cfe11979b5205edcc2f7972be0a6029858e7481f95b3b2e8",
+    "selftest.py": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+  },
+  "rooms": {
+    "A": "atlas",
+    "B": "birch"
+  },
+  "fixture_dates": [
+    "2026-12-01",
+    "2026-12-02",
+    "2026-12-03"
+  ],
+  "criteria": [
+    {
+      "id": "existing_system",
+      "status": "pass",
+      "evidence": {
+        "api_stats_equals_direct_aggregation": true,
+        "dashboard_routes": [
+          "/dashboard",
+          "/dashboard.html"
+        ],
+        "api_create_cancel": true,
+        "overlap_containment_rejected": true,
+        "adjacent_and_other_room_accepted": true,
+        "cancellation_durable": true,
+        "analytics_is_read_only": true,
+        "documented_launch": "server.py",
+        "documentation": [
+          "README.md",
+          "NOTES-dashboard.md"
+        ],
+        "entrypoint": "server.py __main__ executed; no-network server adapter dispatched /dashboard successfully",
+        "execution": "Seatbelt; actual handler dispatch, no network listener"
+      }
+    },
+    {
+      "id": "date_selection",
+      "status": "pass",
+      "evidence": {
+        "range_specific_responses": {
+          "2026-12-01/2026-12-01": {
+            "bookings_active": 2,
+            "hours_active": 3.0
+          },
+          "2026-12-02/2026-12-02": {
+            "bookings_active": 1,
+            "hours_active": 1.0
+          },
+          "2026-12-01/2026-12-02": {
+            "bookings_active": 3,
+            "hours_active": 4.0
+          },
+          "2026-12-03/2026-12-03": {
+            "bookings_active": 1,
+            "hours_active": 2.0
+          },
+          "2026-11-01/2026-11-30": {
+            "bookings_active": 0,
+            "hours_active": 0.0
+          }
+        },
+        "both_endpoints_included": true,
+        "missing_invalid_reversed_rejected": true,
+        "browser_interaction": "Requires separate browser evidence; this is backend verification.",
+        "browser_result": "../checkpoint-101/browser/browser-result.json",
+        "browser_html_hash_matches": true,
+        "actual_handler_responses_equal_browser_fixture": true
+      },
+      "backend_static_status": "pass"
+    },
+    {
+      "id": "per_room_count",
+      "status": "pass",
+      "evidence": {
+        "atlas": 2,
+        "birch": 1,
+        "unused_rooms_zero": [
+          "cedar",
+          "delta",
+          "everest"
+        ],
+        "total_active": 3
+      }
+    },
+    {
+      "id": "per_room_duration",
+      "status": "pass",
+      "evidence": {
+        "atlas": "3 active hours; 1 cancelled hour excluded",
+        "birch": "1 active hour",
+        "all_rooms_active_hours": 4.0,
+        "outside_D3_excluded": true,
+        "range_policy": "inclusive booking date; active reserved duration only",
+        "utilisation_pct": 3.08
+      }
+    },
+    {
+      "id": "busiest_days_times",
+      "status": "pass",
+      "evidence": {
+        "top_days": [
+          {
+            "date": "2026-12-01",
+            "bookings_active": 2,
+            "hours_active": 3.0
+          },
+          {
+            "date": "2026-12-02",
+            "bookings_active": 1,
+            "hours_active": 1.0
+          }
+        ],
+        "hourly_active_hours": {
+          "07:00": 0.0,
+          "08:00": 0.0,
+          "09:00": 2.0,
+          "10:00": 1.0,
+          "11:00": 1.0,
+          "12:00": 0.0,
+          "13:00": 0.0,
+          "14:00": 0.0,
+          "15:00": 0.0,
+          "16:00": 0.0,
+          "17:00": 0.0,
+          "18:00": 0.0,
+          "19:00": 0.0
+        },
+        "fractional_booking_0930_1030": {
+          "09:00": 0.5,
+          "10:00": 0.5
+        },
+        "weekday_totals_match": true
+      }
+    },
+    {
+      "id": "cancellation_frequency",
+      "status": "pass",
+      "evidence": {
+        "retained_cancelled_records": 1,
+        "overall_rate": "1 / 4 = 25%",
+        "A_count": 1,
+        "B_count": 0,
+        "denominator": "all active and cancelled bookings with booked date in range"
+      }
+    },
+    {
+      "id": "clear_charts_summaries",
+      "status": "pass",
+      "evidence": {
+        "static": {
+          "date_inputs": true,
+          "actual_stats_endpoint": true,
+          "room_hours_weekday_hour_cancellation_rendering_references": true,
+          "self_contained_scripts": true
+        },
+        "browser_visual_and_interaction": "Not performed by this Python script.",
+        "browser_result": "../checkpoint-101/browser/browser-result.json",
+        "browser_html_hash_matches": true,
+        "actual_handler_responses_equal_browser_fixture": true
+      },
+      "backend_static_status": "pass"
+    }
+  ],
+  "mandatory_criteria_total": 7,
+  "mandatory_criteria_passed": 7,
+  "artifact_success": true,
+  "supplementary": {
+    "empty_store": {
+      "zero_counts_and_duration": true,
+      "all_rooms_present": true,
+      "read_did_not_create_data": true
+    }
+  },
+  "method": "Unmodified copies imported and executed in Seatbelt. HTTP handlers exercised with in-memory streams; no network listener or browser invoked.",
+  "reviewer_repairs": false,
+  "browser_evidence": {
+    "path": "../checkpoint-101/browser/browser-result.json",
+    "sha256": "2bdbd8031e190de118fc2cfd3bf9732ccae7e05ffd64db507c8089f3b6079cda",
+    "browser": "144.0.7559.133",
+    "html_sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602",
+    "method": "Unmodified HTML in Chromium; HTTP requests intercepted with JSON from real delivered handlers independently executed in Seatbelt. No live HTTP listener.",
+    "checks": [
+      "Default dates use Hong Kong local date at 00:30, with no UTC shift",
+      "Known two-day fixture renders correct totals, all five rooms, day/hour charts, cancellation and readable tables",
+      "Room table sorts by name in both directions",
+      "Changing dates changes active hours/count and cancellation denominator",
+      "Empty range has an explanatory message",
+      "Invalid range and API error are visible",
+      "Last seven days and last month presets use correct calendar boundaries",
+      "390px mobile page has no horizontal document overflow"
+    ],
+    "reuse_basis": "Exact HTML bytes and all fixture response JSON equal checkpoint-120; original browser evidence preserved."
+  },
+  "engine_status_at_120": "budget_exhausted",
+  "complete_course_task_success_at_120": false,
+  "artifact_success_scope": "Artifacts pass all seven criteria; original engine run did not finish within its 120-turn budget. Completion after continuation must be reported separately."
+}

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Semiconductors at End-2026 - Fund Team Presentation</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#0b1016;color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+#deck{position:relative;height:100vh;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;padding:40px 56px 64px;overflow-y:auto}
+.slide.active{display:block}
+.kicker{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#4aa3ff;font-weight:700;margin-bottom:9px}
+h1{font-size:40px;line-height:1.12;margin:0 0 12px;font-weight:800;letter-spacing:-.02em}
+h2{font-size:24px;line-height:1.2;margin:0 0 15px;font-weight:750;letter-spacing:-.01em}
+h3{font-size:12.5px;margin:0 0 7px;color:#9fb3c8;text-transform:uppercase;letter-spacing:.07em}
+p,li{font-size:14.5px;line-height:1.47}
+ul,ol{margin:0 0 10px;padding-left:20px}
+li{margin-bottom:6px}
+.sub{color:#8b98a5;font-size:16px}
+.grid{display:grid;gap:13px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:#121a24;border:1px solid #24303d;border-radius:10px;padding:13px 15px}
+.big{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.08em;padding:2px 6px;border-radius:4px;vertical-align:middle;margin-left:5px}
+.e{background:#12351f;color:#5fd68a;border:1px solid #1f6b3a}
+.j{background:#3a2c0e;color:#ffb454;border:1px solid #7a5a18}
+.nv{background:#3a1414;color:#ff8585;border:1px solid #7a2424}
+.d{background:#0f2a3a;color:#6fc4ff;border:1px solid #1d5573}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:#9fb3c8;font-weight:700;border-bottom:1px solid #2c3a4a;padding:6px 8px;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}
+td{border-bottom:1px solid #1c2632;padding:7px 8px;vertical-align:top}
+.hi{color:#fff;font-weight:700}
+.muted{color:#8b98a5}
+.warn{color:#ffb454}
+.bad{color:#ff8585}
+.good{color:#5fd68a}
+.foot{position:fixed;left:0;right:0;bottom:0;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 56px;font-size:11px;color:#5d6b7a;border-top:1px solid #1c2632;background:#0b1016;z-index:7}
+.bar{position:fixed;left:0;top:0;height:3px;background:#4aa3ff;width:0;transition:width .18s;z-index:8}
+.nav{position:fixed;right:16px;bottom:52px;display:flex;gap:7px;z-index:9}
+.nav button{background:#18222e;color:#cfe0f0;border:1px solid #2c3a4a;border-radius:7px;padding:6px 11px;font-size:12.5px;cursor:pointer}
+.nav button:hover{background:#22303f}
+.two{display:grid;grid-template-columns:1.12fr .88fr;gap:18px}
+.rule{height:1px;background:#1c2632;margin:13px 0}
+@media (max-width:900px){.g2,.g3,.two{grid-template-columns:1fr}h1{font-size:27px}h2{font-size:19px}.slide{padding:24px 20px 60px}.foot{padding:0 20px}}
+</style>
+</head>
+<body>
+<div class='bar' id='bar'></div>
+<main id='deck'>
+
+<section class='slide active'>
+  <div class='kicker'>Internal fund-team presentation &middot; 23 November 2026</div>
+  <h1>Semiconductors at End-2026</h1>
+  <p class='sub'>Cycle position, industry structure, 2027&ndash;2029 scenarios, investment implications and key risks.</p>
+  <div class='grid g3' style='margin:18px 0'>
+    <div class='card'><h3>Evidence base</h3><div class='hi'>3 hard prints</div><div class='muted' style='font-size:12.5px'>SIA Q3-2026 and YTD releases, retrieved 2026-11-23</div></div>
+    <div class='card'><h3>House view 2027&ndash;29</h3><div class='hi'>Bull 25 / Base 50 / Bear 25</div><div class='muted' style='font-size:12.5px'>fund manager's judgement <span class='tag j'>J</span></div></div>
+    <div class='card'><h3>Stance</h3><div class='hi'>Barbell, sized for survival</div><div class='muted' style='font-size:12.5px'>own chokepoints, not sector beta</div></div>
+  </div>
+  <div class='rule'></div>
+  <p><b>How to read this deck.</b> Every claim is tagged: <span class='tag e'>E</span> evidence (reported, dated, sourced), <span class='tag d'>D</span> derived arithmetic, <span class='tag j'>J</span> our judgement, <span class='tag nv'>NV</span> not verified &mdash; do not quote as fact. Tags are deliberate: we would rather show a gap than invent a number.</p>
+  <p class='muted'>Navigate with &rarr; / &larr; / Space, or the buttons bottom-right. Internal research for fund-team discussion &mdash; not investment advice, no price targets.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>1 &middot; Executive summary</div>
+  <h2>Our view in five lines</h2>
+  <ul>
+    <li><b>Late-cycle tight, structurally larger.</b> Three consecutive quarters of &gt;20% QoQ industry growth <span class='tag e'>E</span> is not a mid-cycle print; at that rate of change broad sector beta is a poor entry. <span class='tag j'>J</span></li>
+    <li><b>AI is the engine &mdash; but our evidence is directional, not quantitative.</b> Hyperscaler capex dollars, HBM pricing and accelerator units are all <span class='tag nv'>NV</span> in this deck.</li>
+    <li><b>Bottleneck owners get paid.</b> Leading-edge foundry, EUV lithography, the HBM leader, advanced packaging and EDA sit where the customer cannot route around them. Commodity logic and mature node are price-takers. <span class='tag j'>J</span></li>
+    <li><b>Memory is a timing decision, not a structural one.</b> HBM improves the quality of memory earnings; it does not repeal the cycle. Capacity funded in 2024&ndash;26 lands on a 2&ndash;3 year lag. <span class='tag j'>J</span></li>
+    <li><b>Portfolio stance: barbell, size for survival, do not pay for narrative.</b> Scenarios Bull 25% / Base 50% / Bear 25% (my judgement) &mdash; the bear is fully funded, not hypothetical.</li>
+  </ul>
+  <div class='card'><b>One-line conclusion:</b> own the chokepoints rather than the industry; treat memory as a sized, pre-triggered trade; and hold permanent haircuts for Taiwan and China policy rather than expected values.</div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>2 &middot; Where the cycle stands</div>
+  <h2>The three hard numbers we actually hold</h2>
+  <div class='grid g3'>
+    <div class='card'><h3>Q3-2026 global sales</h3><div class='big good'>USD 517.7bn</div><div><b>+24.1% QoQ</b> <span class='tag e'>E</span></div><div class='muted' style='font-size:12px'>SIA release 2026-11-03 &middot; retrieved 2026-11-23</div></div>
+    <div class='card'><h3>September 2026 sales</h3><div class='big good'>USD 172.6bn</div><div><b>+146.8% YoY &middot; +7.9% MoM</b> <span class='tag e'>E</span></div><div class='muted' style='font-size:12px'>A <b>three-month moving average</b> &mdash; never sum monthly prints into a quarter.</div></div>
+    <div class='card'><h3>Year-to-date through Aug 2026</h3><div class='big good'>&gt; USD 1trn</div><div><b>eight months</b> <span class='tag e'>E</span></div><div class='muted' style='font-size:12px'>SIA release 2026-10-05 &middot; retrieved 2026-11-23</div></div>
+  </div>
+  <div class='rule'></div>
+  <div class='two'>
+    <div>
+      <h3>Why this matters more than the precision</h3>
+      <p>The SIA release quotes its CEO: sales rose by more than 20% quarter-on-quarter for the <b>third consecutive quarter</b> <span class='tag e'>E</span>. Regional September YoY growth was broad-based &mdash; Americas +191.7%, Asia Pacific +141.4%, China +124.9%, Europe +102.5%, Japan +73.4% <span class='tag e'>E</span>. A three-quarter streak with global breadth is the signature of a <b>pricing-led up-leg</b>, not a mid-cycle recovery.</p>
+      <p><b>Our read <span class='tag j'>J</span>:</b> the industry is <b>late-cycle tight</b> but structurally larger than in prior cycles. Buying broad sector beta after a three-quarter &gt;20% QoQ run is a poor risk/reward entry.</p>
+    </div>
+    <div>
+      <h3>Derived arithmetic (not a forecast)</h3>
+      <table>
+        <tr><td>Q3 annualised run-rate</td><td class='hi'>&asymp; USD 2.07trn <span class='tag d'>D</span></td></tr>
+        <tr><td>Implied FY2026 revenue</td><td class='hi'>&asymp; USD 1.6&ndash;1.75trn <span class='tag d'>D</span></td></tr>
+        <tr><td>Memory vs logic split</td><td class='bad'>NOT VERIFIED <span class='tag nv'>NV</span></td></tr>
+        <tr><td>2027 consensus growth</td><td class='bad'>NOT VERIFIED <span class='tag nv'>NV</span></td></tr>
+      </table>
+      <p class='muted' style='font-size:12px'>The FY band is deliberately wide: it is arithmetic on three prints, not a bottom-up model. WSTS detail is subscription-gated and was not retrieved.</p>
+    </div>
+  </div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>3 &middot; Evidence discipline</div>
+  <h2>What we can verify &mdash; and what we cannot</h2>
+  <div class='two'>
+    <div class='card' style='border-color:#1f6b3a'>
+      <h3 class='good'>Verified <span class='tag e'>E</span></h3>
+      <ul style='margin-bottom:0'>
+        <li>Q3-2026 sales USD 517.7bn, +24.1% QoQ</li>
+        <li>September 2026 (3-month moving average) USD 172.6bn, +146.8% YoY, +7.9% MoM</li>
+        <li>YTD &gt; USD 1trn through August 2026; third consecutive &gt;20% QoQ quarter</li>
+        <li>Regional September YoY growth, all five regions</li>
+        <li>Existence of a 2026 US export-control rule addressing remote access to advanced semiconductors (date and scope <span class='tag nv'>NV</span>)</li>
+      </ul>
+    </div>
+    <div class='card' style='border-color:#7a2424'>
+      <h3 class='bad'>Not verified <span class='tag nv'>NV</span></h3>
+      <ul style='margin-bottom:0'>
+        <li>Hyperscaler capex in dollars (MSFT, GOOGL, AMZN, META)</li>
+        <li>TSMC October-2026 revenue; 2026 capex; N2 timing</li>
+        <li>ASML bookings / backlog; SEMI WFE totals and China's share of WFE</li>
+        <li>DRAM, NAND and HBM pricing; HBM bit share; CoWoS capacity</li>
+        <li>Memory share of industry; top-5 concentration; AI share of leading-edge demand</li>
+        <li>Segment margins; every valuation multiple (P/E, P/B, EV/EBITDA); SOX level</li>
+        <li>China's share of global semiconductor demand</li>
+      </ul>
+    </div>
+  </div>
+  <div class='rule'></div>
+  <p><b>How to use this deck.</b> The judgement slides (cycle position, scenarios, implications) rest on the verified layer plus structural reasoning. The <span class='tag nv'>NV</span> items are <b>data requests, not inputs</b>. WSTS detail sits behind a subscription and the TSMC monthly-revenue page returned navigation only; we stopped rather than guess.</p>
+  <p class='muted'>This gap is the single biggest weakness of the analysis and should be stated whenever the deck is shown. It is also why no price target appears anywhere in these pages.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>4 &middot; AI and datacenter demand</div>
+  <h2>AI is the engine &mdash; our evidence is directional, not quantitative</h2>
+  <div class='two'>
+    <div>
+      <h3>The transmission chain</h3>
+      <ol>
+        <li><b>Accelerator demand</b> (merchant GPU + custom ASIC)</li>
+        <li><b>Leading-edge logic wafers</b> &mdash; one supplier at scale at N3/N2</li>
+        <li><b>HBM stacks</b> &mdash; three qualified suppliers</li>
+        <li><b>Advanced packaging (CoWoS-class)</b> &mdash; the binding constraint</li>
+        <li><b>Equipment / lithography</b> &mdash; one supplier for EUV</li>
+      </ol>
+      <p class='muted' style='font-size:12.5px'>Every link has one to three suppliers. That structure, not the demand forecast, is what our investment view rests on. <span class='tag j'>J</span></p>
+    </div>
+    <div>
+      <h3>Accelerator market structure</h3>
+      <table>
+        <tr><th>Route</th><th>Who captures value</th><th>Our read</th></tr>
+        <tr><td>Merchant GPU</td><td>Platform + software ecosystem owner</td><td>Pricing power from switching costs <span class='tag j'>J</span></td></tr>
+        <tr><td>Custom ASIC / TPU</td><td>Hyperscaler design + design partner</td><td>Grows as buyers de-risk single-supplier dependence <span class='tag j'>J</span></td></tr>
+        <tr><td>Networking / optics</td><td>Incumbent silicon vendors</td><td>Scales with cluster size, not chip count <span class='tag j'>J</span></td></tr>
+      </table>
+      <p class='muted' style='font-size:12.5px'>Units, accelerator pricing, hyperscaler capex dollars and HBM bit share are all <span class='tag nv'>NV</span> &mdash; we make no quantitative claim about the split.</p>
+    </div>
+  </div>
+  <div class='rule'></div>
+  <div class='card'><b>The 2027&ndash;2029 question is the second derivative, not the level.</b> AI infrastructure spend can sit at a record absolute level while decelerating &mdash; and it is the rate of change that reprices the chain. Three tests, in order of signal quality: hyperscaler capex <i>guidance direction</i> (not the level), CoWoS-class lead times, and whether HBM is sold out into the following year. <span class='tag j'>J</span> All three are currently <span class='tag nv'>NV</span>.</div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>5 &middot; Memory and HBM</div>
+  <h2>HBM improves the <i>quality</i> of memory earnings &mdash; it does not repeal the cycle</h2>
+  <div class='grid g2'>
+    <div class='card' style='border-color:#1f6b3a'>
+      <h3 class='good'>What genuinely changed</h3>
+      <ul style='margin-bottom:0'>
+        <li>HBM is <b>contracted and qualification-locked</b>: visibility in quarters, not spot weeks <span class='tag j'>J</span></li>
+        <li>HBM consumes <b>more wafer area per bit</b> than commodity DRAM, tightening base DRAM as mix shifts <span class='tag j'>J</span></li>
+        <li>Memory is now a <b>qualification race</b>, not only a cost race &mdash; a structural positive for the incumbent leader <span class='tag j'>J</span></li>
+        <li>Concentrated buyers plan capacity years ahead, which lengthens the order book <span class='tag j'>J</span></li>
+      </ul>
+    </div>
+    <div class='card' style='border-color:#7a2424'>
+      <h3 class='bad'>What did not change</h3>
+      <ul style='margin-bottom:0'>
+        <li>Capacity funded in 2024&ndash;2026 lands with a <b>two-to-three year lag</b> &mdash; the glut mechanism is bought in advance <span class='tag j'>J</span></li>
+        <li>Commodity DRAM still sets the marginal price and the marginal print <span class='tag j'>J</span></li>
+        <li>Memory remains the <b>highest earnings-volatility</b> segment in the sector <span class='tag j'>J</span></li>
+        <li>Contract prices, bit supply, HBM pricing and capacity additions are all <span class='tag nv'>NV</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class='rule'></div>
+  <p><b>Investment reading <span class='tag j'>J</span>:</b> memory is a <b>timing</b> decision, not a structural one. Own the HBM leader as a quality franchise, but <b>size memory like a cycle</b>: define the exit on DRAM/HBM contract-price direction before entering, not on price momentum. Historical cycle amplitude is NV in this deck &mdash; we will not quote a drawdown percentage we cannot source.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>6 &middot; Leading-edge manufacturing and equipment</div>
+  <h2>The bottleneck map is the investment case</h2>
+  <div class='two'>
+    <div>
+      <table>
+        <tr><th>Chokepoint</th><th>Why it has pricing power</th><th>Status of numbers</th></tr>
+        <tr><td><b>Leading-edge foundry</b> (N3/N2)</td><td>One supplier at scale; customers cannot route around it <span class='tag j'>J</span></td><td>Share, capex, N2 timing <span class='tag nv'>NV</span></td></tr>
+        <tr><td><b>Advanced packaging</b> (CoWoS-class)</td><td>The binding constraint on accelerator shipments <span class='tag j'>J</span></td><td>Capacity, lead times <span class='tag nv'>NV</span></td></tr>
+        <tr><td><b>EUV / High-NA lithography</b></td><td>Single supplier; tools are the gate to the leading edge <span class='tag j'>J</span></td><td>Bookings, backlog, High-NA units <span class='tag nv'>NV</span></td></tr>
+        <tr><td><b>EDA / IP</b></td><td>Design-flow lock-in, low capex, recurring revenue <span class='tag j'>J</span></td><td>Margins <span class='tag nv'>NV</span></td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Roadmap and spend</h3>
+      <ul>
+        <li><b>2nm / backside power:</b> the next node transition is the next capex pulse &mdash; concrete dates and volumes <span class='tag nv'>NV</span></li>
+        <li><b>WFE totals:</b> <span class='tag nv'>NV</span>, including SEMI billings and any 2027 forecast</li>
+        <li><b>China's share of WFE:</b> <span class='tag nv'>NV</span> &mdash; a key swing factor for equipment revenue</li>
+        <li><b>Foundry share split:</b> <span class='tag nv'>NV</span></li>
+      </ul>
+      <p class='muted' style='font-size:12.5px'>Qualitative claim we will defend: equipment is the <b>last leg to fall</b> in a downturn because it sells into multi-year fab programmes, and the first to recover on new-node decisions. <span class='tag j'>J</span></p>
+    </div>
+  </div>
+  <div class='rule'></div>
+  <p><b>Implication <span class='tag j'>J</span>:</b> we prefer the choke points that sit <b>upstream</b> of the accelerator (lithography, packaging, EDA) because they get paid per wafer and per tool regardless of which accelerator architecture wins.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>7 &middot; China and export controls</div>
+  <h2>Policy is a permanent haircut, not a probability-weighted event</h2>
+  <div class='grid g3'>
+    <div class='card'><h3>Verified</h3><p style='margin:0'>A 2026 US export-control rule addressing <b>remote access</b> to advanced semiconductors exists <span class='tag e'>E existence only</span>. Exact scope, entity list changes and effective dates are <span class='tag nv'>NV</span>.</p></div>
+    <div class='card'><h3>Channel 1: revenue loss</h3><p style='margin:0'>China-exposed revenue is removed faster than substitution can replace it; the loss lands in the quarter the rule is published, not spread <span class='tag j'>J</span>. China's share of global demand <span class='tag nv'>NV</span>.</p></div>
+    <div class='card'><h3>Channel 2: substitution</h3><p style='margin:0'>Controls <b>accelerate</b> domestic Chinese capability at mature and specialty nodes, compressing the Western pricing umbrella over time <span class='tag j'>J</span>. Progress metrics <span class='tag nv'>NV</span>.</p></div>
+  </div>
+  <div class='rule'></div>
+  <div class='two'>
+    <div class='card' style='border-color:#7a5a18'><h3 class='warn'>Channel 3: mature-node oversupply</h3><p style='margin:0'>Subsidised capacity additions &mdash; including the announced USD 21bn GlobalFoundries US/Japan build <span class='tag e'>E announcement only, not capacity or timing</span> &mdash; plus Chinese expansion risk a 2027&ndash;28 price war in trailing-edge and analog. That is the supply leg of our bear case.</p></div>
+    <div class='card'><h3>How we treat it in the portfolio</h3><ul style='margin-bottom:0'>
+      <li>Apply a <b>permanent haircut</b> to China-exposed revenue rather than a low-probability expected value <span class='tag j'>J</span></li>
+      <li>Prefer franchises whose China exposure is already written down by the market <span class='tag j'>J</span></li>
+      <li>Treat a widening of the perimeter as a <b>sizing input</b>, not a tradeable surprise <span class='tag j'>J</span></li>
+    </ul></div>
+  </div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>8 &middot; Structural demand beyond AI</div>
+  <h2>The non-AI half of the industry is the option value</h2>
+  <div class='grid g2'>
+    <div class='card'><h3>PCs and smartphones</h3><p style='margin:0'>Replacement-cycle markets with a slow content tailwind. Unit growth magnitudes <span class='tag nv'>NV</span>. The investable question is <b>content per device</b>, not units. <span class='tag j'>J</span></p></div>
+    <div class='card'><h3>Autos</h3><p style='margin:0'>Structural content growth (electrification, ADAS) inside an EV-programme digestion phase. Magnitudes <span class='tag nv'>NV</span>. <span class='tag j'>J</span></p></div>
+    <div class='card'><h3>Industrial</h3><p style='margin:0'>The classic inventory cycle, and where a recovery is <b>least crowded</b>. This is our preferred non-AI exposure. Magnitudes <span class='tag nv'>NV</span>. <span class='tag j'>J</span></p></div>
+    <div class='card'><h3>Edge AI</h3><p style='margin:0'>Largest <b>option value</b>, least monetised: if inference migrates to devices, winners are content-per-device franchises and analog/power suppliers, not accelerator vendors. Timing unknowable. <span class='tag j'>J</span></p></div>
+  </div>
+  <div class='rule'></div>
+  <p><b>Why we hold them anyway <span class='tag j'>J</span>:</b> they are cheap optionality <b>against our own bear case</b> &mdash; if AI capex digests, the marginal dollar rotates toward the laggards and the barbell is already positioned for that rotation.</p>
+  <p class='muted'>Honest status: <b>no dated demand series for PCs, handsets, autos, industrial or edge AI was retrieved</b>, so this slide is structural reasoning with every magnitude marked <span class='tag nv'>NV</span>. It is the weakest evidential slide and should not be quoted quantitatively.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>9 &middot; Economics and valuation</div>
+  <h2>Where the margin sits &mdash; and why we refuse to quote a multiple</h2>
+  <div class='two'>
+    <div>
+      <h3>Margin and capital structure, ranked <span class='tag j'>J</span></h3>
+      <table>
+        <tr><th>Segment</th><th>Pricing power</th><th>Capex intensity</th><th>Earnings volatility</th></tr>
+        <tr><td>EDA / IP</td><td class='good'>Highest</td><td class='good'>Lowest</td><td>Low</td></tr>
+        <tr><td>Equipment (EUV)</td><td class='good'>Very high</td><td>Medium</td><td>Medium</td></tr>
+        <tr><td>Fabless (platform)</td><td class='good'>High</td><td class='good'>Low</td><td>Medium</td></tr>
+        <tr><td>Foundry, leading edge</td><td>High</td><td class='bad'>Very high</td><td>Medium</td></tr>
+        <tr><td>Memory / HBM</td><td class='warn'>Cyclical</td><td class='bad'>Very high</td><td class='bad'>Highest</td></tr>
+        <tr><td>Mature node / analog</td><td class='bad'>Low</td><td>High</td><td>High</td></tr>
+      </table>
+      <p class='muted' style='font-size:12px'>Ranking only &mdash; no margin percentages were retrieved, so none appear.</p>
+    </div>
+    <div>
+      <div class='card' style='border-color:#7a2424'>
+        <h3 class='bad'>Every multiple is NV</h3>
+        <ul style='margin-bottom:0'>
+          <li>P/E, P/B, EV/EBITDA for the major names <span class='tag nv'>NV</span></li>
+          <li>SOX index level and forward P/E <span class='tag nv'>NV</span></li>
+          <li>Segment gross / operating margins in % <span class='tag nv'>NV</span></li>
+          <li>Capex intensity in % of revenue <span class='tag nv'>NV</span></li>
+        </ul>
+      </div>
+      <p style='margin-top:13px'><b>The valuation judgement we will defend without a multiple <span class='tag j'>J</span>:</b> after a multi-year AI re-rating the burden of proof has shifted from <i>is AI real?</i> to <i>is it already in the price?</i> Pay for rising estimates and forward cover, not for narrative; avoid names whose case rests on 2028 outcomes.</p>
+    </div>
+  </div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>10 &middot; Investment implications</div>
+  <h2>Own the chokepoints, not the industry</h2>
+  <div class='grid g2'>
+    <div class='card' style='border-color:#1f6b3a'>
+      <h3 class='good'>What we would own</h3>
+      <ul style='margin-bottom:0'>
+        <li><b>Leading-edge foundry</b> &mdash; the only route to N3/N2 volume <span class='tag j'>J</span></li>
+        <li><b>EUV lithography</b> &mdash; single supplier, backlog visibility <span class='tag j'>J</span></li>
+        <li><b>HBM leader, advanced packaging, EDA</b> &mdash; the customer cannot route around the supplier <span class='tag j'>J</span></li>
+        <li><b>Broad sector beta is a poor entry</b> after a three-quarter &gt;20% QoQ run <span class='tag e'>E</span> <span class='tag j'>J</span></li>
+      </ul>
+    </div>
+    <div class='card' style='border-color:#7a5a18'>
+      <h3 class='warn'>Size it like a cycle, not a religion</h3>
+      <ul style='margin-bottom:0'>
+        <li><b>Barbell:</b> bottleneck monopolies on one side, cycle-trough non-AI franchises (analog, industrial) on the other; underweight the crowded middle <span class='tag j'>J</span></li>
+        <li><b>Memory is a sized, pre-triggered trade:</b> define the exit on DRAM/HBM contract-price direction, not on price momentum <span class='tag j'>J</span></li>
+        <li><b>Cap single-name and Taiwan-linked exposure</b> so a policy or cross-Strait event is a drawdown, not a fund-level event <span class='tag j'>J</span></li>
+        <li><b>Use the bear case as the sizing constraint,</b> not as a forecast: it is 25% weighted and already funded by capacity ordered in 2024&ndash;26 <span class='tag j'>J</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class='rule'></div>
+  <div class='card'><b>The trade-off we accept, stated plainly.</b> A barbell underperforms a concentrated AI-beta position if the bull case is right (25%) &mdash; we give up upside to survive the 50% base case and the 25% bear. No price targets and no position sizes in these pages: every valuation multiple is <span class='tag nv'>NV</span>, so sizing must be done by the investment team against live data, not from this deck.</div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>11 &middot; Key risks</div>
+  <h2>The five ways this view is wrong</h2>
+  <table>
+    <tr><th>#</th><th style='width:20%'>Risk</th><th style='width:26%'>Plausible trigger</th><th>Magnitude</th><th style='width:20%'>What we watch</th></tr>
+    <tr><td class='hi'>R1</td><td><b>AI capex digestion</b></td><td>A hyperscaler trims or re-phases datacenter capex</td><td>Multiple compression first, estimate cuts second; the whole chain de-rates <span class='tag j'>J</span></td><td>Hyperscaler capex <i>direction</i> at each earnings date <span class='tag nv'>NV</span></td></tr>
+    <tr><td class='hi'>R2</td><td><b>Memory glut timing</b></td><td>Capacity funded 2024&ndash;26 lands into decelerating demand; DRAM contract prices roll over</td><td>Memory EPS to loss for 2&ndash;3 quarters in the worst case; historical pattern, magnitudes <span class='tag nv'>NV</span></td><td>DRAM/NAND contract prices; HBM sold-out status</td></tr>
+    <tr><td class='hi'>R3</td><td><b>Export controls widen</b></td><td>The 2026 remote-access rule is extended or new entities are listed <span class='tag e'>E existence</span></td><td>Step-change loss of China revenue faster than substitution replaces it</td><td>BIS / Federal Register actions; SIA statements</td></tr>
+    <tr><td class='hi'>R4</td><td><b>Taiwan concentration</b></td><td>Cross-Strait escalation or a blockade scenario</td><td>Tail event, not diversifiable inside the sector; underwritten by position size, not expected value <span class='tag j'>J</span></td><td>Structural &mdash; no market indicator gives advance warning</td></tr>
+    <tr><td class='hi'>R5</td><td><b>Mature-node oversupply</b></td><td>Subsidised capacity additions, incl. a reported GlobalFoundries US/Japan expansion <span class='tag nv'>NV</span> &mdash; the earlier &lsquo;USD 21bn&rsquo; figure is <b>withdrawn</b> (unverified, 2026-11-23)</td><td>Specialty and trailing-edge pricing pressure 2027&ndash;28 <span class='tag j'>J</span></td><td>Capacity announcements; mature-node utilisation</td></tr>
+  </table>
+  <div class='card' style='border-color:#7a5a18;margin-top:12px'><h3 class='warn'>A sixth, added after risk review: concentration and crowding</h3><p style='margin:0'>The material risk R1&ndash;R5 do not capture is <b>position-sizing risk</b>: a handful of names and Taiwan-linked leading-edge capacity carry most of the AI exposure, so the drawdown is correlated <i>by construction</i> <span class='tag j'>J</span>. USD strength adds a translation headwind on non-USD revenue <span class='tag j'>J</span>. Managed by single-name and country caps, not by stock selection; concentration data itself is <span class='tag nv'>NV</span>.</p></div>
+  <div class='rule'></div>
+  <p class='muted'>R1 and R2 are the same underlying uncertainty seen from two directions: how fast AI infrastructure spend decelerates relative to how fast new memory capacity lands. Everything else is policy or geography. All magnitudes above are judgement; none is a modelled loss estimate.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>9 &middot; Economics and valuation</div>
+  <h2>Where the margin sits &mdash; and why we refuse to quote a multiple</h2>
+  <div class='two'>
+    <div>
+      <h3>Earnings quality, ranked (no percentages retrieved) <span class='tag j'>J</span></h3>
+      <table>
+        <tr><th>Segment</th><th>Pricing power</th><th>Capex intensity</th><th>EPS volatility</th></tr>
+        <tr><td>EDA / IP</td><td class='good'>Highest</td><td class='good'>Lowest</td><td>Low</td></tr>
+        <tr><td>Equipment (EUV)</td><td class='good'>Very high</td><td>Medium</td><td>Medium</td></tr>
+        <tr><td>Fabless (platform)</td><td class='good'>High</td><td class='good'>Low</td><td>Medium</td></tr>
+        <tr><td>Foundry (leading edge)</td><td>High</td><td class='bad'>Very high</td><td>Medium</td></tr>
+        <tr><td>Memory / HBM</td><td class='warn'>Cyclical</td><td class='bad'>Very high</td><td class='bad'>Highest</td></tr>
+        <tr><td>Mature node / analog</td><td class='bad'>Low</td><td>High</td><td>High</td></tr>
+      </table>
+      <p class='muted' style='font-size:12px'>This is a ranking of structural quality only. <b>No gross margin, operating margin or capex-intensity percentage was retrieved</b>, so none appears <span class='tag nv'>NV</span>.</p>
+    </div>
+    <div>
+      <div class='card' style='border-color:#7a2424'>
+        <h3 class='bad'>Every valuation input is NV <span class='tag nv'>NV</span></h3>
+        <ul style='margin-bottom:0'>
+          <li>P/E, P/B, EV/EBITDA for the major names</li>
+          <li>SOX index level and forward P/E</li>
+          <li>Segment margins and capex intensity in %</li>
+          <li>Consensus 2027 revenue or EPS</li>
+        </ul>
+      </div>
+      <p style='margin-top:13px'><b>The valuation judgement we will defend without a multiple <span class='tag j'>J</span>:</b> after a multi-year AI re-rating the burden of proof has shifted from <i>&ldquo;is AI real?&rdquo;</i> to <i>&ldquo;is it already in the price?&rdquo;</i>. Pay for rising estimates and forward cover, not for narrative; avoid names whose case depends on 2028 outcomes.</p>
+      <p class='muted' style='font-size:12px'><b>Why no target prices:</b> a multiple we cannot source is a number we would end up defending. The deck is deliberately multiple-free so that sizing happens in the investment team against live data.</p>
+    </div>
+  </div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>10 &middot; Investment implications</div>
+  <h2>Own the chokepoints, not the industry</h2>
+  <div class='grid g2'>
+    <div class='card' style='border-color:#1f6b3a'>
+      <h3 class='good'>Where we would concentrate</h3>
+      <ul style='margin-bottom:0'>
+        <li><b>Leading-edge foundry</b> &mdash; one credible supplier at the leading node; customers cannot dual-source at the frontier <span class='tag j'>J</span></li>
+        <li><b>EUV lithography</b> &mdash; single supplier, backlog visibility, paid before the wafer is sold <span class='tag j'>J</span></li>
+        <li><b>HBM leader, advanced packaging, EDA</b> &mdash; the customer cannot route around the supplier <span class='tag j'>J</span></li>
+        <li><b>Broad sector beta is a poor entry</b> after three consecutive &gt;20% QoQ quarters <span class='tag e'>E</span> <span class='tag j'>J</span></li>
+      </ul>
+    </div>
+    <div class='card' style='border-color:#7a5a18'>
+      <h3 class='warn'>How we would size it</h3>
+      <ul style='margin-bottom:0'>
+        <li><b>Barbell:</b> bottleneck monopolies on one side, cycle-trough non-AI franchises (analog, industrial) on the other; underweight the crowded middle <span class='tag j'>J</span></li>
+        <li><b>Memory is a sized, pre-triggered trade:</b> define the exit on DRAM/HBM contract-price direction, not on price momentum <span class='tag j'>J</span></li>
+        <li><b>Cap single-name and Taiwan-linked exposure</b> so a policy or cross-Strait shock is a drawdown, not a fund-level event <span class='tag j'>J</span></li>
+        <li><b>Use the bear case as the sizing constraint,</b> not as a forecast: it is 25%-weighted and already funded by capacity ordered in 2025&ndash;26 <span class='tag j'>J</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class='rule'></div>
+  <div class='card'><b>The trade-off we are accepting, stated plainly.</b> A barbell underperforms a concentrated AI-beta position if the bull case is right (25%) &mdash; we give up upside to survive the 50% base case and the 25% bear. No price targets and no position sizes in these pages: every valuation multiple is <span class='tag nv'>NV</span>, so sizing must be done by the investment team against live data, not from this deck.</div>
+</section>
+<section class='slide'>
+  <div class='kicker'>12 &middot; Scenarios 2027&ndash;2029</div>
+  <h2>Three scenarios &mdash; our house view, not consensus</h2>
+  <table style='font-size:12.5px'>
+    <tr><th style='width:14%'>Scenario &amp; weight</th><th style='width:26%'>Drivers</th><th style='width:16%'>Industry revenue</th><th>Memory</th><th>Logic / foundry</th><th>Equipment</th></tr>
+    <tr><td><b class='good'>Bull &mdash; 25%</b><div class='muted' style='font-size:11px'>my judgement <span class='tag j'>J</span></div></td>
+      <td>AI capex keeps <b>accelerating</b>; HBM sold on multi-year take-or-pay; no China air-pocket from the 2026 remote-access rule</td>
+      <td><b>High-teens % CAGR</b> 2027&ndash;29 off the 2026 base <span class='tag j'>J</span></td>
+      <td>Record EPS; HBM mix keeps pricing firm into 2028</td>
+      <td>N2 fully loaded; advanced packaging is the binding constraint and earns rent</td>
+      <td>Bookings re-accelerate; WFE up double-digit %</td></tr>
+    <tr><td><b class='warn'>Base &mdash; 50%</b><div class='muted' style='font-size:11px'>my judgement <span class='tag j'>J</span> &middot; research 45%</div></td>
+      <td>AI spend grows but the <b>second derivative flattens</b>; a normal 2027&ndash;28 inventory air-pocket; capacity lands roughly in line with demand</td>
+      <td><b>Low-to-mid single digit %</b> 2027; mid-single-digit CAGR 2027&ndash;29 <span class='tag j'>J</span></td>
+      <td>Strong but decelerating EPS; HBM premium narrows; ASPs flat-to-down</td>
+      <td>Leading edge holds; mature-node price erosion continues</td>
+      <td>Flat-to-up, lagged one to two quarters</td></tr>
+    <tr><td><b class='bad'>Bear &mdash; 25%</b><div class='muted' style='font-size:11px'>my judgement <span class='tag j'>J</span> &middot; research 25%</div></td>
+      <td>Capacity funded in 2025&ndash;26 (HBM/DRAM) lands into decelerating demand; DRAM contract prices fall double-digit %; hyperscalers digest and guide flat-to-down; controls remove China demand faster than substitution replaces it</td>
+      <td><b>2027 flat, 2028 down ~10&ndash;15%</b> <span class='tag j'>J</span></td>
+      <td>EPS to <b>loss</b> for 2&ndash;3 quarters in the worst case (historical pattern; magnitudes <span class='tag nv'>NV</span>)</td>
+      <td>Foundry utilisation into the 70s %; mature node loss-making</td>
+      <td>Bookings down 20&ndash;30%; the last leg to fall</td></tr>
+  </table>
+  <div class='rule'></div>
+  <p><b>Why these weights <span class='tag j'>J</span>.</b> Three consecutive quarters of &gt;20% QoQ industry growth <span class='tag e'>E</span> is a steep up-leg, and steep up-legs are followed by a plateau or a fall far more often than by immediate re-acceleration. The bear gets a full 25% because the capacity mechanism that produces memory down-cycles is <b>already funded</b>, not hypothetical. Research independently assigned 30/45/25; the only disagreement is base vs bull, and <b>bear is 25% in both</b>.</p>
+  <p class='muted' style='font-size:12.5px'>Revenue ranges are judgement, not forecasts. No scenario carries a price target: every valuation multiple in this deck is <span class='tag nv'>NV</span>.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>13 &middot; Signposts</div>
+  <h2>Indicators that will tell us which scenario is playing out</h2>
+  <table style='font-size:11.5px'>
+    <tr><th>#</th><th style='width:25%'>Indicator</th><th style='width:24%'>Confirms / refutes</th><th style='width:20%'>Where to observe</th><th>Cadence</th></tr>
+    <tr><td>1</td><td>SIA/WSTS monthly global sales (3-month moving average)</td><td>Bull if QoQ double-digit; base 3&ndash;10%; bear &lt;3% for two prints</td><td>semiconductors.org monthly release</td><td>Monthly <span class='tag nv'>NV</span> exact day</td></tr>
+    <tr><td>2</td><td>WSTS autumn/spring forecast update</td><td>Bull if 2027 raised; bear if cut</td><td>wsts.org (detail paywalled)</td><td>Twice yearly <span class='tag nv'>NV</span></td></tr>
+    <tr><td>3</td><td>TSMC monthly revenue</td><td>Bull if YoY &gt;+30%; base +10&ndash;30%; bear &lt;+10% or negative</td><td>investor.tsmc.com</td><td>Monthly, ~10th <span class='tag nv'>NV</span></td></tr>
+    <tr><td>4</td><td>TSMC quarterly capex guidance + N2 ramp commentary</td><td>Bull if 2027 capex up; bear if trimmed or pushed out</td><td>TSMC quarterly results / IR</td><td>Quarterly <span class='tag nv'>NV</span></td></tr>
+    <tr><td>5</td><td>Hyperscaler capex <b>direction</b> (MSFT, GOOGL, AMZN, META)</td><td>Bull if raised; bear if flat or re-phased</td><td>Company earnings calls / IR</td><td>Quarterly, late Jan&ndash;Feb 2027 for Q4-2026 <span class='tag nv'>NV</span></td></tr>
+    <tr><td>6</td><td>DRAM / NAND contract prices</td><td>Bear trigger: double-digit % sequential decline</td><td>TrendForce / DRAMeXchange (paywalled)</td><td>Monthly / fortnightly <span class='tag nv'>NV</span></td></tr>
+    <tr><td>7</td><td>HBM sold-out status and pricing commentary</td><td>Bull if sold out into 2028; bear if HBM pricing flat or discounted</td><td>SK Hynix / Micron results and calls</td><td>Quarterly <span class='tag nv'>NV</span></td></tr>
+    <tr><td>8</td><td>CoWoS-class advanced-packaging lead times</td><td>Bull if lead times lengthen; bear if lead times normalise</td><td>TSMC commentary; supply-chain checks</td><td>Quarterly <span class='tag nv'>NV</span></td></tr>
+    <tr><td>9</td><td>ASML bookings / backlog and High-NA order commentary</td><td>Bull if bookings recover; bear if pushed to the right</td><td>ASML quarterly results</td><td>Quarterly <span class='tag nv'>NV</span></td></tr>
+    <tr><td>10</td><td>SEMI WFE billings, incl. China's share</td><td>Bear if China WFE share falls faster than non-China rises</td><td>SEMI reports (subscription)</td><td>Monthly / quarterly <span class='tag nv'>NV</span></td></tr>
+    <tr><td>11</td><td>US BIS / Federal Register export-control actions</td><td>Bear if the perimeter widens or new entities are listed</td><td>federalregister.gov; bis.gov</td><td>Event-driven <span class='tag e'>E existence of a 2026 remote-access rule</span></td></tr>
+    <tr><td>12</td><td>Mature-node capacity announcements and utilisation</td><td>Bear if subsidised additions continue into weak demand</td><td>Company IR; government grant disclosures</td><td>Event-driven <span class='tag nv'>NV</span></td></tr>
+  </table>
+  <p class='muted' style='font-size:12px'>Twelve signposts, each mapped to the scenario it would confirm or refute. Cadences marked <span class='tag nv'>NV</span> were not verified this session.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>14 &middot; Key numbers</div>
+  <h2>The ten numbers to carry into the meeting</h2>
+  <div class='two'>
+    <div>
+      <ol style='font-size:13.5px'>
+        <li>Q3-2026 global semiconductor sales <b>USD 517.7bn, +24.1% QoQ</b> <span class='tag e'>E</span></li>
+        <li>September 2026 sales <b>USD 172.6bn, +146.8% YoY, +7.9% MoM</b> (3-month moving average) <span class='tag e'>E</span></li>
+        <li>YTD 2026 sales <b>&gt; USD 1trn</b> through August <span class='tag e'>E</span></li>
+        <li>Implied FY2026 revenue <b>&asymp; USD 1.6&ndash;1.75trn</b> <span class='tag d'>D</span> &mdash; wide band, not a forecast</li>
+        <li>Q3 annualised run-rate <b>&asymp; USD 2.07trn</b> <span class='tag d'>D</span></li>
+        <li>Memory share of industry revenue <span class='tag nv'>NV</span></li>
+        <li>Top-5 company concentration <span class='tag nv'>NV</span></li>
+        <li>AI share of leading-edge demand <span class='tag nv'>NV</span> &mdash; AI is the inferred driver of the +146.8% print, not a measured share</li>
+        <li>2027 growth, base case <b>low-to-mid single digit %</b> <span class='tag j'>J</span>; consensus <span class='tag nv'>NV</span></li>
+        <li><b>Single most important uncertainty:</b> whether AI-capex growth decelerates faster than HBM/DRAM capacity additions land &mdash; a memory-glut <b>timing</b> risk, not an AI-demand-existence risk <span class='tag j'>J</span></li>
+      </ol>
+    </div>
+    <div>
+      <div class='card' style='border-color:#1f6b3a'><h3 class='good'>What these numbers support</h3><p style='margin:0'>A very large industry growing at a rate history says does not persist for many quarters. That is enough to set positioning and risk limits, and not enough to justify a price target. <span class='tag j'>J</span></p></div>
+      <div class='card' style='border-color:#7a2424;margin-top:12px'><h3 class='bad'>What they do not support</h3><p style='margin:0'>Any claim about memory share, concentration, AI's measured share of demand, segment margins or valuation multiples. Those are open data requests. <span class='tag nv'>NV</span></p></div>
+      <div class='card' style='border-color:#7a5a18;margin-top:12px'><h3 class='warn'>Data-integrity note</h3><p style='margin:0'>Monthly prints are a three-month moving average and must not be summed into a quarter. An earlier &lsquo;reconciliation gap&rsquo; was a methodology artefact and has been withdrawn.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>15 &middot; Conclusion</div>
+  <h2>What we would actually do on Monday</h2>
+  <div class='grid g2'>
+    <div class='card'><h3>Decisions this deck supports</h3><ul style='margin-bottom:0'>
+      <li>Own the chokepoints (leading-edge foundry, EUV, HBM leader, advanced packaging, EDA) rather than sector beta <span class='tag j'>J</span></li>
+      <li>Treat memory as a sized, pre-triggered trade with an exit defined on contract-price direction, not on momentum <span class='tag j'>J</span></li>
+      <li>Cap single-name and Taiwan-linked exposure so a policy or cross-Strait shock is a drawdown, not a fund-level event <span class='tag j'>J</span></li>
+      <li>Hold permanent haircuts on China-exposed revenue instead of pricing a low-probability expected value <span class='tag j'>J</span></li>
+      <li>Fund the data gaps before sizing: hyperscaler capex, DRAM/HBM pricing, TSMC capex, ASML bookings, valuation multiples</li>
+    </ul></div>
+    <div class='card'><h3>What this deck cannot do</h3><ul style='margin-bottom:0'>
+      <li>It cannot rank names on valuation &mdash; every multiple is <span class='tag nv'>NV</span></li>
+      <li>It cannot quantify the AI share of demand &mdash; <span class='tag nv'>NV</span></li>
+      <li>It cannot substitute for live data in position sizing</li>
+      <li>It is a <b>framework for a debate</b>, not a recommendation to buy or sell any security</li>
+    </ul></div>
+  </div>
+  <div class='rule'></div>
+  <p class='muted' style='font-size:12px'><b>Sources (retrieved 2026-11-23):</b> SIA press releases &mdash; Q3-2026 sales +24.1% QoQ (2026-11-03); YTD sales top USD 1trn through August (2026-10-05); SIA statement on the 2026 remote-access export-control rule. Underlying research memo dated 2026-11-23 (12-row signpost table, scenario probabilities, methodology correction). WSTS detail is subscription-gated and was not retrieved.</p>
+  <p class='muted' style='font-size:12px'><b>Internal research for fund-team discussion &mdash; not investment advice, not a recommendation, no price targets.</b> Past performance is not a reliable indicator of future results. Every <span class='tag nv'>NV</span> item is an open data request, not an input.</p>
+</section>
+
+<section class='slide'>
+  <div class='kicker'>16 &middot; Errata and risk addendum</div>
+  <h2>Corrections applied after independent risk review</h2>
+  <div class='grid g2'>
+    <div class='card' style='border-color:#7a2424'>
+      <h3 class='bad'>Withdrawn &mdash; not verified <span class='tag nv'>NV</span></h3>
+      <ul style='margin-bottom:0'>
+        <li><b>&ldquo;USD 21bn GlobalFoundries US/Japan build&rdquo;</b> (slide 7 channel 3, slide 11 R5) is <b>withdrawn and relabelled NOT VERIFIED</b>. Our risk reviewer could not source it and neither could we. Treat the mature-node oversupply risk as <b>qualitative only</b>.</li>
+        <li><b>&ldquo;Three consecutive quarters of &gt;20% QoQ growth&rdquo;</b> is a <b>quotation of the SIA release statement</b> <span class='tag e'>E as quoted</span>, <b>not</b> three prints we independently hold. We hold <b>one</b> QoQ print: Q3-2026 +24.1% QoQ <span class='tag e'>E</span>. Anywhere the deck implies three verified prints, read it as the SIA statement.</li>
+      </ul>
+    </div>
+    <div class='card' style='border-color:#7a5a18'>
+      <h3 class='warn'>R6 added &mdash; concentration and crowding <span class='tag j'>J</span></h3>
+      <p style='margin:0 0 7px'>A <b>position-sizing risk, not a market call</b>: a handful of names and Taiwan-linked leading-edge capacity carry most of the AI exposure, so the drawdown is <b>correlated by construction</b> &mdash; diversification inside the theme is largely illusory.</p>
+      <p style='margin:0' class='muted' style='font-size:12.5px'>Sub-bullet &mdash; <b>FX/USD sensitivity</b>: sector revenue is largely USD-denominated against mixed cost bases, so a stronger USD is a translation and competitiveness variable. Magnitudes <span class='tag nv'>NV</span>.</p>
+    </div>
+  </div>
+  <div class='rule'></div>
+  <div class='two'>
+    <div class='card'><h3>Framing</h3><p style='margin:0'><b>No position is authorised by this deck.</b> Headings are discussion language for an internal fund-team debate; nothing here is a recommendation to buy or sell any security, and no price target or position size appears anywhere in these pages. Internal research &mdash; not investment advice.</p></div>
+    <div class='card'><h3>Known cosmetic defect</h3><p style='margin:0'>Slide 11 sits before slides 9&ndash;10 in document order, so kicker numbers are out of sequence. Navigation, counter and progress bar are unaffected. Disclosed rather than restructured late; fix before any external circulation.</p></div>
+  </div>
+</section>
+
+</main>
+<div class='foot'><span>Semiconductors at End-2026 &middot; internal research, not investment advice</span><span id='counter'>1 / 16</span></div>
+<div class='nav'><button id='prev' aria-label='Previous slide'>&larr;</button><button id='next' aria-label='Next slide'>&rarr;</button></div>
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  var i=0;
+  function show(n){
+    i=(n+slides.length)%slides.length;
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i);s.scrollTop=0;});
+    bar.style.width=((i+1)/slides.length*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+  }
+  document.getElementById('next').addEventListener('click',function(e){e.stopPropagation();show(i+1);});
+  document.getElementById('prev').addEventListener('click',function(e){e.stopPropagation();show(i-1);});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1);}
+    else if(e.key==='Home'){e.preventDefault();show(0);}
+    else if(e.key==='End'){e.preventDefault();show(slides.length-1);}
+  });
+  show(0);
+})();
+</script>
+</body>
+</html>

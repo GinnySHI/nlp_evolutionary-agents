@@ -1,0 +1,1152 @@
+{
+  "session": "course-software",
+  "title": "Software Development Team",
+  "agents": [
+    {
+      "id": "lead",
+      "name": "Technical Lead",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file"
+      ]
+    },
+    {
+      "id": "dev",
+      "name": "Software Developer",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file",
+        "delete_file",
+        "run_python",
+        "search_web",
+        "fetch_url"
+      ]
+    },
+    {
+      "id": "qa",
+      "name": "Test Engineer",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file",
+        "run_python"
+      ]
+    },
+    {
+      "id": "release",
+      "name": "Release Manager",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file",
+        "git_init",
+        "git_status",
+        "git_diff",
+        "git_commit",
+        "git_push"
+      ]
+    }
+  ],
+  "archived_runs": [
+    {
+      "task_id": "28c5a0a7b4454845bb6aaec684d25a84",
+      "status": "completed",
+      "task": "Our team currently manages meeting rooms using a shared spreadsheet. We often run into double bookings and records that are not updated after cancellations. Please build a usable meeting room booking system that makes it easy to check availability, book rooms, and cancel bookings. Show me what you have built and explain how to use it. If you need to understand how we work or need other information",
+      "final_output": "## Meeting Room Booking System v1.0.0 — delivered\n\nAll three subtasks are accepted: dev's implementation (subtask-1, reviewed with source-level evidence), QA's independent verification (subtask-2), and the release README (subtask-3).\n\n### What you get (5 files, shared copies in inbox/dev/ plus README.md)\n| File | Size | Purpose |\n|---|---|---|\n| `booking.py` | 14,708 B | Core logic + JSON store (stdlib only) |\n| `server.py` | 9,726 B | `ThreadingHTTPServer` web server + JSON API, serves the page |\n| `index.html` | 24,373 B | Single self-contained UI (inline CSS/JS, no CDN, works offline) |\n| `selftest.py` | 7,152 B | Plain-assert self-test |\n| `README.md` | 3,463 B | User guide / release notes |\n\n### How to use it (2 steps)\n1. Put all four code files in **one** folder, then run:\n   ```\n   python3 server.py\n   ```\n   (optional: `--port 8080 --data bookings.json --rooms rooms.json`)\n2. Open `http://localhost:8080`, or the LAN URL printed at startup (e.g. `http://192.168.1.20:8080`) so colleagues share **one** calendar. Data lives in a single `bookings.json` next to the server — copy that file to back it up.\n\nDay to day: pick a date (defaults to today) and optionally a room → read the per-room 07:00–20:00 timeline to see free gaps at a glance → book room/date/start/end (15-min steps)/title/organizer → a clashing slot is refused with a message naming the clashing booking, while back-to-back meetings are allowed → cancel with confirm + optional reason: the slot frees instantly and the record stays as a greyed-out, struck-through entry behind the \"show cancelled\" toggle.\n\n### How double bookings are actually prevented\nEvery create runs inside one `threading.Lock` critical section: read all bookings from disk → validate → scan same-room/same-date **active** bookings for overlap using half-open intervals (`start < other.end and end > other.start`, so 10:00–11:00 and 11:00–12:00 coexist) → append → atomic `tempfile` + `os.replace` write. Check-and-insert cannot interleave, s",
+      "metrics": {
+        "elapsed_seconds": 1244.7468700408936,
+        "active_seconds": 623.2234299168922,
+        "agent_turns": 116,
+        "tool_calls": 73,
+        "tool_errors": 3,
+        "invalid_actions": 22,
+        "recovered_responses": 5,
+        "output_limit_errors": null,
+        "fatal_errors": 0,
+        "subtasks_total": 3,
+        "subtasks_accepted": 3,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "checkpoints": 8,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "normalized_actions": 1
+      },
+      "provider": {
+        "active_provider": "deepseek",
+        "calls": 25,
+        "completion_tokens": 26733,
+        "prompt_tokens": 658167,
+        "reasoning_tokens": 12450,
+        "requests": 25,
+        "total_tokens": 684900
+      },
+      "subtasks": [
+        {
+          "id": "subtask-1",
+          "assignee": "dev",
+          "status": "accepted",
+          "review": {
+            "reviewer": "lead",
+            "accepted": true,
+            "reason": "Lead reviewed the delivered files directly in inbox/dev/ (booking.py sha c7a208d…, server.py 0c2aecb…, index.html d9f5e7f…, selftest.py 7660e99…) and validate_file reports index.html valid with no errors. Verified in the code: (a) create_booking computes/validates inputs then enters `with self._lock:` and inside that single critical section re-reads all bookings, scans same-room/same-date active bookings with half-open overlap (_overlaps start<other.end and end>other.start), and only then appends and performs the atomic tempfile+os.replace write — so check-and-insert cannot interleave and double bookings are impossible; the conflict error carries existing=other plus a message naming room/date/time/organizer/title for inline UI display. (b) cancel_booking under the same lock flips status to 'cancelled', stamps cancelled_at and cancel_reason, keeps the record (audit trail), and availability() excludes non-active rows so the slot is immediately rebookable. (c) Validation covers unknown room, real calendar date via datetime.date(), 15-min step, start<end, 07:00–20:00 window, max 8h, required title/organizer, with machine codes matching the spec. (d) Dates are compared as wall-clock strings and times as int minutes; no UTC conversion anywhere, so no day shift. (e) server.py uses ThreadingHTTPServer on 0.0.0.0, exposes rooms/bookings/availability GETs and create/cancel POSTs, maps conflict->409 with {error,message,existing}, validation->400, unknown id->404, malformed JSON->400 invalid_json, unknown path->404, and never lets an exception escape the handler; make_server(port=0) exists so QA can test in-process. (f) index.html passes validate_file. dev's reported selftest run shows 28 PASS with the HTTP-layer sandbox limitation disclosed honestly. Accepted as v1; the HTTP-layer socket round-trip is delegated to QA for independent verification.",
+            "time": "2026-11-23T11:15:28.857917+00:00"
+          }
+        },
+        {
+          "id": "subtask-2",
+          "assignee": "qa",
+          "status": "accepted",
+          "review": {
+            "reviewer": "lead",
+            "accepted": true,
+            "reason": "QA's review is evidence-based and matches what I independently verified by reading the delivered source (booking.py sha c7a208d…, server.py 0c2aecb…, index.html d9f5e7f…) and running validate_file. Confirmed independently: (a) create_booking validates inputs, then inside `with self._lock:` re-reads bookings, checks half-open overlap for same room/date active rows, and only then appends + atomic write — no interleaving window, so double booking is prevented; conflict carries existing=other and a message naming room/date/time/organizer/title. (b) cancel_booking under the lock keeps the record with status='cancelled', cancelled_at and cancel_reason while availability() excludes inactive rows, so the slot frees without losing history. (c) Validation codes/limits and string-date/int-minute comparisons (no UTC conversion) match the spec, so no day shift. (d) server.py maps conflict->409 {error,message,existing}, validation->400, unknown id/path->404, malformed JSON->400, and catches exceptions in the handler. QA's extra value: its own half-open/leap-day/hours/availability/persistence/thread-race (20 threads -> exactly 1 success, 19 conflicts) and in-process handler-dispatch results, which corroborate the design. QA honestly discloses what it could NOT do: dev's selftest.py never reached QA's inbox, socket-level HTTP bind blocked by sandbox, browser JS not executed. Defect D1 (files delivered one directory deep, so `python3 server.py` cannot find index.html in the delivered layout) is a real handoff/packaging problem — I can see it in my own inbox (inbox/dev/inbox/dev/index.html) — and the release package puts all four files flat, which fixes it. D2 (missing index.html returns 500 not 404) is minor and acceptable. No blocker in the source; QA's stated NOT TESTED items are carried forward honestly into my final report.",
+            "time": "2026-11-23T11:20:15.965210+00:00"
+          }
+        },
+        {
+          "id": "subtask-3",
+          "assignee": "release",
+          "status": "accepted",
+          "review": {
+            "reviewer": "lead",
+            "accepted": true,
+            "reason": "Release delivered README.md (3275 bytes, sha a4d8ed8a…) into lead's inbox as inbox/release/README.md; I read it in full and it is accurate against the verified source: it names the four files and one-folder layout, gives the exact quick start (`python3 server.py`, open http://localhost:8080 or the printed LAN URL) with optional `--port/--data/--rooms` flags, explains the 07:00-20:00 per-room timeline for availability, booking fields, that conflicting slots are refused with a message naming the clashing booking and back-to-back is allowed, that cancel confirms + optional reason, instantly frees the slot and keeps a greyed/struck-through audit record behind 'show cancelled', states data lives in one bookings.json to back up with one server per file, documents `python3 selftest.py`, and lists honest v1 limitations (no login, no recurrence, no edit-in-place, single server per data file). The submission honestly discloses what was not done (its own file re-copy, validate_file on three files, git init/commit/tag) rather than claiming success — I hold the four validated files flat and have verified index.html with validate_file, and drop the git tag as optional for this delivery.",
+            "time": "2026-11-23T11:21:10.415331+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "2f75c214f05c48b7bd0f108dfcdae84c",
+      "status": "failed",
+      "task": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room alloca",
+      "final_output": "Model request failed (ProviderError: Model API HTTP 402: request failed; check configuration)",
+      "metrics": {
+        "elapsed_seconds": 108.45645093917847,
+        "active_seconds": 108.44134987518191,
+        "agent_turns": 25,
+        "tool_calls": 17,
+        "tool_errors": 0,
+        "invalid_actions": 3,
+        "recovered_responses": 2,
+        "output_limit_errors": null,
+        "fatal_errors": 1,
+        "subtasks_total": 1,
+        "subtasks_accepted": 0,
+        "subtask_completion_rate": 0.0,
+        "model_claimed_success": null,
+        "peer_reviewed_completion": false,
+        "checkpoints": 2,
+        "reflection_calls": 0,
+        "reflection_failures": 0,
+        "normalized_actions": null
+      },
+      "provider": {
+        "active_provider": "deepseek",
+        "calls": 24,
+        "completion_tokens": 16207,
+        "errors": 1,
+        "invalid_responses": 1,
+        "prompt_tokens": 667556,
+        "protocol_retries": 1,
+        "reasoning_tokens": 9545,
+        "requests": 26,
+        "total_tokens": 683763
+      },
+      "subtasks": [
+        {
+          "id": "subtask-1",
+          "assignee": "dev",
+          "status": "assigned",
+          "review": null
+        }
+      ]
+    }
+  ],
+  "current_run": {
+    "task_id": "12c9c6be49894f2a994698bdb0f1b313",
+    "status": "completed",
+    "task": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room alloca",
+    "final_output": "Analytics dashboard extension delivered and peer-verified. FINAL STATE: the workload is complete; QA independently re-ran the v2 suite and every required behaviour is backed by observed output, with the remaining gaps disclosed rather than glossed over.\n\nWHAT WAS BUILT (v2 of the booking system, five files, all flat — put them in ONE folder):\n- booking.py (23,122 B, sha256 41c966fa…) — v1 behaviour untouched, plus one read-only aggregate: compute_stats(start_date, end_date, store=None) and BookingStore.stats(). Inclusive wall-clock 'YYYY-MM-DD' string range (no UTC conversion, no day shift); BookingError('bad_range') when start>end, 'bad_date' for unparsable dates; capacity = rooms x days x 780 min (07:00–20:00), all calendar days counted; per-room hours/utilisation/busiest weekday sorted by hours_active; by_weekday fixed Mon..Sun (7 entries); by_hour 13 entries 07..19 with each booking's active minutes split proportionally at clock edges (09:30–10:30 -> 30/30); top_days (max 5); cancellations by room and weekday; cancelled time counted only in hours_cancelled, never in utilisation; malformed legacy rows skipped; never creates or modifies bookings.json.\n- server.py (11,223 B, sha256 5a249b9d…) — v1 routes plus GET /api/stats?start=&end= (400 bad_request / bad_date / bad_range, 200 JSON otherwise), GET /dashboard and /dashboard.html served from the file next to server.py exactly like index.html, 404 fallback, no exception escapes the handler. This also fixes an earlier 500 caused by an undefined DASHBOARD_PATH.\n- dashboard.html (21,361 B, sha256 f66d0fcc…) — self-contained offline page (inline CSS/JS, no CDN, no <script src>, no external URLs): start/end date inputs with Last 7 / Last 30 / This month / Last month presets and Apply, default last 30 days with today built from getFullYear/getMonth/getDate; summary cards (active bookings, cancelled, cancellation rate, hours reserved, utilisation %, days); 'Hours reserved per room' bar chart coloured by utilisation plus a",
+    "metrics": {
+      "elapsed_seconds": 5605.262032985687,
+      "active_seconds": 1450.0505764591508,
+      "agent_turns": 198,
+      "tool_calls": 136,
+      "tool_errors": 8,
+      "invalid_actions": 22,
+      "recovered_responses": 9,
+      "output_limit_errors": null,
+      "fatal_errors": 0,
+      "subtasks_total": 7,
+      "subtasks_accepted": 6,
+      "subtask_completion_rate": 0.8571428571428571,
+      "model_claimed_success": true,
+      "peer_reviewed_completion": true,
+      "checkpoints": 12,
+      "reflection_calls": 4,
+      "reflection_failures": 0,
+      "normalized_actions": 5
+    },
+    "provider": {
+      "active_provider": "deepseek",
+      "calls": 12,
+      "completion_tokens": 10476,
+      "prompt_tokens": 472109,
+      "reasoning_tokens": 4681,
+      "requests": 12,
+      "total_tokens": 482585
+    },
+    "memory": {
+      "lead": {
+        "group_entries": 5,
+        "lessons": 2,
+        "successes": 0,
+        "failures": 1
+      },
+      "dev": {
+        "group_entries": 11,
+        "lessons": 2,
+        "successes": 6,
+        "failures": 1
+      },
+      "qa": {
+        "group_entries": 8,
+        "lessons": 2,
+        "successes": 2,
+        "failures": 2
+      },
+      "release": {
+        "group_entries": 6,
+        "lessons": 2,
+        "successes": 1,
+        "failures": 1
+      }
+    },
+    "subtasks": [
+      {
+        "id": "subtask-1",
+        "assignee": "dev",
+        "status": "accepted",
+        "review": {
+          "reviewer": "lead",
+          "accepted": true,
+          "reason": "Reviewed against the actual artifacts I hold. Verified by direct read/sha, not by dev's claims alone: booking.py v2 (23,122 B, sha 41c966fa…) — I read the compute_stats source in inbox/dev/booking_py_v2.py and inbox/dev/final_booking.py: inclusive wall-clock string range, bad_range when start>end, 780 min/room-day capacity, proportional hour split (_hour_parts splits at clock edges), by_weekday fixed Mon..Sun, by_hour 07..19, top_days capped 5, cancellations by room/weekday, malformed rows skipped via try/except, read-only path (list_bookings/get_rooms). server.py v2 (11,223 B, sha 5a249b9d… = final_server.py) — I read it in full head: module-level DASHBOARD_PATH defined next to INDEX_PATH, dispatch '/dashboard' and '/dashboard.html' to _serve_dashboard, '/api/stats' to _get_stats, 404 fallback, and a blanket try/except so nothing escapes the handler; this fixes the previously observed 500 (undefined DASHBOARD_PATH). dashboard.html (21,361 B, f66d0fcc…) is my own validated file (validate_file valid, no errors/warnings; operator reports real Chrome checks pass), byte-identical to the copy I sent dev. selftest.py (13,480 B, sha 22a1f458…) is byte-identical to inbox/dev/v2_selftest.py which I read: the stats block covers empty store, single booking, inclusive start/end, out-of-range exclusion, cancelled counted only as cancelled/hours_cancelled, per-room split, by_weekday 7 entries summing to active, by_hour 13 entries with 09:30-10:30 -> 0.5h/0.5h, top_days ordering with a documented deterministic tie handling, 390/780 min -> 50.0%, bad_range, and data-file untouched. Honest gaps: (1) dev's index.html v2 (24,576 B, sha 077fe7a3…) is NOT in my inbox — only v1 (24,373 B, d9f5e7f) reached me, so the single href=\"/dashboard\" header link is unverified by me; (2) I have no run_python tool, so the '54 PASS / All 54 checks passed' output is dev's observed run, corroborated only by reading the test code and by the operator's independent artifact check; (3) no socket-level HTTP round trip (sandbox blocks bind) and no browser execution by me. Accepted on the strength of the verified source, my own dashboard file, and independent operator checks, with these three items carried forward as disclosed open risks rather than claimed as tested.",
+          "time": "2026-11-23T12:54:18.915391+00:00"
+        }
+      },
+      {
+        "id": "subtask-2",
+        "assignee": "dev",
+        "status": "accepted",
+        "review": {
+          "reviewer": "lead",
+          "accepted": true,
+          "reason": "Duplicate of the already-accepted subtask-1 work; I reviewed the actual artifacts rather than dev's claims. booking.py v2 in my inbox (inbox/dev/booking_py_v2.py and inbox/dev/final_booking.py, 23,122 B, sha 41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee) contains compute_stats(start_date, end_date, store=None) and BookingStore.stats(); I read the source: inclusive wall-clock 'YYYY-MM-DD' string comparison, BookingError('bad_range') when start>end, capacity minutes = rooms x days x 780, active vs cancelled split with cancelled hours only in hours_cancelled, utilisation_pct and cancellation_rate_pct rounded 2dp with zero-guards, by_weekday fixed Mon..Sun (7 entries), by_hour 13 entries 07..19 with _hour_parts splitting at clock edges (09:30-10:30 -> 30/30), top_days capped 5, cancellations by room and weekday, malformed rows skipped in try/except, read-only access via list_bookings/get_rooms so the data file is untouched. Honest gaps carried forward: dev's run_python '54 PASS / All 54 checks passed' output is dev-observed (I have no run_python tool), no socket-level HTTP round trip (sandbox blocks bind), and no browser JS execution by me (operator reports real Chrome checks pass on the dashboard HTML).",
+          "time": "2026-11-23T12:54:43.780210+00:00"
+        }
+      },
+      {
+        "id": "subtask-3",
+        "assignee": "dev",
+        "status": "accepted",
+        "review": {
+          "reviewer": "lead",
+          "accepted": true,
+          "reason": "Duplicate of the already-accepted subtask-1/2 work, reviewed against actual artifacts I now hold in my inbox rather than dev's claims. Confirmed by direct read/sha: inbox/dev/final_booking.py 23,122 B sha 41c966fa… (compute_stats + BookingStore.stats, inclusive wall-clock string range, bad_range, 780 min/room-day, proportional hour split, by_weekday 7, by_hour 13, top_days<=5, cancellations by room/weekday, malformed rows skipped, read-only); inbox/dev/final_server.py = v2_server.py 11,223 B sha 5a249b9d… (module-level DASHBOARD_PATH next to INDEX_PATH, dispatch '/dashboard' and '/dashboard.html' -> _serve_dashboard, '/api/stats' -> _get_stats, 404 fallback, blanket try/except); inbox/dev/final_dashboard.html 21,361 B sha f66d0fcc… byte-identical to my own validate_file-clean dashboard; inbox/dev/final_selftest.py 13,480 B sha 22a1f458… with the stats cases (I read the stats block: empty store, single booking, inclusive start/end, out-of-range exclusion, cancelled only in cancelled/hours_cancelled, two-room split, by_weekday 7 summing to active, by_hour 13 with 09:30-10:30 -> 0.5/0.5, top_days ordering with documented tie handling, 390/780 -> 50.0%, bad_range, data file untouched); inbox/dev/final_index.html 24,576 B sha 077fe7a3… which I read — header now contains exactly one link <a class=\"dash-link\" href=\"/dashboard\">Analytics dashboard →</a>, closing the gap flagged in the subtask-1 review. Honest gaps carried forward as open risks, not claimed as tested by me: dev's '54 PASS / All 54 checks passed' is dev-observed (I have no run_python tool), no socket-level HTTP round trip (sandbox blocks bind) and no browser JS execution by me (operator reports real Chrome checks pass on the dashboard HTML). Independent QA verification of the assembled package is being requested next.",
+          "time": "2026-11-23T12:55:30.274930+00:00"
+        }
+      },
+      {
+        "id": "subtask-4",
+        "assignee": "dev",
+        "status": "accepted",
+        "review": {
+          "reviewer": "lead",
+          "accepted": true,
+          "reason": "Duplicate of already-accepted subtask-1/2/3 work, reviewed against the actual artifacts I hold in my inbox, not dev's claims. Verified by direct read_file/sha256: inbox/dev/final_booking.py 23,122 B sha 41c966fa… (compute_stats(start_date,end_date,store=None) + BookingStore.stats(); inclusive wall-clock 'YYYY-MM-DD' string range, BookingError('bad_range') when start>end, capacity = rooms x days x 780 min, active/cancelled split with cancelled hours only in hours_cancelled, utilisation_pct and cancellation_rate_pct 2dp with zero guards, _hour_parts proportional split at clock edges, by_weekday fixed Mon..Sun 7 entries, by_hour 13 entries 07..19, top_days capped 5, cancellations by room and weekday, malformed rows skipped, read-only access through list_bookings/get_rooms); inbox/dev/final_server.py 11,223 B sha 5a249b9d… (module-level DASHBOARD_PATH defined next to INDEX_PATH — this corrects the previously observed 500 for /dashboard — dispatch of '/dashboard' and '/dashboard.html' to _serve_dashboard, '/api/stats' to _get_stats with 400 bad_request/bad_date/bad_range handling, 404 fallback, blanket try/except so no exception escapes); inbox/dev/final_index.html 24,576 B sha 077fe7a3… which I read at offset 5600: header contains exactly one <a class=\"dash-link\" href=\"/dashboard\">Analytics dashboard →</a> link; inbox/dev/final_dashboard.html 21,361 B sha f66d0fcc… byte-identical to my own validate_file-clean, Chrome-checked dashboard; inbox/dev/final_selftest.py 13,480 B sha 22a1f458… whose stats block I read (empty store, single booking, inclusive start/end, out-of-range exclusion, cancelled only in cancelled/hours_cancelled, two-room split, by_weekday 7 summing to active, by_hour 13 with 09:30-10:30 -> 0.5/0.5, top_days ordering with documented tie handling, 390/780 min -> 50.0%, bad_range, data file untouched). Honest gaps carried as open risks, not claimed as tested by me: the '54 PASS / All 54 checks passed' output is dev-observed (I have no run_python tool), no socket-level HTTP round trip (sandbox blocks bind), and no browser JS execution by me (operator reports real Chrome checks pass). Independent QA re-run is being requested for exactly these items.",
+          "time": "2026-11-23T12:58:11.670733+00:00"
+        }
+      },
+      {
+        "id": "subtask-5",
+        "assignee": "dev",
+        "status": "accepted",
+        "review": {
+          "reviewer": "lead",
+          "accepted": true,
+          "reason": "Reviewed against the actual artifacts I hold in my inbox, not dev's summary. Verified by direct read_file/sha256 this session: inbox/dev/final_booking.py 23,122 B sha 41c966fa… (compute_stats(start_date,end_date,store=None) + BookingStore.stats(); inclusive wall-clock 'YYYY-MM-DD' string range, BookingError('bad_range') when start>end, capacity = rooms x days x 780 min, active/cancelled split with cancelled time only in hours_cancelled, utilisation_pct/cancellation_rate_pct 2dp with zero guards, _hour_parts proportional hour split at clock edges, by_weekday fixed Mon..Sun 7 entries, by_hour 13 entries 07..19, top_days capped 5, cancellations by room and weekday, malformed rows skipped, read-only); inbox/dev/final_server.py 11,223 B sha 5a249b9d… (module-level DASHBOARD_PATH next to INDEX_PATH — corrects the previously observed 500 on /dashboard — '/dashboard' and '/dashboard.html' dispatched like index.html, '/api/stats' with 400 bad_request/bad_date/bad_range, 404 fallback, blanket try/except); inbox/dev/final_index.html 24,576 B sha 077fe7a3… read at offset 5600: header contains exactly one <a class=\"dash-link\" href=\"/dashboard\">Analytics dashboard →</a>; inbox/dev/final_dashboard.html 21,361 B sha f66d0fcc… byte-identical to the dashboard I authored and validate_file reported valid (operator reports real Chrome checks pass); inbox/dev/final_selftest.py 13,480 B sha 22a1f458… whose stats block I read (empty store, single booking, inclusive start/end, out-of-range exclusion, cancelled only in cancelled/hours_cancelled, two-room split, by_weekday 7 summing to active, by_hour 13 with 09:30-10:30 -> 0.5/0.5, top_days ordering with documented deterministic tie handling, 390/780 min -> 50.0%, bad_range, data file untouched). Honest gaps carried as disclosed open risks, not claimed as tested by me: the '54 PASS / All 54 checks passed' run is dev-observed (I have no run_python tool), no socket-level HTTP round trip (sandbox blocks bind), and no browser JS execution by me. All five files are in my inbox flat and I am delivering exactly those.",
+          "time": "2026-11-23T12:58:34.097281+00:00"
+        }
+      },
+      {
+        "id": "subtask-6",
+        "assignee": "qa",
+        "status": "superseded",
+        "review": {
+          "reviewer": "lead",
+          "accepted": false,
+          "reason": "Rejected as a failure-claiming submission, not because QA lied — QA's evidence is honest — but because its central finding is a handoff defect on my side and the application was never shown at fault. Facts I verified myself: I sent v2_booking.py (23122 B, 41c966fa…), v2_server.py (11223 B, 5a249b9d…), v2_index.html (24576 B, 077fe7a3…) and v2_dashboard.html (21361 B, f66d0fcc…) to QA, but I never sent v2_selftest.py (13480 B, 22a1f458…) flat, so QA ran the v1 suite (28 PASS, 'All 28 checks passed.', exit 0) and cannot reproduce the v2 stats block. That gap is mine, not QA's, and it must be closed, not published as a defect. Secondly, QA's independent stats harness aborted on its own API mismatch ('unexpected keyword argument rooms'/'data_path') — a harness bug with no application error shown; the delivered files were not modified, correctly. Thirdly, the v2 selftest does exist in my inbox (inbox/dev/final_selftest.py = v2_selftest.py, sha 22a1f458…) and I read its stats block, so 'not delivered' must be read as 'not handed to QA', not 'does not exist'. What remains genuinely unverified by an independent party: the stats arithmetic under execution, the /api/stats handler statuses and DASHBOARD_PATH dispatch from a real run. Action: I will send v2_selftest.py to QA flat under a fresh destination and re-delegate one small, focused correction run with the correct harness approach; the 54-PASS figure stays unpublished until QA observes it.",
+          "time": "2026-11-23T13:07:03.284710+00:00"
+        }
+      },
+      {
+        "id": "subtask-7",
+        "assignee": "qa",
+        "status": "accepted",
+        "review": {
+          "reviewer": "lead",
+          "accepted": true,
+          "reason": "Independent QA run executed and reported with real observed values; I am accepting it as evidence of the v2 package behaviour, with QA's own fixture errors correctly attributed to the harness rather than the application. What was actually observed: (1) QA copied the five delivered files flat (booking.py 23122 B 41c966fa…, server.py 11223 B 5a249b9d…, index.html 24576 B 077fe7a3…, selftest.py 13480 B 22a1f458…, dashboard.html 21361 B f66d0fcc…) and ran selftest.py in-process with runpy: 57 stdout lines, 54 PASS, 0 FAIL, exit code 0, last lines verbatim 'PASS  stats: compute_stats leaves the data file untouched' / '' / 'All 54 checks passed.' — this independently CONFIRMS the 54-PASS claim that was previously dev-observed only, closing the open item from my subtask-1/5 reviews. (2) Independent stats checks with real values: 13 by_hour entries with 0.5h at 09:00 and 0.5h at 10:00, 7 by_weekday entries summing to bookings_active, inclusive start and end both counted, one-day-outside and 03-05 excluded, cancelled only in bookings_cancelled/hours_cancelled and not in hours_active, bad_range for start>end, bad_date for '2026-13-01', no bookings.json created and data file sha unchanged, malformed legacy rows skipped, empty store zeros. (3) /api/stats via ApiHandler._get_stats with parse_qs-style lists: 400 bad_request (missing and empty), 400 bad_date, 400 bad_range, 200 with totals.bookings_active=1 for a valid 1-day range; server.DASHBOARD_PATH exists with basename dashboard.html and do_GET contains '/dashboard' and '/dashboard.html'. (4) validate_file valid=true, no errors/warnings on v2_booking.py and v2_index.html. QA honestly disclosed: its two 50.0 utilisation expectations were wrong fixtures (1h over 5 rooms x 13h = 1.54%; 50% needs 390 of 780 min — the delivered selftest does exactly that and passed), earlier BookingStore kwargs harness failures were harness errors, and validate_file on dashboard.html/server.py/selftest.py plus some dashboard grep lines were not completed this session; socket-level HTTP and browser JS remain untested. Those are carried forward as open risks, not claimed as tested.",
+          "time": "2026-11-23T13:11:01.978436+00:00"
+        }
+      }
+    ],
+    "pending": null
+  },
+  "event_counts": {
+    "action_applied": 290,
+    "action_normalized": 6,
+    "agent_turn": 339,
+    "approval_requested": 19,
+    "approval_resolved": 19,
+    "budget_exhausted": 2,
+    "human_question": 1,
+    "invalid_response": 47,
+    "message": 380,
+    "response_recovered": 16,
+    "session_created": 1,
+    "task_failed": 1,
+    "task_finished": 2,
+    "task_started": 3,
+    "tool_started": 226
+  },
+  "human_interventions": [
+    {
+      "time": "2026-11-23T11:00:54.106161+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "Our team currently manages meeting rooms using a shared spreadsheet. We often run into double bookings and records that are not updated after cancellations. Please build a usable meeting room booking system that makes it easy to check availability, book rooms, and cancel bookings. Show me what you have built and explain how to use it. If you need to understand how we work or need other information, you can ask me in the group."
+    },
+    {
+      "time": "2026-11-23T11:03:21.063300+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:04:07.429560+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation c5e7e914da2c461e911913e3a39add48. Approved: self-test writes only to a temp directory and makes no network calls."
+    },
+    {
+      "time": "2026-11-23T11:04:07.429985+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:04:28.137627+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:05:47.057422+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation da25af4ecd124bb0adb48189949e1cea. Approved: re-running the same self-test after the server.py fix."
+    },
+    {
+      "time": "2026-11-23T11:05:47.057860+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:08:03.650163+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:09:06.272240+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation eb2c3193ba9b4966b5358935f535a59a. Approved: QA checks import dev's files read-only and use temp dirs; any HTTP is loopback to a thread-local server. Sandbox network policy still applies."
+    },
+    {
+      "time": "2026-11-23T11:09:06.272793+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:09:26.362344+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:10:55.362593+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation da1deb41c0004c74a19b599b9e3ba304. Approved: in-process handler dispatch with fake streams, no socket binding, read-only against dev's files."
+    },
+    {
+      "time": "2026-11-23T11:10:55.363171+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:11:04.387116+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:13:31.001579+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation eb661c16356b4e0c81ababaf10f2d6c0. Approved: static pattern search over dev's files, no network or process creation."
+    },
+    {
+      "time": "2026-11-23T11:13:31.002213+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:13:44.717125+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:14:32.823658+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation 5de62777342d45e791f14b35206bb1f6. Approved: same self-test, re-run after fixes."
+    },
+    {
+      "time": "2026-11-23T11:14:32.824488+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:16:27.278164+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T11:18:57.175797+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation ad676014e0ea441392cbf81e072bf682. Approved: final QA verification, read-only on copied files, no sockets or process creation."
+    },
+    {
+      "time": "2026-11-23T11:18:57.176348+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T11:22:56.724151+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room allocation. Use the system's booking records; You can ask me about unclear requirements during development."
+    },
+    {
+      "time": "2026-11-23T11:38:19.858256+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "Extend the meeting room booking system with an interactive dashboard for the person managing the rooms. For a selected date range, it should show how often each room is booked, the total time reserved, the busiest days and times, and how often bookings are cancelled. Use clear charts and summaries so the manager can identify heavily used and underused rooms and decide whether to change room allocation. Use the system's booking records; You can ask me about unclear requirements during development."
+    },
+    {
+      "time": "2026-11-23T11:43:16.634625+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:20:32.253075+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation 0851805044c44f03adb6e182050f94d2. Resume the reviewed verify_stats.py execution under the existing sandbox, as authorized by the user request to complete the remaining tasks."
+    },
+    {
+      "time": "2026-11-23T12:20:32.253530+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:20:46.375921+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:21:08.793353+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation b17c3af47e104c0da6021bbf95d1cbbc. Reviewed the corrected top-days assertion; execute this exact updated test in the sandbox and continue."
+    },
+    {
+      "time": "2026-11-23T12:21:08.793743+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:24:43.214180+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:36:11.872086+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation abb0c516a0344048ac7671439adbeba9. Reviewed copy_dash.py: copies the delivered dashboard only inside the sandbox workspace. Continue the authorized completion and verification."
+    },
+    {
+      "time": "2026-11-23T12:36:11.872711+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:38:20.736563+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:39:59.604545+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation ce92bd20d00a4ce483bcd3edb700912b. Operator follow-up under the user completion request: the reviewed copy_dash.py is approved. Independent checkpoint found statistics arithmetic correct, but GET /dashboard returns 500 because DASHBOARD_PATH is undefined in server.py. Fix that binding, ensure index links to /dashboard, and send final versions with unique destination names because send_file never overwrites. README must document dashboard launch/access. Inform lead of these concrete findings and complete actual review; do not claim success merely from syntax validation."
+    },
+    {
+      "time": "2026-11-23T12:39:59.605171+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:41:45.006618+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:43:13.932510+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation a858cde8e5c1403fbb2deb489af12ca1. Reviewed assemble_stats.py: workspace-only assembly, notes and in-process tests are approved. Preserve truthful test output. Note that a top_days fixture may contain equal totals; ensure expected ordering matches the documented deterministic tie break, without weakening real correctness checks."
+    },
+    {
+      "time": "2026-11-23T12:43:13.933242+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:43:30.039412+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:47:07.151047+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation dedd83aabab14982af68115ed737b1cd. Reviewed the extended selftest; approved to run under the existing sandbox. Preserve and report any real failure, then fix the cause before claiming completion."
+    },
+    {
+      "time": "2026-11-23T12:47:07.151900+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:49:13.047670+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:51:01.446257+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation b3e0a8959c9f4ce1b721001ed361f8b9. Approved this reviewed final_assemble.py in the sandbox. Independent artifact checks now pass all seven rubric criteria; current dashboard HTML passes real Chrome checks. Finish handoff and peer review using these actual files. Several overlapping dev subtasks remain assigned: submit each completed task through the normal complete action, have the coordinator review each against its own criteria, and avoid creating more duplicate assembly tasks. Do not bypass review or fabricate acceptance."
+    },
+    {
+      "time": "2026-11-23T12:51:01.447183+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:51:27.560585+00:00",
+      "type": "approval_requested",
+      "agent_id": "dev",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T12:53:28.326001+00:00",
+      "type": "human_reply",
+      "to": "dev",
+      "text": "Approved operation 677b675224f9459b9eb35045df2c1e71. Approved the reviewed final_verify.py sandbox execution. The functional dashboard path and API already pass the independent review. After this verification, prioritize sending the manifest and final artifacts and submitting the existing subtasks for peer review; no new assembly work is needed unless this test reveals an actual functional defect."
+    },
+    {
+      "time": "2026-11-23T12:53:28.326858+00:00",
+      "type": "approval_resolved",
+      "agent_id": "dev",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T12:55:30.808404+00:00",
+      "type": "question",
+      "agent_id": "lead",
+      "text": "The model service is unavailable (network, rate limit, service error, or exhausted account balance). Progress including every accepted subtask is saved; no action was received or executed. Restore service, top up the account, or configure the authorized backup, then reply to retry this task."
+    },
+    {
+      "time": "2026-11-23T12:57:46.793852+00:00",
+      "type": "human_reply",
+      "to": "lead",
+      "text": "The user has confirmed the DeepSeek balance has been topped up. Resume the saved task and complete the remaining peer reviews and final handoff. Keep the verified artifact bytes and accurate validation evidence; no further assembly is needed without a concrete defect."
+    },
+    {
+      "time": "2026-11-23T13:01:14.639720+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T13:04:11.683694+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation 1e70caa485334b1f80467a392a134ee1. Reviewed qa_verify.py; workspace-only verification is approved. If the QA harness fails, distinguish a harness/API mismatch from an application failure: the delivered BookingStore constructor takes data_path and optional rooms_path, persisted records are a JSON list, and _get_stats receives a parsed query dictionary. Preserve the actual output. Do not modify the verified delivery just to fit the harness."
+    },
+    {
+      "time": "2026-11-23T13:04:11.684493+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T13:04:38.144537+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T13:05:56.756060+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Denied operation c3259807db0b42da9f670019da9c127b. Do not run this draft harness yet: it runs the copied selftest before inserting FLAT into sys.path, so booking cannot be imported; and _get_stats expects parse_qs-style values (lists of strings), not strings, so the valid query would be mis-tested. Fix only the QA harness, keep the delivered files unchanged, and execute one final meaningful check. Preserve the earlier failed run as a harness failure."
+    },
+    {
+      "time": "2026-11-23T13:05:56.756701+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": false
+    },
+    {
+      "time": "2026-11-23T13:07:59.278262+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T13:08:52.448529+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Approved operation ea9a51792b6744f987ea84e83b6c2f6b. Reviewed qa_run.py; approved for sandbox execution. Report the actual results. Two expected-50-percent assertions use the wrong fixture: one hour over five configured rooms x 13 hours is 1.54 percent, not 50 percent. A 50-percent test needs one configured room with 390 active minutes over 780 available minutes; the v2 selftest covers that. Treat any failure of those two incorrect expectations as a QA fixture error, not a reason to change the correct application calculation. Keep all captured output and explain the arithmetic to the reviewer."
+    },
+    {
+      "time": "2026-11-23T13:08:52.449254+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": true
+    },
+    {
+      "time": "2026-11-23T13:09:07.162354+00:00",
+      "type": "approval_requested",
+      "agent_id": "qa",
+      "tool": "run_python"
+    },
+    {
+      "time": "2026-11-23T13:10:21.311352+00:00",
+      "type": "human_reply",
+      "to": "qa",
+      "text": "Denied operation 9e5d1c54f527420e9bb666cf9c73ba6c. This proposed repeat still has an incorrect expectation: one configured room and one active hour gives 60/780*100 = 7.69%, not 50%. A one-hour booking cannot give 50% of a 13-hour day. The delivered v2 selftest already ran 54 checks including the correct 390-minute / 780-minute = 50% fixture. No further repeat is needed for this known arithmetic issue. Submit your real QA results now, disclose the two wrong expectations in qa_run.py and the prior harness failures, explain the correct denominators, and let the lead complete peer review. Do not change correct application code or claim those incorrect assertions passed."
+    },
+    {
+      "time": "2026-11-23T13:10:21.312269+00:00",
+      "type": "approval_resolved",
+      "agent_id": "qa",
+      "approved": false
+    }
+  ],
+  "workspace_files": {
+    "dev/workspace/.tmp/statsgen-0bzi_pwi/bookings.json": {
+      "size": 487,
+      "sha256": "7d992b635aa4482d880518d6090ce7cce11fd04a1b711295d2637df5555a1c3d"
+    },
+    "dev/workspace/.tmp/statsgen-8iud14gz/bookings.json": {
+      "size": 1208,
+      "sha256": "fc3d1b5168be6dee86c133ce4e8fcd304191fa8dc37af9bb02e6405428100555"
+    },
+    "dev/workspace/.tmp/statsgen-_tamhdp1/bookings.json": {
+      "size": 2291,
+      "sha256": "89fdd1ff66243ebdf0175500e475f53015888917598a54d1230fa62836b8ff57"
+    },
+    "dev/workspace/.tmp/statsgen-e9u62jyy/bookings.json": {
+      "size": 2291,
+      "sha256": "e8b3752f58f1903021d7388a45336a6d7feb26317b9251bb47d0fa1af54fdc78"
+    },
+    "dev/workspace/.tmp/statsgen-htr21woo/bookings.json": {
+      "size": 404,
+      "sha256": "116f133799ecd56a713e83c24a161568de68c79e198537f57f2bb61e0b0edf42"
+    },
+    "dev/workspace/.tmp/statsgen-o2u1qr66/bookings.json": {
+      "size": 1208,
+      "sha256": "9a8ef53e41519ced4be3e3a749cb796169431f6ad7e79f3dbdf216d0cb1b90a5"
+    },
+    "dev/workspace/NOTES-dashboard.md": {
+      "size": 1148,
+      "sha256": "af24150c3c04017fdbffdf5e5756d57ea522bac52361bcb55269032e62ec90c0"
+    },
+    "dev/workspace/__pycache__/booking.cpython-312.pyc": {
+      "size": 29604,
+      "sha256": "fa8c55c5d79c4fbc2a5801d01eea05101750805db9475c0b28745b95eb05041d"
+    },
+    "dev/workspace/__pycache__/server.cpython-312.pyc": {
+      "size": 18360,
+      "sha256": "9dd6d9ba7ed783aee27a5436b712e70dcf2030f752f3b61129aa63fee1843b21"
+    },
+    "dev/workspace/analytics.py": {
+      "size": 9769,
+      "sha256": "2673511e1ebd10a6a83d46a2518f8022e399c46d3855241dd79488db83142f5b"
+    },
+    "dev/workspace/assemble_stats.py": {
+      "size": 11613,
+      "sha256": "5b086569b9653be4663218c1e9be292e0f6b70362f13a69ac27052c9c7074bb1"
+    },
+    "dev/workspace/booking.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "dev/workspace/copy_dash.py": {
+      "size": 766,
+      "sha256": "2f98552651d9ced1fa22078844c621ec7a4f4687d617c1d1199569d021f3951a"
+    },
+    "dev/workspace/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "dev/workspace/final_assemble.py": {
+      "size": 4992,
+      "sha256": "f7e8ba6dc3ff96de7d14d03fb4ffd6896102917c44895c76dc07619d08c910e9"
+    },
+    "dev/workspace/final_verify.py": {
+      "size": 3262,
+      "sha256": "c0892a7c6647ab1a84b98288a8edc07a42b1c689d4b8e13a1590fb9382911887"
+    },
+    "dev/workspace/inbox/lead/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "dev/workspace/index.html": {
+      "size": 24576,
+      "sha256": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6"
+    },
+    "dev/workspace/selftest.py": {
+      "size": 13480,
+      "sha256": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+    },
+    "dev/workspace/server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "dev/workspace/verify_stats.py": {
+      "size": 7791,
+      "sha256": "2c86fe78703c21ae7073994129464f54563105bfb8b849bcb303fa26fa75323d"
+    },
+    "lead/workspace/DELIVERY.md": {
+      "size": 6396,
+      "sha256": "b647a9de545a9e77dd3d2c7b6956ed69a63a1e1371b03e58e7906d631949c861"
+    },
+    "lead/workspace/README.md": {
+      "size": 3463,
+      "sha256": "00fb8e3bc8a5b3aaac34e869f4bb26b2f023ec7b4fc2c4a926261eed2e4b724b"
+    },
+    "lead/workspace/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "lead/workspace/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "lead/workspace/inbox/dev/booking_dash.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "lead/workspace/inbox/dev/booking_py_v2.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "lead/workspace/inbox/dev/booking_v2.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "lead/workspace/inbox/dev/final_booking.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "lead/workspace/inbox/dev/final_dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "lead/workspace/inbox/dev/final_index.html": {
+      "size": 24576,
+      "sha256": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6"
+    },
+    "lead/workspace/inbox/dev/final_selftest.py": {
+      "size": 13480,
+      "sha256": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+    },
+    "lead/workspace/inbox/dev/final_server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "lead/workspace/inbox/dev/inbox/dev/index.html": {
+      "size": 24373,
+      "sha256": "d9f5e7fcf10144cce36c16ade7e0609ee76a9c46033b02e8d665247bfd26a8de"
+    },
+    "lead/workspace/inbox/dev/index.html": {
+      "size": 24373,
+      "sha256": "d9f5e7fcf10144cce36c16ade7e0609ee76a9c46033b02e8d665247bfd26a8de"
+    },
+    "lead/workspace/inbox/dev/index_v2.html": {
+      "size": 24576,
+      "sha256": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6"
+    },
+    "lead/workspace/inbox/dev/selftest.py": {
+      "size": 7152,
+      "sha256": "7660e9951c68bbc103068ac348975bbc6464f487734f472dc132382498189797"
+    },
+    "lead/workspace/inbox/dev/server.py": {
+      "size": 9726,
+      "sha256": "0c2aecb42c61c1b8252c7ababf287d2cd357398188f727a57421cf1db7195d33"
+    },
+    "lead/workspace/inbox/dev/v2_selftest.py": {
+      "size": 13480,
+      "sha256": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+    },
+    "lead/workspace/inbox/dev/v2_server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "lead/workspace/inbox/release/README.md": {
+      "size": 3275,
+      "sha256": "a4d8ed8a3c5d5bf0cfe11979b5205edcc2f7972be0a6029858e7481f95b3b2e8"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/__pycache__/booking.cpython-312.pyc": {
+      "size": 19988,
+      "sha256": "44145612b7430cd1fd9215612a035b2f1847c57f4bdb664b492e1c09962aa5ed"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/__pycache__/server.cpython-312.pyc": {
+      "size": 16209,
+      "sha256": "1f0dad021dc64de9bfafd53df424f8ee85f1cdc5657d74c687ec8969382dc87a"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/http.json": {
+      "size": 432,
+      "sha256": "dd6ddbd39ce4cc842263e1eabb57f707924c69df36f16dd2071eb054a47637f1"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/logic.json": {
+      "size": 2329,
+      "sha256": "49110d4a61e0a827f512b37f4ee42c47a7f6d511ed8a055c2f01aa6bbd8fba0f"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/race.json": {
+      "size": 406,
+      "sha256": "dc2abec262bf43bb52babe278e87420f2bddb189c27a011fdb300474641e29ac"
+    },
+    "qa/workspace/.tmp/qa_final_ir09lihk/server.py": {
+      "size": 9726,
+      "sha256": "0c2aecb42c61c1b8252c7ababf287d2cd357398188f727a57421cf1db7195d33"
+    },
+    "qa/workspace/.tmp/qa_flat_7bfv5o3i/__pycache__/booking.cpython-312.pyc": {
+      "size": 29625,
+      "sha256": "b5ddb103697313f953645e138ab4ea234e1ae31f53411bb92bbc2f1d6983414c"
+    },
+    "qa/workspace/.tmp/qa_flat_7bfv5o3i/__pycache__/server.cpython-312.pyc": {
+      "size": 18381,
+      "sha256": "d13dd852b83e1cb25b5e1625a2b0769c08529a7b0521673ba50bb26feea345a9"
+    },
+    "qa/workspace/.tmp/qa_flat_7bfv5o3i/booking.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "qa/workspace/.tmp/qa_flat_7bfv5o3i/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "qa/workspace/.tmp/qa_flat_7bfv5o3i/index.html": {
+      "size": 24576,
+      "sha256": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6"
+    },
+    "qa/workspace/.tmp/qa_flat_7bfv5o3i/selftest.py": {
+      "size": 13480,
+      "sha256": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+    },
+    "qa/workspace/.tmp/qa_flat_7bfv5o3i/server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "qa/workspace/.tmp/qa_http_m6x3f9a1/http.json": {
+      "size": 436,
+      "sha256": "3f39430344f1066b8a288c77a70a57fb2729442143f1abc3b3e844e2793f855a"
+    },
+    "qa/workspace/.tmp/qa_st_5qadggmr/bookings.json": {
+      "size": 1547,
+      "sha256": "dc540b47112338cfc8eaf87340b8effe6b0f44805e1178c803f60eeabaf30f96"
+    },
+    "qa/workspace/.tmp/qa_st_bq6h8brv/bookings.json": {
+      "size": 821,
+      "sha256": "d98d4bcd19a007f0defdef72edadb82d032b2a4d3300fcd52db6499bce5fa3e7"
+    },
+    "qa/workspace/.tmp/qa_st_isifjpsw/bookings.json": {
+      "size": 404,
+      "sha256": "f2f4df002ff62dddbf5dc647884154445b792769f7a978acd8419ac00f62f3c0"
+    },
+    "qa/workspace/.tmp/qa_st_jaje5t4y/bookings.json": {
+      "size": 404,
+      "sha256": "161b8757de910e4cfa3164d8b7827e8476a63785ca09a11d2c2998b613733029"
+    },
+    "qa/workspace/.tmp/qa_st_vit2jy9w/bookings.json": {
+      "size": 682,
+      "sha256": "37beed06bb5efaef0b19da79eda101cee59c9bdd20607748101ad597eed47c5e"
+    },
+    "qa/workspace/.tmp/qa_st_zp3j64il/bookings.json": {
+      "size": 404,
+      "sha256": "da7f4ce47db526d70b7da89bdaf378cc70d28666338aa036633cd0ebdfdef5fa"
+    },
+    "qa/workspace/.tmp/tmp2afp717y/bookings.json": {
+      "size": 791,
+      "sha256": "215100b8e5e1f4455b1f8e2c0b86f9e86e5fdf7b0e9ab03537aed8f09d3e7f24"
+    },
+    "qa/workspace/.tmp/tmp2oijy2gs/bookings.json": {
+      "size": 793,
+      "sha256": "f342176af661f4d9ee9a69a13499928bb4f37f0cbd950d89175ef06f767e4b22"
+    },
+    "qa/workspace/.tmp/tmp3sf6gg6l/bookings.json": {
+      "size": 424,
+      "sha256": "c694e6a0f35b7b0e6c1206e6c85bb391f85f4e2fe7b30d32c76f5957b8182090"
+    },
+    "qa/workspace/.tmp/tmp3uw_mklo/bookings.json": {
+      "size": 410,
+      "sha256": "c73c9047ca9eca6a9bf3bce19e50460dc62ae7ba89d2747962b62b08061dcbf2"
+    },
+    "qa/workspace/.tmp/tmp59agm1o8/bookings.json": {
+      "size": 779,
+      "sha256": "d18b3736ae1816515fc916b6a40ffc04209167e205e72adeb44036a29644ee1b"
+    },
+    "qa/workspace/.tmp/tmpa5gozlrh/bookings.json": {
+      "size": 402,
+      "sha256": "31c2b2e8cff36d0932b35e109e60b9fd03aa96443ac72e918c42dcb7ebb92f09"
+    },
+    "qa/workspace/.tmp/tmpeklrunvn/bookings.json": {
+      "size": 404,
+      "sha256": "2d072a6b5c791c09612aefdcda39b9064a450c8185a24ae2e7754b71894e7b65"
+    },
+    "qa/workspace/.tmp/tmphq47r2ki/bookings.json": {
+      "size": 1583,
+      "sha256": "a2ebb7776ebfe1ab74d9139c4c4a5a42b08eb33f6a4f5634044cfb68204f561c"
+    },
+    "qa/workspace/.tmp/tmpi_g3u7c7/bookings.json": {
+      "size": 290,
+      "sha256": "a5cf269333c109501fab57873524f6b7c2add1d9856e1386994e1ac64a6e6b29"
+    },
+    "qa/workspace/.tmp/tmpk4n85o45/bookings.json": {
+      "size": 404,
+      "sha256": "dbde772da0981e4e6567f1b3f9e55220e5f6c0c50e45cba7033c67991a7aafd3"
+    },
+    "qa/workspace/.tmp/tmpvrtxs0v2/bookings.json": {
+      "size": 404,
+      "sha256": "e92badc327d65caea3040cb3bcd469319ebe9aa4e03253ca9738776dd8a611a3"
+    },
+    "qa/workspace/.tmp/tmpxvw4htkn/bookings.json": {
+      "size": 814,
+      "sha256": "4cfdd0d47e83214ecce7130b2ef042bbf4ae79fd8b93617010bfd8e1e1dde0c9"
+    },
+    "qa/workspace/inbox/dev/__pycache__/booking.cpython-312.pyc": {
+      "size": 19975,
+      "sha256": "7aca6d0a8cf63fba6b3b27db25e4370fa0d59617db05ac36889965161d27bc98"
+    },
+    "qa/workspace/inbox/dev/__pycache__/server.cpython-312.pyc": {
+      "size": 16196,
+      "sha256": "6ffe010420f7eb6f8049717d5544b1725e7854f76fa6e6160e8f0e08490546cc"
+    },
+    "qa/workspace/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "qa/workspace/inbox/dev/inbox/dev/index.html": {
+      "size": 24373,
+      "sha256": "d9f5e7fcf10144cce36c16ade7e0609ee76a9c46033b02e8d665247bfd26a8de"
+    },
+    "qa/workspace/inbox/dev/server.py": {
+      "size": 9726,
+      "sha256": "0c2aecb42c61c1b8252c7ababf287d2cd357398188f727a57421cf1db7195d33"
+    },
+    "qa/workspace/inbox/lead/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "qa/workspace/inbox/lead/inbox/lead/v2_dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "qa/workspace/inbox/lead/selftest.py": {
+      "size": 7152,
+      "sha256": "7660e9951c68bbc103068ac348975bbc6464f487734f472dc132382498189797"
+    },
+    "qa/workspace/inbox/lead/v2_booking.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "qa/workspace/inbox/lead/v2_index.html": {
+      "size": 24576,
+      "sha256": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6"
+    },
+    "qa/workspace/inbox/lead/v2_selftest.py": {
+      "size": 13480,
+      "sha256": "22a1f458f17d9878882b36ce275d1e4e4fbb461f05200ae60720351f729a234f"
+    },
+    "qa/workspace/inbox/lead/v2_server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "qa/workspace/pkg_v2/__pycache__/booking.cpython-312.pyc": {
+      "size": 29610,
+      "sha256": "ce65e3f3f9dd7d0a7763e6b98d0e2eefbcc881213b93f9bbb3ab3496099c13bd"
+    },
+    "qa/workspace/pkg_v2/__pycache__/server.cpython-312.pyc": {
+      "size": 18366,
+      "sha256": "24d090e53002c8225a87bc2b35b5b3cc65a5dbda820ed6f666843a0ab4305180"
+    },
+    "qa/workspace/pkg_v2/booking.py": {
+      "size": 23122,
+      "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+    },
+    "qa/workspace/pkg_v2/dashboard.html": {
+      "size": 21361,
+      "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+    },
+    "qa/workspace/pkg_v2/index.html": {
+      "size": 24576,
+      "sha256": "077fe7a307867490218ecd189bab4ddb0fae7e4b9f0a5b67bfb6321dcaa9fcd6"
+    },
+    "qa/workspace/pkg_v2/selftest_v1.py": {
+      "size": 7152,
+      "sha256": "7660e9951c68bbc103068ac348975bbc6464f487734f472dc132382498189797"
+    },
+    "qa/workspace/pkg_v2/server.py": {
+      "size": 11223,
+      "sha256": "5a249b9de4cc0793b02db302fd504532c1672259626949eafdd971e81929cdc1"
+    },
+    "qa/workspace/qa_checks.py": {
+      "size": 14433,
+      "sha256": "e387dcf1a1ec9b49df18f8f70cfd324faebcc8b5d39bd4aa0cab16eee60f36be"
+    },
+    "qa/workspace/qa_copy.py": {
+      "size": 511,
+      "sha256": "48ae0c2c85cbd65d7d14a8129935cc4c78591f484852cae6daf3da1a0736a1a6"
+    },
+    "qa/workspace/qa_final.py": {
+      "size": 10184,
+      "sha256": "3b301d3f8343047e9d2cd4813800aa131a5906cabc30005175baf036ac99bd00"
+    },
+    "qa/workspace/qa_grep.py": {
+      "size": 1140,
+      "sha256": "6740eb4aaf985307d8ecad4b858f804f63667e009cd4dbd2cba3363f871db864"
+    },
+    "qa/workspace/qa_http.py": {
+      "size": 6661,
+      "sha256": "6496c80944cd16a63b80f39a4a3d652a2e34458fcd19fa538b2be9f990363567"
+    },
+    "qa/workspace/qa_report.md": {
+      "size": 5885,
+      "sha256": "cccffe860aecaa4169feda8440ca4bdabae2b305544038c6f25c8a127a426cbe"
+    },
+    "qa/workspace/qa_room1.py": {
+      "size": 1797,
+      "sha256": "fc0996501d18e18fcf401e6033b1a588f92ff24925a5d92bcf1aae8a1a64e4b4"
+    },
+    "qa/workspace/qa_run.py": {
+      "size": 15539,
+      "sha256": "c67ebd21691b9698d43434684eb3f31e7d9b4ef802246bb4507ddec45e4be38a"
+    },
+    "qa/workspace/qa_setup.py": {
+      "size": 3380,
+      "sha256": "b5414c191cd5c69a907443434acac68a24cf0b53d71a074dbf070484df3a0bd1"
+    },
+    "qa/workspace/qa_verify.py": {
+      "size": 10951,
+      "sha256": "7d93cec9e75b2eb3a7410dab1e525627c29c0b0c82d6f627d1a6f2c4497c63b2"
+    },
+    "qa/workspace/qa_verify2.py": {
+      "size": 9200,
+      "sha256": "7ad78122f4167c938adeaef8f745338e29f10e09c42f11ec5856f8b00af07628"
+    },
+    "release/workspace/README.md": {
+      "size": 3275,
+      "sha256": "a4d8ed8a3c5d5bf0cfe11979b5205edcc2f7972be0a6029858e7481f95b3b2e8"
+    },
+    "release/workspace/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "release/workspace/inbox/dev/inbox/dev/booking.py": {
+      "size": 14708,
+      "sha256": "c7a208dec1af819e934e3b4d5b9d70e6e6abab9aace35a6c13dfbe6fcde54ef6"
+    },
+    "transfers.jsonl": {
+      "size": 7081,
+      "sha256": "08b53ee284637c9723475b878649906e34de54667b7e9b1174323f3cef9e2cbf"
+    }
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "session": "course-newsroom",
+  "title": "Newsroom",
+  "agents": [
+    {
+      "id": "chief_editor",
+      "name": "Editor-in-Chief",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file"
+      ]
+    },
+    {
+      "id": "reporter",
+      "name": "Reporter",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file",
+        "search_web",
+        "fetch_url"
+      ]
+    },
+    {
+      "id": "fact_checker",
+      "name": "Fact-Checker",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "search_web",
+        "fetch_url"
+      ]
+    },
+    {
+      "id": "editor",
+      "name": "Editor",
+      "allowed_tools": [
+        "list_files",
+        "read_file",
+        "validate_file",
+        "write_file",
+        "append_file",
+        "replace_text",
+        "send_file"
+      ]
+    }
+  ],
+  "archived_runs": [
+    {
+      "task_id": "f7b2cf40cb53409ba20049818fbb9876",
+      "status": "completed",
+      "task": "We want to produce a news report on “AI on HKUST University Campuses” for students and faculty. Please choose a specific recent event worth reporting, investigate it, and prepare the report for publication across different channels. Help readers understand what happened and why it matters. You can discuss the choice of story and the audience's needs with me.",
+      "final_output": "Delivered the AI-on-HKUST story package.\n\nSTORY: HKUST has established the Center for Marine Intelligence (CMI), combining AI, robotics and marine science, with the AI4Coral project (automated coral-reef image analysis) with KAUST's Coral Restoration Initiative as its first international project. Source: official HKUST news item dated 18 November 2026, accessed 23 November 2026 — https://hkust.edu.hk/news/hkust-establishes-center-marine-intelligence-and-partners-kaust-launch-inaugural-ai4coral. Led by Prof. YEUNG Sai-Kit (Founding Director) with Prof. Rob SCHARFF and Prof. HU Wenqi as Associate Directors; AI4Coral co-led by Yeung, Prof. David SUGGETT and Dr. Liz GOERGEN.\n\nFILES (in my workspace):\n1. article.md — ~665-word web article for HKUST students and faculty: headline, standfirst, dateline 'HONG KONG, 23 November 2026', plain explanations of dense segmentation and the 'over 1,000 times faster' / '5,000 times as many classified image locations' claims, testing status (Red Sea, KAUST nurseries, Hoi Ha Wan via WWF-Hong Kong, 'broader field validation is ongoing'), three verbatim quotes with source URL, a clearly-labelled 'Why it matters here' context section, and a 'What we could not verify' note. Publish as-is on the news site.\n2. newsletter.md — short headline plus a ~118-word blurb carrying the single-source and unstated-siting caveats in brief. Paste into the faculty/student newsletter.\n3. social_and_email.md — OPTIONAL extras (nice-to-have per your priority order): one short-form/X post under 280 characters, one ~85-word LinkedIn version and an ~80-word email teaser with subject line. Replace [link] with the published article URL before sending.\n\nCAVEATS CARRIED THROUGHOUT (per your instructions): the item does not state that the centre is physically sited on the Clear Water Bay campus, so we do not assert it; only the publication date is verified, not an establishment date; no funding, headcount, opening dates or student-opportunity details exist in the sou",
+      "metrics": {
+        "elapsed_seconds": 652.6013853549957,
+        "active_seconds": 569.6931618750095,
+        "agent_turns": 85,
+        "tool_calls": 57,
+        "tool_errors": 1,
+        "invalid_actions": 10,
+        "recovered_responses": 9,
+        "output_limit_errors": null,
+        "fatal_errors": 0,
+        "subtasks_total": 3,
+        "subtasks_accepted": 3,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "checkpoints": 5,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "normalized_actions": 3
+      },
+      "provider": {
+        "active_provider": "deepseek",
+        "calls": 88,
+        "completion_tokens": 76936,
+        "invalid_responses": 1,
+        "prompt_tokens": 1352754,
+        "protocol_retries": 1,
+        "reasoning_tokens": 59114,
+        "requests": 89,
+        "total_tokens": 1429690
+      },
+      "subtasks": [
+        {
+          "id": "subtask-1",
+          "assignee": "reporter",
+          "status": "accepted",
+          "review": {
+            "reviewer": "chief_editor",
+            "accepted": true,
+            "reason": "Reviewed the reporter's submission: it delivers no research artifact and explicitly says so, which is the honest and correct account. Its stated gaps match the record — two protocol errors, eight-turn checkpoint, no research_notes.md produced, and no claim to have independently corroborated the published story. Because this subtask's evidence gap was covered by an accepted parallel research sprint (subtask-2) whose findings were independently checked against the primary HKUST news item of 2026-11-18, and because the reporter invented no facts, sources or quotations, I accept it as a transparent negative result rather than requiring further work. No article content depends on this subtask.",
+            "time": "2026-11-23T11:11:24.159969+00:00"
+          }
+        },
+        {
+          "id": "subtask-2",
+          "assignee": "fact_checker",
+          "status": "accepted",
+          "review": {
+            "reviewer": "chief_editor",
+            "accepted": true,
+            "reason": "Verified the fact-checker's research report against the primary source it cites (official HKUST news item https://hkust.edu.hk/news/hkust-establishes-center-marine-intelligence-and-partners-kaust-launch-inaugural-ai4coral, dated 2026-11-18, accessed 2026-11-23). The report delivers each required element: (1) a named, dated event — establishment of the HKUST Center for Marine Intelligence (CMI) and its inaugural AI4Coral project with KAUST's KCRI; (2) four key facts each tied to the fetched official HKUST page (CMI's AI/robotics/marine-science remit; leadership of Prof. YEUNG Sai-Kit as Founding Director with Prof. Rob SCHARFF and Prof. HU Wenqi as Associate Directors; AI4Coral co-led by Yeung, SUGGETT and GOERGEN; the 'over 1,000 times faster' and '5,000 times as many classified image locations' performance claims; testing on Red Sea, KAUST nursery and Hoi Ha Wan/WWF-Hong Kong imagery with 'broader field validation is ongoing'); (3) three verbatim quotes with URL and access date 2026-11-23; (4) rejected candidates listed one line each, explicitly marked as unfetched/unusable rather than presented as evidence; (5) honest gaps — campus siting unstated, no establishment date, single-source with no independent outlet. Its only output was a message, appropriate for a read-only role, and no fabricated sources, quotes or URLs were found. This evidence base was used to brief the editor and underpins the accepted article.md and newsletter.md.",
+            "time": "2026-11-23T11:11:10.251670+00:00"
+          }
+        },
+        {
+          "id": "subtask-3",
+          "assignee": "editor",
+          "status": "accepted",
+          "review": {
+            "reviewer": "chief_editor",
+            "accepted": true,
+            "reason": "Reviewed the files transferred into inbox/editor/article.md (4,550 bytes) and inbox/editor/newsletter.md (864 bytes). article.md meets the brief: headline, standfirst, dateline 'HONG KONG, 23 November 2026', ~665 words, plain Markdown only. Every factual claim maps to the single HKUST news item cited (https://hkust.edu.hk/news/hkust-establishes-center-marine-intelligence-and-partners-kaust-launch-inaugural-ai4coral, dated 2026-11-18, accessed 2026-11-23): CMI and its AI/robotics/marine-science remit; Prof. YEUNG Sai-Kit as Founding Director with Prof. Rob SCHARFF and Prof. HU Wenqi as Associate Directors; AI4Coral with KAUST's KCRI co-led by Yeung, SUGGETT and GOERGEN; the 'over 1,000 times faster' and '5,000 times as many classified image locations' claims explicitly attributed to HKUST and flagged as not independently checked; testing on Red Sea, KAUST nurseries and Hoi Ha Wan imagery via WWF-Hong Kong with 'broader field validation is ongoing'. All three verbatim quotes are correctly attributed and unaltered. The mandatory caveats are all plainly present in the 'What we could not verify' section: no claim that the centre is sited on Clear Water Bay (siting and student access stated as not described), no establishment date (only publication date), no funding/headcount/opening dates, no invented student opportunities, and explicit notice that no independent second outlet was found so the piece rests on HKUST's own account. The 'Why it matters here' section is clearly labelled as context rather than announcement fact. newsletter.md has a short headline plus a ~118-word blurb consistent with the article and carries the single-source and unstated-siting caveats in brief. No fabricated people, dates, quotations or URLs detected.",
+            "time": "2026-11-23T11:10:49.672172+00:00"
+          }
+        }
+      ]
+    }
+  ],
+  "current_run": {
+    "task_id": "346eddcd20414e96bfcf19cace1356e4",
+    "status": "completed",
+    "task": "Please investigate the following claim: \"AI-writing detectors can reliably determine whether a university student's assignment was written by AI.\" Examine the evidence and produce a fact-check article for students and faculty explaining your conclusion and any remaining uncertainty. You can discuss the interpretation of the claim, editorial angle, and questions that arise with me during the proces",
+    "final_output": "Fact-check complete and accepted. Claim examined: \"AI-writing detectors can reliably determine whether a university student's assignment was written by AI.\" Verdict: unsupported as stated — detectors can flag risk but cannot reliably establish authorship.\n\nEvidence base (both read directly, exact verbatim quotes, accessed 2026-11-23):\n1. Weber-Wulff et al., 'Testing of detection tools for AI-generated text', International Journal for Educational Integrity 19:26 (Springer), 25 Dec 2023, DOI 10.1007/s40979-023-00146-z — 12 public + 2 commercial = 14 tools; tools 'neither accurate nor reliable' with a bias toward classifying output as human-written; obfuscation 'significantly worsen[s]' performance.\n2. Liang et al., 'GPT detectors are biased against non-native English writers', Stanford, arXiv:2304.02819v3 (10 Jul 2023), published in Patterns — 61.22% average false-positive rate on 91 human-written TOEFL essays vs 5.19% on 88 US 8th-grade essays; 19.78% unanimously flagged by all seven detectors; 97.80% flagged by at least one; authors caution against evaluative/educational use.\n\nUncertainty stated plainly in the article: OpenAI's Jan 2023 classifier page body was not retrievable (26%/9% figures NOT printed), Turnitin's detector page returned HTTP 403 so its accuracy claim could not be checked, and no HKUST document on AI-writing detection was found — framed as absence of verification, not proof of absence. 'Why it matters' is labelled editorial reasoning, not a finding.\n\nProcess note: the reporter's sprint failed (stuck in a protocol loop; its research_notes.md held stale notes from the previous assignment) and was accepted as a transparent negative result; the evidence came from two independent fact-checker sprints and the article was written by the editor. All four subtasks are terminal and accepted.\n\nDELIVERABLE: article_factcheck.md in my workspace (6,154 bytes, ~890 words, plain Markdown, static validation passed). Send it to the requester as-is for publication; ",
+    "metrics": {
+      "elapsed_seconds": 644.9285409450531,
+      "active_seconds": 644.9195526661351,
+      "agent_turns": 81,
+      "tool_calls": 58,
+      "tool_errors": 7,
+      "invalid_actions": 4,
+      "recovered_responses": 2,
+      "output_limit_errors": null,
+      "fatal_errors": 0,
+      "subtasks_total": 4,
+      "subtasks_accepted": 4,
+      "subtask_completion_rate": 1.0,
+      "model_claimed_success": true,
+      "peer_reviewed_completion": true,
+      "checkpoints": 6,
+      "reflection_calls": 4,
+      "reflection_failures": 0,
+      "normalized_actions": 1
+    },
+    "provider": {
+      "active_provider": "deepseek",
+      "calls": 85,
+      "completion_tokens": 102931,
+      "invalid_responses": 1,
+      "prompt_tokens": 2260747,
+      "protocol_retries": 1,
+      "reasoning_tokens": 77783,
+      "requests": 86,
+      "total_tokens": 2363678
+    },
+    "memory": {
+      "chief_editor": {
+        "group_entries": 4,
+        "lessons": 2,
+        "successes": 0,
+        "failures": 0
+      },
+      "reporter": {
+        "group_entries": 6,
+        "lessons": 2,
+        "successes": 2,
+        "failures": 0
+      },
+      "fact_checker": {
+        "group_entries": 7,
+        "lessons": 2,
+        "successes": 3,
+        "failures": 0
+      },
+      "editor": {
+        "group_entries": 6,
+        "lessons": 2,
+        "successes": 2,
+        "failures": 0
+      }
+    },
+    "subtasks": [
+      {
+        "id": "subtask-1",
+        "assignee": "reporter",
+        "status": "accepted",
+        "review": {
+          "reviewer": "chief_editor",
+          "accepted": true,
+          "reason": "Reviewed against the record. The reporter delivered no detector research and says so explicitly: it confirms research_notes.md exists in its workspace but contains only stale HKUST-event candidate notes from the previous assignment, and it makes no claim to any figure, quotation or citation in the published fact-check. That matches what I can see — the verified evidence base came from the two independent fact-checker sprints (subtask-2, subtask-3) and the article from the editor (subtask-4), all of which I reviewed against fetched primary sources. This subtask's original success criteria (6+ fetched sources with verbatim statistics, HKUST finding) were not met, but that work was superseded and independently completed; requiring it now would add no evidence and would risk invented content. The submission is honest, invents nothing, and artifacts=[] is consistent with its account. Accepted as a transparent negative result; no article content depends on it.",
+          "time": "2026-11-23T11:24:10.403560+00:00"
+        }
+      },
+      {
+        "id": "subtask-2",
+        "assignee": "fact_checker",
+        "status": "accepted",
+        "review": {
+          "reviewer": "chief_editor",
+          "accepted": true,
+          "reason": "Reviewed the fact-checker's handoff against its own claims and the record. It is a transparent, useful partial result rather than a full research sprint: it fully verifies one peer-reviewed source (Weber-Wulff et al., https://link.springer.com/article/10.1007/s40979-023-00146-z, DOI 10.1007/s40979-023-00146-z, published 25 December 2023, accessed 2026-11-23) with four exact verbatim quotes covering the key findings ('The research covers 12 publicly available tools and two commercial systems (Turnitin and PlagiarismCheck)...'; 'neither accurate nor reliable'; 'content obfuscation techniques significantly worsen the performance of tools'). It correctly flags a brief error we made — the venue is the International Journal for Educational Integrity, not IJETHE — which I will carry into the article. It confirms Liang et al. bibliographically without inventing the TOEFL/IELTS false-positive figures, states 'NO HKUST DOCUMENT FOUND' explicitly and correctly frames that as absence of verification, and separates verified (section A) from unverified (sections B/D/E). It also warns that several Springer pages it fetched are untrusted and must not be cited. No fabricated URLs, dates, statistics or quotations found; artifacts=[] is correct for a read-only role. I accept it as an honest negative/partial result and will open a narrower follow-up sprint for the specific missing sources rather than treating this as sufficient.",
+          "time": "2026-11-23T11:16:47.400510+00:00"
+        }
+      },
+      {
+        "id": "subtask-3",
+        "assignee": "fact_checker",
+        "status": "accepted",
+        "review": {
+          "reviewer": "chief_editor",
+          "accepted": true,
+          "reason": "Reviewed against the record. This follow-up sprint delivers two of four items with genuine, character-exact evidence and refuses to invent the other two — exactly what I asked for. Item 1 (Liang et al., 'GPT detectors are biased against non-native English writers', Stanford, arXiv:2304.02819v3, 10 Jul 2023, read at https://arxiv.org/html/2304.02819v3, listing at https://arxiv.org/abs/2304.02819, accessed 2026-11-23) now carries the figures we were missing: average false positive rate 61.22% on the 91 TOEFL essays, 'over half of the TOEFL essays' misclassified, 19.78% unanimously flagged by all seven detectors, 97.80% flagged by at least one, versus a 5.19% average false-positive baseline on the 88 US 8th-grade essays. It also correctly corrects our brief: the paper uses TOEFL, not IELTS. Item 2 is an honest negative — the OpenAI page loaded (HTTP 200) but the article body was not retrievable, so the 26%/9% figures are marked UNVERIFIED and must not be printed as quotations. Item 3 similarly honest: Turnitin returned HTTP 403, so the '<1%' vendor claim is not verified. Item 4 states plainly 'NO HKUST DOCUMENT FOUND' and correctly frames it as absence of verification, not proof of absence. The vendor-vs-independent distinction is made correctly. No fabricated URLs, dates, statistics or quotations; artifacts=[] is right for a read-only role. Accepted, and I will build the article only on the two verified peer-reviewed sources plus explicit statements of what we could not verify.",
+          "time": "2026-11-23T11:17:49.910182+00:00"
+        }
+      },
+      {
+        "id": "subtask-4",
+        "assignee": "editor",
+        "status": "accepted",
+        "review": {
+          "reviewer": "chief_editor",
+          "accepted": true,
+          "reason": "Reviewed against the record. The editor transferred a complete 6,156-byte article (inbox/editor/article_factcheck_final.md) which I read end to end, and the submitted artifact (article.md, 6,176 bytes) is a cosmetic variant of it. The piece meets the brief on every required element: headline and standfirst signal the verdict; dateline 'HONG KONG, 23 November 2026'; the claim is stated fairly and judged unsupported as stated, with the distinction between 'flag/signal' and 'establish authorship' made explicitly. Both verified sources are used with the exact figures we locked in — Source 1 (Weber-Wulff et al., 12 public + 2 commercial = 14 tools, 'neither accurate nor reliable', bias toward human-written classification, obfuscation worsening performance) with the venue correctly named as the International Journal for Educational Integrity, not IJETHE; Source 2 (Liang et al., 61.22% average false positive on the 91 TOEFL essays, 5.19% baseline on the 88 US 8th-grade essays, 19.78% unanimously flagged, 97.80% flagged by at least one, plus the authors' caution against evaluative use), and correctly says TOEFL not IELTS. The 'Why it matters' section is plainly labelled as editorial reasoning rather than a finding. 'What we could not verify' honestly names the unretrievable OpenAI classifier body (no 26%/9% figures printed), Turnitin's HTTP 403 (no <1% figure printed), and states that no HKUST document was found with the correct absence-of-verification caveat. Method note and sources list carry URLs and access date 2026-11-23. No fabricated studies, figures, quotations, people or HKUST policy. Two disclosed deltas in the submitted copy — a reworded standfirst and rendering the nested 'AI-generated' quotes as single quotes — change no facts, figures or sources, and the latter actually repairs a literal-backslash escaping artifact present in the copy I reviewed ('\\\"AI-generated\\\"'), so it is an improvement; the editor also discloses the rendering in the method note. Accepted.",
+          "time": "2026-11-23T11:23:48.881103+00:00"
+        }
+      }
+    ],
+    "pending": null
+  },
+  "event_counts": {
+    "action_applied": 152,
+    "action_normalized": 4,
+    "agent_turn": 166,
+    "human_question": 1,
+    "invalid_response": 14,
+    "message": 179,
+    "response_recovered": 11,
+    "session_created": 1,
+    "task_finished": 2,
+    "task_started": 2,
+    "tool_started": 115
+  },
+  "human_interventions": [
+    {
+      "time": "2026-11-23T11:01:00.021351+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "We want to produce a news report on “AI on HKUST University Campuses” for students and faculty. Please choose a specific recent event worth reporting, investigate it, and prepare the report for publication across different channels. Help readers understand what happened and why it matters. You can discuss the choice of story and the audience's needs with me."
+    },
+    {
+      "time": "2026-11-23T11:01:08.737788+00:00",
+      "type": "question",
+      "agent_id": "chief_editor",
+      "text": "Two quick editorial calls before I commit the newsroom (I'll default if you'd rather leave it to me):\n\n1) SCOPE — Is this Clear Water Bay (HK) only, or should it cover all HKUST campuses, including HKUST(GZ)?\n2) CHANNELS — Which outputs do you actually need? My proposed package: (a) a ~700-word web news article, (b) a 120-word student-newsletter blurb, (c) 3 short social posts (Instagram/LinkedIn), (d) a 2-line campus-email teaser. Add or cut as you like.\n3) STORY CHOICE — I'd rather not pick a headline before it's verified. May I lead with the most newsworthy AI development on campus from roughly the last 3–6 months, choosing between three plausible angles: (i) a change in GenAI teaching/assessment rules or AI-literacy courses affecting students and faculty; (ii) new AI computing/research infrastructure or a major AI research launch; (iii) student/faculty AI-use findings? Tell me if you have a strong preference or a specific event you already have in mind.\n\nMy default if I don't hear back: all HKUST campuses, full 4-channel package above, and the angle with the strongest primary-source evidence."
+    },
+    {
+      "time": "2026-11-23T11:02:31.652700+00:00",
+      "type": "human_reply",
+      "to": "chief_editor",
+      "text": "1) SCOPE: lead on the Clear Water Bay campus in Hong Kong, since that is where most of our readers are. Mention HKUST(GZ) only if it is directly part of the same story. 2) CHANNELS: the package is right, but prioritise in this order - (a) the ~700-word web article and (b) the 120-word newsletter blurb are both required; (c) social posts and (d) the email teaser are nice to have if you still have time. Do not let the extras push out the main article. 3) STORY CHOICE: your approach is correct, go with the angle that has the strongest primary-source evidence - I have no specific event in mind. Two firm requirements: the event must be real, specific and dated within roughly the last 12 months, and the central facts must be traceable to primary or official sources such as an HKUST announcement, department page or named public document. Do not invent interviews or quotations; if you cannot reach a person, say so and quote the published material instead. Where evidence is thin, say what is unverified rather than smoothing over it."
+    },
+    {
+      "time": "2026-11-23T11:13:48.794644+00:00",
+      "type": "human_reply",
+      "to": "group",
+      "text": "Please investigate the following claim: \"AI-writing detectors can reliably determine whether a university student's assignment was written by AI.\" Examine the evidence and produce a fact-check article for students and faculty explaining your conclusion and any remaining uncertainty. You can discuss the interpretation of the claim, editorial angle, and questions that arise with me during the process."
+    }
+  ],
+  "workspace_files": {
+    "chief_editor/workspace/article.md": {
+      "size": 4550,
+      "sha256": "5e1d52c87a0d0d02e60679d9ba8d397e5c7466151af456377ee0dbbef8bf2534"
+    },
+    "chief_editor/workspace/article_factcheck.md": {
+      "size": 6154,
+      "sha256": "7965a29786bbedb89d048a90325324c9ac631ac32014ddbaea9be29842f6ad60"
+    },
+    "chief_editor/workspace/inbox/editor/article.md": {
+      "size": 4550,
+      "sha256": "5e1d52c87a0d0d02e60679d9ba8d397e5c7466151af456377ee0dbbef8bf2534"
+    },
+    "chief_editor/workspace/inbox/editor/article_factcheck.md": {
+      "size": 6335,
+      "sha256": "eb5e289b697e01e3f4d610f7574bb36ebc271a1e4649049fd8c2ff1bb6f729c6"
+    },
+    "chief_editor/workspace/inbox/editor/article_factcheck_final.md": {
+      "size": 6156,
+      "sha256": "8ded4036232274db369f09d82a247eb88597a349826e892c70b35ac78459998c"
+    },
+    "chief_editor/workspace/inbox/editor/newsletter.md": {
+      "size": 864,
+      "sha256": "40d17e34127384d9962ba86c063b705ff252ba5852512e438ed5e408378fbb5b"
+    },
+    "chief_editor/workspace/newsletter.md": {
+      "size": 864,
+      "sha256": "40d17e34127384d9962ba86c063b705ff252ba5852512e438ed5e408378fbb5b"
+    },
+    "chief_editor/workspace/social_and_email.md": {
+      "size": 1614,
+      "sha256": "5f7820f707a32af65d0988b9ab446ff0fcbb03b777df7682152c32cf08b208e2"
+    },
+    "editor/workspace/article.md": {
+      "size": 6176,
+      "sha256": "1e643ae0062839f27229d1a3b51d035bfb80d906f3f9ccebcd5f1c7bb505e6f7"
+    },
+    "editor/workspace/newsletter.md": {
+      "size": 864,
+      "sha256": "40d17e34127384d9962ba86c063b705ff252ba5852512e438ed5e408378fbb5b"
+    },
+    "reporter/workspace/research_notes.md": {
+      "size": 6365,
+      "sha256": "fe78922f04a5ffb0977c2bff123c1731033d62c189c7a80b049049511c15ae1d"
+    },
+    "transfers.jsonl": {
+      "size": 997,
+      "sha256": "5dfb49ce4e309c18a0425fc5eb2d8bcdeff251319dd8d9ef177254d089beb1f0"
+    }
+  }
+}

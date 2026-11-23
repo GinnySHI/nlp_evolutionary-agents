@@ -200,12 +200,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"API base: {settings.base_url}")
             print(f"Model: {settings.model}")
             print(f"API key configured: {bool(settings.api_key)}")
+            print(f"Provider: {settings.provider}")
+            print(f"DeepSeek fallback ready: {settings.fallback_enabled and bool(settings.deepseek_api_key) and settings.provider == 'hkgai'}")
             print(f"Sandbox preference: {settings.sandbox_backend}")
             print(f"Docker executable: {bool(shutil.which('docker'))}")
             print(f"macOS sandbox executable: {platform.system() == 'Darwin' and bool(shutil.which('sandbox-exec'))}")
             if args.live:
                 client = HKGAIClient(settings)
                 print("API response:", client.complete([{"role": "user", "content": "Reply with exactly HKGAI_OK."}], json_mode=False))
+                print(f"Active provider: {getattr(client, 'active_provider', settings.provider)}")
                 dump(dict(client.stats))
             return 0
         if args.command == "sessions":

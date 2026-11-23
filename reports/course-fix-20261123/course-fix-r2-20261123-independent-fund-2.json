@@ -1,0 +1,134 @@
+{
+  "task": "fund-2",
+  "source_revision_label": "r2 development validation",
+  "review_date": "2026-11-23",
+  "snapshot": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-2",
+  "rubric": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-comparison-20261123/content-rubric.md",
+  "engine_status": "budget_exhausted",
+  "agent_turns": 120,
+  "task_pass": false,
+  "independent_acceptance": "fail",
+  "criteria_passed": 3,
+  "criteria_total": 4,
+  "criteria": [
+    {
+      "id": 1,
+      "status": "fail",
+      "finding": "No completed delivery to coordinator. Partial HTML exists and contains real scripts, but has 22 slides, two full HTML document endings, duplicated prev/next/counter/dots IDs and two independent navigation controllers. Isolated exact-script execution shows End activates slides 17 and 22 simultaneously; the second footer has no click handlers. Browser rendering was not verified because automatic approval rejected browser launch."
+    },
+    {
+      "id": 2,
+      "status": "pass",
+      "finding": "Partial content is substantive: defines chip value-chain scope, AI demand, memory cycle, foundry/equipment, export rules, valuations, ETF/stock implications and five forward judgments with rationale."
+    },
+    {
+      "id": 3,
+      "status": "pass",
+      "finding": "Partial deck clearly covers cyclical, policy, concentration, rates, Taiwan, governance and AI-capex risks. Forecasts/assumptions are labeled and as-of date is explicit. One duplicated policy paragraph labels a prospective tightening judgment LIVE, a local inconsistency."
+    },
+    {
+      "id": 4,
+      "status": "pass",
+      "finding": "Source slides contain traceable URLs from Stock Analysis and Multpl. Four central quantitative claims were corroborated against preserved successful fetch responses (including prior-task evidence in same session). Market prices have dates; narrative sources are explicitly secondary."
+    }
+  ],
+  "metrics": {
+    "elapsed_seconds": 1966.600252866745,
+    "active_seconds": 1966.5953937498853,
+    "agent_turns": 120,
+    "tool_calls": 103,
+    "fatal_errors": 0,
+    "tool_errors": 0,
+    "invalid_actions": 9,
+    "subtasks_total": 2,
+    "subtasks_accepted": 1,
+    "subtask_completion_rate": 0.5,
+    "model_claimed_success": null,
+    "peer_reviewed_completion": false,
+    "reflection_calls": 0,
+    "reflection_failures": 0,
+    "memory": {
+      "fund_manager": {
+        "group_entries": 2,
+        "lessons": 1,
+        "successes": 0,
+        "failures": 0
+      },
+      "research": {
+        "group_entries": 4,
+        "lessons": 1,
+        "successes": 2,
+        "failures": 0
+      },
+      "risk": {
+        "group_entries": 3,
+        "lessons": 1,
+        "successes": 1,
+        "failures": 0
+      },
+      "marketing": {
+        "group_entries": 3,
+        "lessons": 1,
+        "successes": 1,
+        "failures": 0
+      }
+    },
+    "normalized_actions": 9,
+    "output_limit_errors": 4
+  },
+  "artifact": {
+    "path": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/runs/candidate/fund/snapshots/fund-2/agents/marketing/workspace/semi_deck.html",
+    "bytes": 30685,
+    "sha256": "00a720e3dcf205176ad07864e867e63922b2bcc91cce2bb95225b680ec4a4421",
+    "slides": 22,
+    "scripts": 2,
+    "document_endings": 2
+  },
+  "corroborated_claims": [
+    {
+      "claim": "CAPE 36.44 used in macro/risk slides",
+      "source_url": "https://www.multpl.com/shiller-pe",
+      "excerpt": "Shiller PE Ratio:\n36.44",
+      "state_message_index_zero_based": 5,
+      "retrieved_at": 1795421711.727495,
+      "note": "Indices 5 and 9 are prior-task evidence retained in same session; indices 74 and 75 were retrieved for fund-2."
+    },
+    {
+      "claim": "SMH forward PE 11.97 used in valuation slides",
+      "source_url": "https://stockanalysis.com/etf/smh/",
+      "excerpt": "Forward PE11.97",
+      "state_message_index_zero_based": 9,
+      "retrieved_at": 1795421780.694827,
+      "note": "Indices 5 and 9 are prior-task evidence retained in same session; indices 74 and 75 were retrieved for fund-2."
+    },
+    {
+      "claim": "NVDA forward PE 8.65 used in single-name context",
+      "source_url": "https://stockanalysis.com/stocks/nvda/",
+      "excerpt": "Forward PE8.65",
+      "state_message_index_zero_based": 74,
+      "retrieved_at": 1795423326.4673338,
+      "note": "Indices 5 and 9 are prior-task evidence retained in same session; indices 74 and 75 were retrieved for fund-2."
+    },
+    {
+      "claim": "MU forward PE 3.37 used in memory-cycle context",
+      "source_url": "https://stockanalysis.com/stocks/mu/",
+      "excerpt": "Forward PE3.37",
+      "state_message_index_zero_based": 75,
+      "retrieved_at": 1795423342.601631,
+      "note": "Indices 5 and 9 are prior-task evidence retained in same session; indices 74 and 75 were retrieved for fund-2."
+    }
+  ],
+  "dom_test": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-fix-r2-20261123/fund-2-dom-check.json",
+  "failure_analysis": [
+    "The run exhausted 120-turn budget with only research subtask accepted and marketing still in progress; no final coordinator response.",
+    "Marketing repeatedly rewrote/appended/read the same deck, including overwriting a 46KB file back to a 7KB prefix.",
+    "Long read_file results in state.messages are clipped at 16000 characters and can terminate before script/footer even when file is complete. Full audit remains in events.jsonl. This plausibly contributed to repeated reconstruction and duplicate tails; causal attribution is not proven.",
+    "Final source has five repeated tail sections after a complete first document, followed by another navigation/footer/script."
+  ],
+  "verification_limits": [
+    "No model artifacts modified.",
+    "No browser render performed: automatic approval rejected isolated headless Chrome as bypassing a recorded URL-policy restriction and recommended static/isolated JavaScript checks. No workaround attempted.",
+    "The Node VM test executes exact scripts with a minimal DOM abstraction; it confirms script logic, not visual rendering.",
+    "Content passes describe useful partial work; budget_exhausted alone disqualifies task success under the unchanged common rubric."
+  ]
+}

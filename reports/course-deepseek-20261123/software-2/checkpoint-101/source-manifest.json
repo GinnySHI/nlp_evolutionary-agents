@@ -1,0 +1,26 @@
+{
+  "booking.py": {
+    "source": "/Users/agiuser/Documents/ChatGPT/NLP/evolutionary-agents/.evoagents/sessions/course-software/agents/dev/workspace/booking.py",
+    "sha256": "41c966fa2364baa4b12802d61a069a9127d066954f7b44d1d7063c438543ecee"
+  },
+  "server.py": {
+    "source": "/Users/agiuser/Documents/ChatGPT/NLP/evolutionary-agents/.evoagents/sessions/course-software/agents/dev/workspace/server.py",
+    "sha256": "6da90181614ffb69560d8068c0260566a2184ad881b6e71c151570872e923255"
+  },
+  "index.html": {
+    "source": "/Users/agiuser/Documents/ChatGPT/NLP/evolutionary-agents/.evoagents/sessions/course-software/agents/dev/workspace/index.html",
+    "sha256": "d9f5e7fcf10144cce36c16ade7e0609ee76a9c46033b02e8d665247bfd26a8de"
+  },
+  "selftest.py": {
+    "source": "/Users/agiuser/Documents/ChatGPT/NLP/evolutionary-agents/.evoagents/sessions/course-software/agents/dev/workspace/selftest.py",
+    "sha256": "7660e9951c68bbc103068ac348975bbc6464f487734f472dc132382498189797"
+  },
+  "dashboard.html": {
+    "source": "/Users/agiuser/Documents/ChatGPT/NLP/evolutionary-agents/.evoagents/sessions/course-software/agents/lead/workspace/dashboard.html",
+    "sha256": "f66d0fcc6ac975b790974cd6e9f2c075bab0f0bc329c7ff2deb58f340bdba602"
+  },
+  "README.md": {
+    "source": "/Users/agiuser/Documents/ChatGPT/NLP/evolutionary-agents/.evoagents/sessions/course-software/agents/release/workspace/README.md",
+    "sha256": "a4d8ed8a3c5d5bf0cfe11979b5205edcc2f7972be0a6029858e7481f95b3b2e8"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "reviewed_at": "2026-11-23T12:41:15.432304+00:00",
+  "source_sha256": "0c8ed566556f07b0fc223f6840aa78603bde6f461a459ae2a6628e39cb6d48fa",
+  "browser": "144.0.7559.133",
+  "desktop_viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "desktop_slides_rendered_and_inspected": 17,
+  "inspection_method": "All 17 desktop renders inspected in three six-up contact sheets; the corrected China/policy slide also inspected full size. Mobile table left/top and right/bottom screenshots inspected for slides 12, 13 and 14.",
+  "desktop_clipping_or_overlap_found": false,
+  "desktop_scroll_or_horizontal_overflow_slides": [],
+  "mobile_viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "mobile_wide_tables": [
+    {
+      "number": 12,
+      "width": 350,
+      "scrollWidth": 760,
+      "scrollHeight": 450,
+      "height": 450,
+      "tableFontSize": "13px",
+      "canScrollToRightEdge": true
+    },
+    {
+      "number": 13,
+      "width": 350,
+      "scrollWidth": 760,
+      "scrollHeight": 402,
+      "height": 402,
+      "tableFontSize": "12.5px",
+      "canScrollToRightEdge": true
+    },
+    {
+      "number": 14,
+      "width": 350,
+      "scrollWidth": 760,
+      "scrollHeight": 605,
+      "height": 605,
+      "tableFontSize": "11.5px",
+      "canScrollToRightEdge": true
+    }
+  ],
+  "mobile_readability": "Table text remains readable. Wide tables scroll horizontally within the slide; both left and right columns and final rows are accessible. Vertical scrolling is required for some mobile slides.",
+  "specific_defect_found_and_fixed": "China/policy slide retained an E announcement label for the USD 21bn GlobalFoundries figure while the addendum withdrew it. Revised delivery now marks that figure withdrawn/NV on the affected slide as well.",
+  "pass": true,
+  "contact_sheet": "reports/course-deepseek-20261123/fund-2/revised-contact-sheet.jpg",
+  "full_render_directory": "/Users/agiuser/Documents/ChatGPT/NLP/outputs/course-deepseek-20261123/independent-review/fund-2/visual-revised"
+}

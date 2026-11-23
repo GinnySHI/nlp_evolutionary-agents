@@ -1,0 +1,68 @@
+{
+  "original_sha256": "2385d9adbcb0c9ba67d6a6a253c906beeb1666869adcfb069b7803c0ffc8cdb5",
+  "revised_sha256": "0c8ed566556f07b0fc223f6840aa78603bde6f461a459ae2a6628e39cb6d48fa",
+  "original_slide_count": 19,
+  "revised_slide_count": 17,
+  "original_slide_positions_kept_in_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    13,
+    14,
+    12,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "scope": "Static syntax/structure only. Does not execute code or verify facts, UI, or functionality."
+  },
+  "browser_validation": {
+    "pass": true,
+    "browser": "144.0.7559.133",
+    "navigation_checks_passed": 26,
+    "javascript_errors": [],
+    "mobile_horizontal_overflow_slides": [],
+    "evidence": "reports/course-deepseek-20261123/fund-2/browser-revised/browser-result.json"
+  },
+  "titles": [
+    "1 · Internal fund-team presentation · 23 November 2026",
+    "2 · Executive summary",
+    "3 · Where the cycle stands",
+    "4 · Evidence discipline",
+    "5 · AI and datacenter demand",
+    "6 · Memory and HBM",
+    "7 · Leading-edge manufacturing and equipment",
+    "8 · China and export controls",
+    "9 · Structural demand beyond AI",
+    "10 · Economics and valuation",
+    "11 · Investment implications",
+    "12 · Key risks",
+    "13 · Scenarios 2027–2029",
+    "14 · Signposts",
+    "15 · Key numbers",
+    "16 · Conclusion",
+    "17 · Source notes and risk addendum"
+  ],
+  "visual_validation": {
+    "pass": true,
+    "desktop_slides_inspected": 17,
+    "mobile_tables_inspected": [
+      12,
+      13,
+      14
+    ],
+    "evidence": "reports/course-deepseek-20261123/fund-2/visual-review.json"
+  }
+}

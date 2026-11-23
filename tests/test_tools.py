@@ -264,3 +264,41 @@ def test_interrupted_git_process_is_killed_and_reaped(runner, monkeypatch):
     with pytest.raises(KeyboardInterrupt):
         runner._git("dev", ["status", "--short"])
     assert events == [("wait", 20), ("killpg", 87654, signal.SIGKILL), ("wait", None)]
+
+
+def test_search_warns_about_irrelevant_successful_hits_without_hiding_them(runner, monkeypatch):
+    monkeypatch.setattr(runner, "_http_fetch", lambda url: {
+        "content": "<rss><channel><item><title>Weber manufacturing</title><link>https://example.org/weber</link><description>Factory machines</description></item></channel></rss>",
+        "truncated": False, "retrieved_at": 123,
+    })
+    result = runner.execute("dev", "search_web", {"query": "Weber Wulff artificial intelligence writing detector research"})
+    assert result["ok"] and result["results"]
+    assert result["relevance_warning"] and "irrelevant" in result["relevance_warning"]
+    assert result["results"][0]["matched_query_terms"] == ["weber"]
+
+
+def test_search_relevant_hits_do_not_warn(runner, monkeypatch):
+    monkeypatch.setattr(runner, "_http_fetch", lambda url: {
+        "content": "<rss><channel><item><title>Artificial intelligence writing detector research</title><link>https://example.org/study</link><description>Empirical findings</description></item></channel></rss>",
+        "truncated": False, "retrieved_at": 123,
+    })
+    result = runner.execute("dev", "search_web", {"query": "artificial intelligence writing detector research"})
+    assert result["ok"] and result["relevance_warning"] is None
+
+
+def test_search_empty_results_suggest_another_strategy(runner, monkeypatch):
+    monkeypatch.setattr(runner, "_http_fetch", lambda url: {
+        "content": "<rss><channel/></rss>", "truncated": False, "retrieved_at": 123,
+    })
+    result = runner.execute("dev", "search_web", {"query": "a nonexistent event"})
+    assert result["ok"] and result["results"] == []
+    assert "No search results" in result["relevance_warning"]
+
+
+def test_fetch_exposes_real_links_without_fetching_or_trusting_them(runner,monkeypatch):
+    monkeypatch.setattr(runner,'_http_fetch',lambda url:{'ok':True,'url':'https://example.org/news/','content_type':'text/html','truncated':False,'content':'<a href="article">Specific Event</a><a href="javascript:bad()">Bad</a><a href="http://127.0.0.1/">Untrusted private lead</a><p>Evidence</p>'})
+    result=runner.execute('dev','fetch_url',{'url':'https://example.org/news/'})
+    assert result['links'][0]=={'url':'https://example.org/news/article','text':'Specific Event'}
+    assert not any(x['url'].startswith('javascript:') for x in result['links'])
+    # Links are leads only: following a private link still goes through _public_target.
+    assert 'Evidence' in result['content']

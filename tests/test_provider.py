@@ -115,3 +115,172 @@ def test_retries_are_bounded_for_server_and_network_failures(monkeypatch, networ
         assert client.stats["errors"] == 1
     finally:
         client.close()
+
+
+def test_json_mode_requests_structured_output_and_private_chat_does_not():
+    payloads = []
+
+    def handler(request):
+        import json
+        payloads.append(json.loads(request.content))
+        return httpx.Response(200, json={"choices": [{"message": {"content": "{}"}}]})
+
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(handler))
+    try:
+        client.complete([{"role": "user", "content": "Return JSON"}])
+        client.complete([{"role": "user", "content": "Hello"}], json_mode=False)
+        assert payloads[0]["response_format"] == {"type": "json_object"}
+        assert "response_format" not in payloads[1]
+    finally:
+        client.close()
+
+
+def test_explicit_unsupported_json_format_falls_back_once_and_is_remembered():
+    import json
+    payloads = []
+
+    def handler(request):
+        payload = json.loads(request.content)
+        payloads.append(payload)
+        if "response_format" in payload:
+            return httpx.Response(400, json={"error": {"param": "response_format", "code": "unsupported_parameter", "message": "response_format not supported"}})
+        return httpx.Response(200, json={"choices": [{"message": {"content": "{}"}}]})
+
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(handler))
+    try:
+        assert client.complete([]) == "{}"
+        assert client.complete([]) == "{}"
+        assert ["response_format" in p for p in payloads] == [True, False, False]
+        assert client.stats["json_mode_fallbacks"] == 1
+        assert client.stats["requests"] == 3
+    finally:
+        client.close()
+
+
+@pytest.mark.parametrize("error", [
+    {"param": "messages", "code": "unsupported_parameter"},
+    {"param": "response_format", "message": "content moderation rejected request"},
+    {"message": "model not supported"},
+])
+def test_json_fallback_never_retries_unrelated_rejections(error):
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: httpx.Response(400, json={"error": error})))
+    try:
+        with pytest.raises(ProviderError, match="HTTP 400"):
+            client.complete([])
+        assert client.stats["requests"] == 1
+        assert client.stats.get("json_mode_fallbacks", 0) == 0
+    finally:
+        client.close()
+
+
+@pytest.mark.parametrize("bad_response,expected_code", [
+    ([], "root_not_object"),
+    ({"choices": []}, "missing_choice"),
+    ({"choices": [None]}, "missing_choice"),
+    ({"choices": [{}]}, "missing_message"),
+    ({"choices": [{"message": {"content": None}}]}, "nontext_content"),
+    ({"choices": [{"message": {"content": " "}}]}, "empty_content"),
+])
+def test_malformed_successful_responses_are_retried_but_bounded(monkeypatch, bad_response, expected_code):
+    monkeypatch.setattr(provider_module.time, "sleep", lambda _: None)
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: httpx.Response(200, json=bad_response)))
+    try:
+        with pytest.raises(ProviderError, match=expected_code):
+            client.complete([])
+        assert client.stats["requests"] == 3
+        assert client.stats["invalid_responses"] == 3
+        assert client.stats["protocol_retries"] == 2
+        assert client.stats["errors"] == 1
+    finally:
+        client.close()
+
+
+def test_empty_response_recovers_and_records_usage_from_both_responses(monkeypatch):
+    monkeypatch.setattr(provider_module.time, "sleep", lambda _: None)
+    responses = iter([
+        httpx.Response(200, json={"choices": [{"message": {"content": ""}}], "usage": {"total_tokens": 9}}),
+        httpx.Response(200, json={"choices": [{"message": {"content": "{}"}}], "usage": {"total_tokens": 12}}),
+    ])
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: next(responses)))
+    try:
+        assert client.complete([]) == "{}"
+        assert client.stats["requests"] == 2
+        assert client.stats["calls"] == 1
+        assert client.stats["total_tokens"] == 21
+        assert client.stats["protocol_retries"] == 1
+    finally:
+        client.close()
+
+
+def test_truncation_is_typed_counted_and_never_returned_or_retried():
+    from evoagents.provider import OutputLimitError
+    response = {"choices": [{"finish_reason": "length", "message": {"content": '{"secret":"unit-test-secret"'}}],
+                "usage": {"prompt_tokens": 11, "completion_tokens": 20, "total_tokens": 31}}
+    client = HKGAIClient(Settings(api_key="test", max_output_tokens=20), transport=httpx.MockTransport(lambda _: httpx.Response(200, json=response)))
+    try:
+        with pytest.raises(OutputLimitError) as error:
+            client.complete([])
+        assert error.value.max_tokens == 20
+        assert "unit-test-secret" not in str(error.value)
+        assert client.stats["requests"] == 1
+        assert client.stats["truncated_responses"] == 1
+        assert client.stats["total_tokens"] == 31
+        assert client.stats.get("calls", 0) == 0
+    finally:
+        client.close()
+
+
+@pytest.mark.parametrize("choice", [
+    {"finish_reason": "content_filter", "message": {"content": ""}},
+    {"message": {"content": None, "refusal": "This request is declined."}},
+])
+def test_explicit_refusal_is_not_retried(choice):
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: httpx.Response(200, json={"choices": [choice]})))
+    try:
+        with pytest.raises(ProviderError, match="declined"):
+            client.complete([])
+        assert client.stats["requests"] == 1
+    finally:
+        client.close()
+
+
+def test_invalid_json_error_has_safe_diagnostic_and_no_response_body(monkeypatch):
+    monkeypatch.setattr(provider_module.time, "sleep", lambda _: None)
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: httpx.Response(200, text="unit-test-secret")))
+    try:
+        with pytest.raises(ProviderError, match="invalid_response_json") as error:
+            client.complete([])
+        assert "unit-test-secret" not in str(error.value)
+        assert client.stats["requests"] == 3
+    finally:
+        client.close()
+
+
+def test_fallback_and_transient_failures_share_three_request_budget(monkeypatch):
+    monkeypatch.setattr(provider_module.time, "sleep", lambda _: None)
+    responses = iter([
+        httpx.Response(400, json={"error": {"param": "response_format", "code": "unsupported_parameter"}}),
+        httpx.Response(200, json={"choices": []}),
+        httpx.Response(503),
+    ])
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: next(responses)))
+    try:
+        with pytest.raises(ProviderError, match="HTTP 503"):
+            client.complete([])
+        assert client.stats["requests"] == 3
+    finally:
+        client.close()
+
+
+def test_usage_ignores_negative_values_and_boolean_counts():
+    client = HKGAIClient(Settings(api_key="test"), transport=httpx.MockTransport(lambda _: httpx.Response(200, json={
+        "choices": [{"message": {"content": "{}"}}],
+        "usage": {"prompt_tokens": -1, "completion_tokens": True, "total_tokens": 3},
+    })))
+    try:
+        client.complete([])
+        assert client.stats.get("prompt_tokens", 0) == 0
+        assert client.stats.get("completion_tokens", 0) == 0
+        assert client.stats["total_tokens"] == 3
+    finally:
+        client.close()

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meeting Room Bookings</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --ink: #1d2433;
+    --muted: #65708a;
+    --line: #dde3ee;
+    --accent: #2c5fd8;
+    --accent-soft: #e6edfd;
+    --danger: #b3261e;
+    --ok: #1f7a45;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  header.top {
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 20px;
+  }
+  header.top h1 { margin: 0 0 2px; font-size: 20px; }
+  header.top p { margin: 0; color: var(--muted); font-size: 13px; }
+  main { padding: 18px 20px 60px; max-width: 1180px; margin: 0 auto; }
+  section.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+  section.card > h2 {
+    margin: 0 0 12px;
+    font-size: 16px;
+    letter-spacing: .01em;
+  }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  input, select, textarea, button { font: inherit; }
+  input[type="text"], input[type="date"], select, textarea {
+    padding: 7px 9px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: #fff;
+    color: var(--ink);
+    min-width: 0;
+  }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+  button {
+    padding: 8px 14px;
+    border-radius: 7px;
+    border: 1px solid transparent;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  button.secondary { background: #fff; color: var(--accent); border-color: var(--accent); }
+  button.ghost { background: #fff; color: var(--ink); border-color: var(--line); font-weight: 500; }
+  button.danger { background: #fff; color: var(--danger); border-color: #e6b4b0; font-weight: 600; }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  .checkbox { display: flex; align-items: center; gap: 7px; font-size: 14px; color: var(--ink); }
+  .hint { color: var(--muted); font-size: 12.5px; }
+
+  /* Day grid */
+  .grid-scroll { overflow-x: auto; padding-bottom: 6px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 58px repeat(var(--rooms, 5), minmax(120px, 1fr));
+    gap: 0;
+    min-width: 640px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .grid .head {
+    background: #f0f4fc;
+    border-bottom: 1px solid var(--line);
+    padding: 8px 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .grid .head small { display: block; font-weight: 500; color: var(--muted); font-size: 11px; }
+  .grid .corner { background: #f0f4fc; border-bottom: 1px solid var(--line); }
+  .timeline { position: relative; border-right: 1px solid var(--line); background: #fbfcff; }
+  .timeline span {
+    position: absolute; right: 6px; transform: translateY(-50%);
+    font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+  .col { position: relative; border-right: 1px solid var(--line); background: #fff; }
+  .col:last-child { border-right: none; }
+  .hourline { position: absolute; left: 0; right: 0; border-top: 1px solid #eef1f7; }
+  .slot-free {
+    position: absolute; left: 2px; right: 2px;
+    border: 1px dashed #cbd6ea; border-radius: 6px;
+    color: #8a94ab; font-size: 11px; padding: 2px 5px;
+    background: #fafcff; cursor: pointer; overflow: hidden;
+  }
+  .slot-free:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .block {
+    position: absolute; left: 3px; right: 3px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 3px 5px;
+    font-size: 11.5px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .block strong { display: block; font-size: 12px; }
+  .block .who { color: var(--muted); font-size: 11px; }
+  .block.cancelled {
+    background: #f1f2f5; border-left-color: #9aa2b3; color: #79808f;
+    text-decoration: line-through;
+  }
+  .block.cancelled .who { text-decoration: none; }
+
+  /* List */
+  table.list { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.list th, table.list td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.list th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  tr.cancelled td { color: #8a91a1; }
+  tr.cancelled .title { text-decoration: line-through; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 600; }
+  .pill.active { background: #e5f5eb; color: var(--ok); }
+  .pill.cancelled { background: #f1f2f5; color: #79808f; }
+  .empty { color: var(--muted); padding: 10px 0; }
+
+  /* Form */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .form-grid .wide { grid-column: 1 / -1; }
+  .msg { margin-top: 12px; padding: 10px 12px; border-radius: 8px; font-size: 14px; display: none; }
+  .msg.error { display: block; background: #fdecea; color: #7d1c16; border: 1px solid #f3c3bd; }
+  .msg.ok { display: block; background: #e8f6ee; color: #14603a; border: 1px solid #bfe3cd; }
+  .msg strong { display: block; margin-bottom: 2px; }
+
+  @media (max-width: 700px) {
+    main { padding: 12px 12px 50px; }
+    header.top { padding: 12px; }
+    section.card { padding: 12px; }
+    .controls .field { flex: 1 1 140px; }
+    table.list thead { display: none; }
+    table.list tr { display: block; border-bottom: 1px solid var(--line); padding: 8px 0; }
+    table.list td { display: block; border: none; padding: 2px 0; }
+    table.list td::before { content: attr(data-label) ": "; color: var(--muted); font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Meeting Room Bookings</h1>
+      <a class="dash-link" href="/dashboard" style="display:inline-block;margin-top:6px;font-size:14px;color:#2c5fd8;text-decoration:none;border-bottom:1px solid #2c5fd8;">Analytics dashboard &rarr;</a>
+  <p>One shared schedule for everyone — no more double bookings. Times are wall-clock local times.</p>
+</header>
+
+<main>
+  <section class="card">
+    <div class="controls">
+      <div class="field">
+        <label for="dateInput">Date</label>
+        <input type="date" id="dateInput">
+      </div>
+      <div class="field">
+        <label for="roomFilter">Room filter (day grid shows all rooms)</label>
+        <select id="roomFilter"><option value="">All rooms</option></select>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="ghost" id="todayBtn" type="button">Today</button>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="secondary" id="refreshBtn" type="button">Refresh</button>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <span class="checkbox"><input type="checkbox" id="showCancelled"> Show cancelled</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Day view <span class="hint" id="dayLabel"></span></h2>
+    <p class="hint">Click an empty (dashed) area to pre-fill the booking form for that room and free slot.</p>
+    <div class="grid-scroll"><div class="grid" id="grid"></div></div>
+  </section>
+
+  <section class="card">
+    <h2>Bookings on <span id="listDateLabel"></span></h2>
+    <table class="list">
+      <thead>
+        <tr><th>Room</th><th>Time</th><th>Meeting</th><th>Organizer</th><th>Attendees</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody id="listBody"></tbody>
+    </table>
+    <div class="empty" id="listEmpty" style="display:none">No bookings for this day yet.</div>
+  </section>
+
+  <section class="card">
+    <h2>Book a room</h2>
+    <form id="bookForm" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label for="fRoom">Room</label>
+          <select id="fRoom" required></select>
+        </div>
+        <div class="field">
+          <label for="fDate">Date</label>
+          <input type="date" id="fDate" required>
+        </div>
+        <div class="field">
+          <label for="fStart">Start</label>
+          <select id="fStart" required></select>
+        </div>
+        <div class="field">
+          <label for="fEnd">End</label>
+          <select id="fEnd" required></select>
+        </div>
+        <div class="field">
+          <label for="fTitle">Meeting title</label>
+          <input type="text" id="fTitle" maxlength="120" placeholder="e.g. Sprint planning" required>
+        </div>
+        <div class="field">
+          <label for="fOrganizer">Organizer</label>
+          <input type="text" id="fOrganizer" maxlength="80" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="fAttendees">Attendees (optional)</label>
+          <input type="text" id="fAttendees" maxlength="200" placeholder="e.g. 6 people">
+        </div>
+        <div class="field wide">
+          <label for="fNotes">Notes (optional)</label>
+          <textarea id="fNotes" rows="2" maxlength="500" placeholder="Anything the room or attendees should know"></textarea>
+        </div>
+      </div>
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="submit" id="bookSubmit">Book room</button>
+        <button type="reset" class="ghost">Clear</button>
+      </div>
+      <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var OPEN_MIN = 7 * 60;
+  var CLOSE_MIN = 20 * 60;
+  var STEP = 15;
+  var PX_PER_MIN = 0.85;
+
+  var state = {
+    rooms: [],
+    bookings: [],
+    gapsByRoom: {},
+    date: todayLocal()
+  };
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  // Local date parts only - never toISOString(), which can shift the day.
+  function todayLocal() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+
+  function minutes(hhmm) {
+    var p = String(hhmm).split(":");
+    return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+  }
+
+  function hhmm(total) {
+    return pad(Math.floor(total / 60)) + ":" + pad(total % 60);
+  }
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) { node.className = cls; }
+    if (text !== undefined && text !== null) { node.textContent = text; }
+    return node;
+  }
+
+  function api(path, options) {
+    return fetch(path, options).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (body) {
+        if (!res.ok) {
+          var err = new Error(body.message || ("Request failed (" + res.status + ")"));
+          err.code = body.error || "http_" + res.status;
+          err.existing = body.existing || null;
+          throw err;
+        }
+        return body;
+      });
+    });
+  }
+
+  function showMessage(kind, title, detail) {
+    var box = document.getElementById("formMsg");
+    box.className = "msg " + kind;
+    box.innerHTML = "";
+    box.appendChild(el("strong", null, title));
+    if (detail) { box.appendChild(document.createTextNode(detail)); }
+  }
+
+  function clearMessage() {
+    var box = document.getElementById("formMsg");
+    box.className = "msg";
+    box.textContent = "";
+  }
+
+  function fillTimeSelect(select) {
+    select.innerHTML = "";
+    for (var m = OPEN_MIN; m <= CLOSE_MIN; m += STEP) {
+      var opt = document.createElement("option");
+      opt.value = hhmm(m);
+      opt.textContent = hhmm(m);
+      select.appendChild(opt);
+    }
+  }
+
+  function fillRoomSelects() {
+    var filter = document.getElementById("roomFilter");
+    var form = document.getElementById("fRoom");
+    filter.innerHTML = "<option value=\"\">All rooms</option>";
+    form.innerHTML = "";
+    state.rooms.forEach(function (room) {
+      var o1 = document.createElement("option");
+      o1.value = room.id;
+      o1.textContent = room.name + " (" + room.capacity + ", " + room.location + ")";
+      filter.appendChild(o1);
+      var o2 = document.createElement("option");
+      o2.value = room.id;
+      o2.textContent = room.name + " — seats " + room.capacity + " — " + room.location;
+      form.appendChild(o2);
+    });
+  }
+
+  function roomName(id) {
+    for (var i = 0; i < state.rooms.length; i++) {
+      if (state.rooms[i].id === id) { return state.rooms[i].name; }
+    }
+    return id;
+  }
+
+  function visibleRooms() {
+    var selected = document.getElementById("roomFilter").value;
+    if (!selected) { return state.rooms.slice(); }
+    return state.rooms.filter(function (r) { return r.id === selected; });
+  }
+
+  function loadRooms() {
+    return api("/api/rooms").then(function (body) {
+      state.rooms = body.rooms || [];
+      fillRoomSelects();
+    });
+  }
+
+  function loadDay() {
+    var date = state.date;
+    document.getElementById("dateInput").value = date;
+    document.getElementById("fDate").value = date;
+    document.getElementById("dayLabel").textContent = "— " + date;
+    document.getElementById("listDateLabel").textContent = date;
+
+    var includesCancelled = document.getElementById("showCancelled").checked;
+    var bookingsUrl = "/api/bookings?date=" + encodeURIComponent(date) + "&include_cancelled=" + (includesCancelled ? "1" : "0");
+
+    return Promise.all([
+      api(bookingsUrl),
+      Promise.all(state.rooms.map(function (room) {
+        return api("/api/availability?date=" + encodeURIComponent(date) + "&room=" + encodeURIComponent(room.id))
+          .then(function (body) { return { id: room.id, gaps: body.gaps || [] }; })
+          .catch(function () { return { id: room.id, gaps: [] }; });
+      }))
+    ]).then(function (results) {
+      state.bookings = results[0].bookings || [];
+      var map = {};
+      results[1].forEach(function (item) { map[item.id] = item.gaps; });
+      state.gapsByRoom = map;
+      renderGrid();
+      renderList();
+    }).catch(function (err) {
+      showMessage("error", "Could not load the day", err.message);
+    });
+  }
+
+  function renderGrid() {
+    var grid = document.getElementById("grid");
+    var rooms = visibleRooms();
+    grid.innerHTML = "";
+    grid.style.setProperty("--rooms", String(rooms.length));
+    var height = Math.round((CLOSE_MIN - OPEN_MIN) * PX_PER_MIN);
+
+    grid.appendChild(el("div", "corner"));
+    rooms.forEach(function (room) {
+      var head = el("div", "head", room.name);
+      head.appendChild(el("small", null, "seats " + room.capacity + " · " + room.location));
+      grid.appendChild(head);
+    });
+
+    var timeline = el("div", "timeline");
+    timeline.style.height = height + "px";
+    for (var m = OPEN_MIN; m <= CLOSE_MIN; m += 60) {
+      var label = el("span", null, hhmm(m));
+      label.style.top = Math.round((m - OPEN_MIN) * PX_PER_MIN) + "px";
+      timeline.appendChild(label);
+    }
+    grid.appendChild(timeline);
+
+    rooms.forEach(function (room) {
+      grid.appendChild(renderRoomColumn(room, height));
+    });
+  }
+
+  function renderRoomColumn(room, height) {
+    var col = el("div", "col");
+    col.style.height = height + "px";
+
+    for (var m = OPEN_MIN + 60; m < CLOSE_MIN; m += 60) {
+      var line = el("div", "hourline");
+      line.style.top = Math.round((m - OPEN_MIN) * PX_PER_MIN) + "px";
+      col.appendChild(line);
+    }
+
+    (state.gapsByRoom[room.id] || []).forEach(function (gap) {
+      var s = minutes(gap.start);
+      var e = minutes(gap.end);
+      if (e - s < 15) { return; }
+      var slot = el("div", "slot-free");
+      slot.style.top = Math.round((s - OPEN_MIN) * PX_PER_MIN) + "px";
+      slot.style.height = Math.max(16, Math.round((e - s) * PX_PER_MIN) - 2) + "px";
+      slot.textContent = (e - s >= 30) ? (gap.start + "–" + gap.end + " free") : "";
+      slot.title = "Free " + gap.start + "–" + gap.end + " — click to book";
+      slot.addEventListener("click", function () { prefill(room.id, gap.start, gap.end); });
+      col.appendChild(slot);
+    });
+
+    state.bookings.filter(function (b) { return b.room_id === room.id; }).forEach(function (b) {
+      var s = minutes(b.start);
+      var e = minutes(b.end);
+      var block = el("div", "block" + (b.status === "cancelled" ? " cancelled" : ""));
+      block.style.top = Math.round((s - OPEN_MIN) * PX_PER_MIN) + "px";
+      block.style.height = Math.max(18, Math.round((e - s) * PX_PER_MIN) - 2) + "px";
+      block.appendChild(el("strong", null, b.title));
+      block.appendChild(el("div", "who", b.start + "–" + b.end + " · " + b.organizer));
+      if (e - s >= 60) {
+        block.appendChild(el("div", "who", b.attendees ? ("Attendees: " + b.attendees) : ("Booked by " + b.organizer)));
+      }
+      block.title = b.title + "\n" + b.start + "–" + b.end + "\nOrganizer: " + b.organizer +
+        (b.attendees ? "\nAttendees: " + b.attendees : "") +
+        (b.notes ? "\nNotes: " + b.notes : "") +
+        (b.status === "cancelled" ? "\nCANCELLED" + (b.cancel_reason ? ": " + b.cancel_reason : "") : "");
+      col.appendChild(block);
+    });
+
+    return col;
+  }
+
+  function renderList() {
+    var body = document.getElementById("listBody");
+    body.innerHTML = "";
+    var filter = document.getElementById("roomFilter").value;
+    var rows = state.bookings.filter(function (b) { return !filter || b.room_id === filter; });
+    rows.sort(function (a, b) {
+      if (a.start !== b.start) { return a.start < b.start ? -1 : 1; }
+      return roomName(a.room_id).localeCompare(roomName(b.room_id));
+    });
+
+    document.getElementById("listEmpty").style.display = rows.length ? "none" : "block";
+
+    rows.forEach(function (b) {
+      var tr = el("tr", b.status === "cancelled" ? "cancelled" : "");
+
+      var tdRoom = el("td", null, roomName(b.room_id));
+      tdRoom.setAttribute("data-label", "Room");
+
+      var tdTime = el("td", null, b.start + "–" + b.end);
+      tdTime.setAttribute("data-label", "Time");
+
+      var tdTitle = el("td", "title", b.title);
+      tdTitle.setAttribute("data-label", "Meeting");
+      if (b.notes) {
+        tdTitle.appendChild(el("div", "hint", b.notes));
+      }
+
+      var tdOrg = el("td", null, b.organizer);
+      tdOrg.setAttribute("data-label", "Organizer");
+
+      var tdAtt = el("td", null, b.attendees || "—");
+      tdAtt.setAttribute("data-label", "Attendees");
+
+      var tdStatus = el("td");
+      tdStatus.setAttribute("data-label", "Status");
+      var pill = el("span", "pill " + b.status, b.status === "active" ? "Booked" : "Cancelled");
+      tdStatus.appendChild(pill);
+      if (b.status === "cancelled" && b.cancel_reason) {
+        tdStatus.appendChild(el("div", "hint", "Reason: " + b.cancel_reason));
+      }
+
+      var tdAction = el("td");
+      tdAction.setAttribute("data-label", "Action");
+      if (b.status === "active") {
+        var btn = el("button", "danger", "Cancel");
+        btn.type = "button";
+        btn.addEventListener("click", function () { cancelBooking(b); });
+        tdAction.appendChild(btn);
+      }
+
+      tr.appendChild(tdRoom);
+      tr.appendChild(tdTime);
+      tr.appendChild(tdTitle);
+      tr.appendChild(tdOrg);
+      tr.appendChild(tdAtt);
+      tr.appendChild(tdStatus);
+      tr.appendChild(tdAction);
+      body.appendChild(tr);
+    });
+  }
+
+  function prefill(roomId, start, end) {
+    document.getElementById("fRoom").value = roomId;
+    document.getElementById("fDate").value = state.date;
+    document.getElementById("fStart").value = start;
+    document.getElementById("fEnd").value = end;
+    clearMessage();
+    document.getElementById("bookForm").scrollIntoView({ behavior: "smooth", block: "center" });
+    document.getElementById("fTitle").focus();
+  }
+
+  function cancelBooking(b) {
+    var label = b.title + " (" + roomName(b.room_id) + ", " + b.start + "–" + b.end + " on " + b.date + ")";
+    if (!window.confirm("Cancel this booking?\n\n" + label)) { return; }
+    var reason = window.prompt("Optional reason for cancelling (leave blank to skip):", "");
+    if (reason === null) { reason = ""; }
+    api("/api/bookings/" + encodeURIComponent(b.id) + "/cancel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason: reason })
+    }).then(function () {
+      showMessage("ok", "Booking cancelled", label + " is now cancelled and the slot is free again. The record is kept for the audit trail.");
+      return loadDay();
+    }).catch(function (err) {
+      showMessage("error", "Could not cancel that booking", err.message);
+    });
+  }
+
+  function validateForm(payload) {
+    if (!payload.title) { return "Please give the meeting a title."; }
+    if (!payload.organizer) { return "Please say who is organising the meeting."; }
+    if (!payload.date) { return "Please pick a date."; }
+    var s = minutes(payload.start);
+    var e = minutes(payload.end);
+    if (e <= s) { return "End time must be after start time."; }
+    if (s < OPEN_MIN || e > CLOSE_MIN) { return "Rooms can only be booked between 07:00 and 20:00."; }
+    if (e - s > 8 * 60) { return "A single booking may be at most 8 hours long."; }
+    return null;
+  }
+
+  function submitBooking(ev) {
+    ev.preventDefault();
+    clearMessage();
+    var payload = {
+      room_id: document.getElementById("fRoom").value,
+      date: document.getElementById("fDate").value,
+      start: document.getElementById("fStart").value,
+      end: document.getElementById("fEnd").value,
+      title: document.getElementById("fTitle").value.trim(),
+      organizer: document.getElementById("fOrganizer").value.trim(),
+      attendees: document.getElementById("fAttendees").value.trim(),
+      notes: document.getElementById("fNotes").value.trim()
+    };
+    var problem = validateForm(payload);
+    if (problem) {
+      showMessage("error", "Please check the form", problem);
+      return;
+    }
+
+    var btn = document.getElementById("bookSubmit");
+    btn.disabled = true;
+    api("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (body) {
+      var b = body.booking || {};
+      showMessage("ok", "Booked", roomName(b.room_id) + " on " + b.date + " from " + b.start + " to " + b.end + ".");
+      document.getElementById("bookForm").reset();
+      document.getElementById("fRoom").value = payload.room_id;
+      document.getElementById("fDate").value = state.date;
+      state.date = payload.date;
+      return loadDay();
+    }).catch(function (err) {
+      if (err.code === "conflict") {
+        showMessage("error", "That slot is already booked", err.message + " Please choose another room or time.");
+      } else {
+        showMessage("error", "Could not book that room", err.message);
+      }
+    }).then(function () {
+      btn.disabled = false;
+    });
+  }
+
+  function init() {
+    fillTimeSelect(document.getElementById("fStart"));
+    fillTimeSelect(document.getElementById("fEnd"));
+    document.getElementById("fStart").value = "09:00";
+    document.getElementById("fEnd").value = "10:00";
+    document.getElementById("dateInput").value = state.date;
+    document.getElementById("fDate").value = state.date;
+
+    document.getElementById("dateInput").addEventListener("change", function (ev) {
+      state.date = ev.target.value || todayLocal();
+      loadDay();
+    });
+    document.getElementById("roomFilter").addEventListener("change", function () {
+      renderGrid();
+      renderList();
+    });
+    document.getElementById("showCancelled").addEventListener("change", loadDay);
+    document.getElementById("refreshBtn").addEventListener("click", loadDay);
+    document.getElementById("todayBtn").addEventListener("click", function () {
+      state.date = todayLocal();
+      loadDay();
+    });
+    document.getElementById("bookForm").addEventListener("submit", submitBooking);
+
+    loadRooms().then(loadDay).catch(function (err) {
+      showMessage("error", "Could not reach the booking service", err.message + " Is server.py running?");
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>

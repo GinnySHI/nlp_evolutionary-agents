@@ -43,17 +43,26 @@ docker pull python:3.12-slim
 
 ## API 配置
 
+当前课程运行使用 DeepSeek 作为主干模型：
+
 ```dotenv
-HKGAI_API_KEY=your-own-key
-HKGAI_BASE_URL=https://api1.hkgai.net
-HKGAI_MODEL=t2_hkgai-v3_fp8_1m_e7
+EVO_PROVIDER=deepseek
+DEEPSEEK_API_KEY=your-own-deepseek-key
+DEEPSEEK_MODEL=deepseek-flash
 EVO_SANDBOX=auto
-EVO_MAX_STEPS=40
-EVO_REQUEST_TIMEOUT=90
-EVO_MAX_OUTPUT_TOKENS=4096
+EVO_MAX_STEPS=120
+EVO_REQUEST_TIMEOUT=240
+EVO_MAX_OUTPUT_TOKENS=16384
+EVO_REASONING_EFFORT=low
 ```
 
-接口路径为 `/v1/chat/completions`，直接使用 HTTPX，不依赖 OpenAI/Anthropic SDK，也不会访问这些服务。`HKGAI_BASE_URL` 已以课程要求限制为 HKGAI 或 DeepSeek 的 HTTPS 地址。DeepSeek 可设置 `https://api.deepseek.com` 和相应模型名。
+改用 HKGAI 时设置 `EVO_PROVIDER=hkgai`、`HKGAI_API_KEY` 和 `HKGAI_BASE_URL=https://api1.hkgai.net`。两家服务各自需要独立密钥，不能互相复用。`EVO_PROVIDER=deepseek` 时 base URL 固定为 `https://api.deepseek.com`，忽略 `HKGAI_BASE_URL`。DeepSeek 可用模型为 `deepseek-v4-pro` 与 `deepseek-flash`（`deepseek-chat` 为 flash 的别名）。
+
+接口路径为 `/v1/chat/completions`，直接使用 HTTPX，不依赖 OpenAI/Anthropic SDK，也不会访问这些服务。按课程要求，base URL 被限制为 HKGAI 或 DeepSeek 的 HTTPS 地址，配置其他服务会在发出任何请求前报错。
+
+本次课程测试使用 `deepseek-flash`、`EVO_MAX_STEPS=120`、`EVO_MAX_OUTPUT_TOKENS=16384`、`EVO_REQUEST_TIMEOUT=240`、`EVO_REASONING_EFFORT=low`；`.env.example` 与这些设置一致。这些是运行预算，不保证任务通过。推理 token 也占用输出预算；降低推理强度可以减少推理耗尽预算却没有可执行输出的情况。备用服务默认关闭；只有显式设置 `EVO_DEEPSEEK_FALLBACK=true` 且提供独立 DeepSeek 密钥后，HKGAI 网络错误、402 余额不足、429 或指定 5xx 服务错误才会触发切换。402 不自动重试同一服务；认证失败、内容拒绝、截断和格式错误不会触发跨服务重试。`doctor` 会显示备用是否就绪，不输出密钥。
+
+模型请求使用 JSON 输出模式；服务明确不支持该参数时才回退。空内容或响应结构异常最多尝试三次。截断输出不会执行，而是提示成员缩短动作、分块写文件；连续三次截断仍会停止。可获得的 usage 在截断或响应异常时也计入统计，网络超时等未返回 usage 的消耗仍可能缺失。
 
 密钥只保存在本地忽略文件 `.env`，不会进入会话配置、智能体工作区或源码。新机器请根据 `.env.example` 自行配置，勿上传 `.env`。可选 `EVO_GITHUB_TOKEN` 仅用于经批准的 GitHub 推送。
 
@@ -98,13 +107,19 @@ EVO_MAX_OUTPUT_TOKENS=4096
 
 | 能力 | 实现 |
 |---|---|
-| 文件 | `read_file`、`write_file`、`list_files`、`delete_file`；拒绝越界路径、符号链接和硬链接 |
+| 文件 | `read_file`、`write_file`、`append_file`、`replace_text`、`list_files`、`delete_file`；拒绝越界路径、符号链接和硬链接 |
 | 代码执行 | `run_python`；由 macOS Seatbelt 或 Docker 强制隔离，禁止不受保护的宿主执行回退 |
 | 搜索与获取 | `search_web` 使用 Bing RSS；`fetch_url` 获取公开文本网页，保留 URL 和获取时间 |
 | 跨成员交接 | `send_file` 显式复制至对方 `inbox/<sender>/<destination>`，记录 SHA-256，不覆盖已有文件 |
 | 版本控制 | `git_init`、`git_status`、`git_diff`、`git_commit`、`git_push`；禁用仓库钩子和不可信全局配置 |
 
 每个成员只能访问自己的工作区。成员间消息可以协商与交接；工具结果只注入执行该工具的成员上下文，文件需要显式共享。私聊记录及私聊记忆不注入群聊。
+
+`append_file` 每次追加最多 32 KiB，必须传入最近一次读取/写入返回的 `expected_sha256`，文件已变化则拒绝追加，避免重试重复写入。新建内置团队的文档角色拥有此工具；旧会话仍保留创建时的权限。
+
+`read_file` 支持字符位置 `offset` / `limit`，可直接查看长文件尾部；返回的 SHA-256 始终对应完整文件。`replace_text` 根据当前哈希替换唯一匹配片段，拒绝陈旧或歧义修改，避免为小改动重写整份文件。疑似过度转义只发出提示，不擅自转换内容。`validate_file` 不执行代码，可检查 Python/JSON 语法、HTML 重复文档/ID 和日期转换风险；它不能代替功能测试。网页获取同时保留可追溯链接，减少猜测文章地址。
+
+编排器兼容明确的工具名简写和位置放错但不冲突的工具参数，规范化后仍执行角色白名单、参数、路径和审批检查。冲突参数、多动作 JSON、未知控制字段不被猜测或静默执行。工作上下文保留最近消息和前任务摘要，完整脱敏证据仍保存在事件日志中。成员连续工作八轮后返回协调者检查进度，任务状态和预算不被自动修改。只读核查角色通过消息或评审返回意见，由可写角色保存报告。
 
 代码沙箱默认提供 Python 标准库及当前工作区代码，禁止联网，不自动安装第三方包。macOS 禁止创建子进程；Docker 可在资源限制内创建子进程。默认执行上限 30 秒，可申请至 120 秒；每个输出流最多保留 64 KiB。
 
@@ -130,6 +145,10 @@ macOS 施加 CPU、文件大小、文件描述符和时间限制，但没有硬�
 同伴审核通过和独立验收通过分别计数。测试集支持 `file_exists`、`text_equals`、`text_contains` 三种确定性验收。没有独立规则的开放任务标记为需要人工评审，不能仅凭 AI 的“已完成”当作已验证成功。
 
 原始课程六项任务的批量清单位于 `scenarios/course_mid_test.json`。这些开放任务会触发真实问题和审批，建议使用前述逐项交互方式；批量模式遇到人工请求会保留等待状态，同一团队的后续案例标记为受阻。最终保密测试集尚未提供，项目中的小型验证不代表期末得分。
+
+2026-11-23 的最新课程任务状态、独立验收及本轮补验结果见[测试报告（中文）](docs/test-report-20261123.zh.md)与[英文版](docs/test-report-20261123.md)。早期 HKGAI 运行的域名解析故障与修复过程保留在[历史修复记录](docs/course-fix-20261123.md)；后续运行已使用 DeepSeek。
+
+本轮最终交付为 **6/6**，原 120 回合预算内完成为 **5/6**；software-2 续跑至 198 回合完成。可直接查看[仪表盘启动说明](deliverables/course-deepseek-20261123/software-2/NOTES-dashboard.md)、[半导体 17 页修订幻灯片](deliverables/course-deepseek-20261123/fund-2/semis_deck.html)及[最终验收汇总](reports/course-deepseek-20261123/summary.json)。
 
 完整评测口径与格式见 [docs/evaluation.md](docs/evaluation.md)，架构见 [docs/architecture.md](docs/architecture.md)。
 

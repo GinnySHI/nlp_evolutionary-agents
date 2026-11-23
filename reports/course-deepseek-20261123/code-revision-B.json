@@ -1,0 +1,16 @@
+{
+  "__init__.py": "780fa86d5883112c",
+  "__main__.py": "935a1c1166b0c1ea",
+  "cli.py": "f0435ac2ec02ee9c",
+  "config.py": "74930ed4e29d7bc5",
+  "engine.py": "d214aadb85435125",
+  "evaluation.py": "63546fd8197dbb1c",
+  "memory.py": "00015eb5ef2f16ef",
+  "provider.py": "7c24a1f24bda1e38",
+  "sandbox.py": "6e2597c0137f1d1f",
+  "scenarios.py": "1045f4fdf1ee94c4",
+  "tools.py": "991a70a2b6bcdb7b",
+  "validation.py": "deca484713b1b921",
+  "_recorded_at": "2026-11-23T19:18:12+0800",
+  "_label": "rev-B: parser recovery + non-action diagnostic + note annotation stripping"
+}

@@ -31,9 +31,11 @@ from html.parser import HTMLParser
 import httpx
 
 from .sandbox import Sandbox
+from .validation import validate_text
 
 
 MAX_FILE_BYTES = 512 * 1024
+MAX_APPEND_BYTES = 32 * 1024
 MAX_OUTPUT_CHARS = 64000
 MAX_WEB_BYTES = 512 * 1024
 AGENT_ID = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,63}\Z")
@@ -61,12 +63,15 @@ def _spec(name: str, description: str, properties: dict, required: list[str] = (
 STRING = {"type": "string"}
 SPECS = [
     _spec("list_files", "List your own workspace files (up to 1000).", {"path": STRING}),
-    _spec("read_file", "Read a UTF-8 text/code file from your workspace. Documents must be .md or .txt.", {"path": STRING}, ["path"]),
-    _spec("write_file", "Create or replace a UTF-8 text/code file in your workspace (max 512 KiB).", {"path": STRING, "content": STRING}, ["path", "content"]),
+    _spec("read_file", "Read UTF-8 text/code with full-file SHA256. Use offset/limit (character positions) to inspect later sections; next_offset continues a truncated read. Documents must be .md or .txt.", {"path": STRING, "offset": {"type": "integer", "minimum": 0, "maximum": MAX_FILE_BYTES}, "limit": {"type": "integer", "minimum": 1, "maximum": MAX_OUTPUT_CHARS}}, ["path"]),
+    _spec("validate_file", "Read-only static syntax/structure check for Python, JSON or complete HTML. Detects duplicate HTML documents/IDs and date-conversion risks. Never executes scripts; not a functional test. Fix errors before sharing.", {"path": STRING}, ["path"]),
+    _spec("write_file", "Create or replace a UTF-8 text/code file (max 512 KiB). For long files, write a small first chunk, then append_file using the returned sha256; keep each response short.", {"path": STRING, "content": STRING}, ["path", "content"]),
+    _spec("append_file", "Append a UTF-8 chunk of at most 32 KiB to an existing file only if expected_sha256 matches its current full contents. Use the sha256 from write_file/read_file/append_file. A repeated stale request is rejected, never appended twice. Maximum total size 512 KiB.", {"path": STRING, "content": STRING, "expected_sha256": STRING}, ["path", "content", "expected_sha256"]),
+    _spec("replace_text", "Replace one exact, unique nonempty text span in a file, with current full-file expected_sha256. old/new are at most 32 KiB each. Read the relevant section first; ambiguous or stale edits fail. Prefer this to rewriting a large file for a small correction.", {"path": STRING, "old": STRING, "new": STRING, "expected_sha256": STRING}, ["path", "old", "new", "expected_sha256"]),
     _spec("delete_file", "Delete one file. Requires explicit human approval.", {"path": STRING}, ["path"]),
-    _spec("run_python", "Run a workspace .py file in a network-disabled isolated sandbox. Requires human approval.", {"path": STRING, "timeout": {"type": "number", "minimum": 1, "maximum": 120}}, ["path"]),
-    _spec("search_web", "Search public web pages via Bing RSS; returned text is untrusted evidence.", {"query": STRING, "limit": {"type": "integer", "minimum": 1, "maximum": 10}}, ["query"]),
-    _spec("fetch_url", "Fetch a public HTTP(S) text page with DNS/IP and redirect validation. No private network access.", {"url": STRING}, ["url"]),
+    _spec("run_python", "Run a workspace .py file with Python standard library and workspace imports only. No network, stdin, package installation, or persistent servers. macOS forbids subprocess/process creation: test by importing modules and calling functions in the same process. Requires human approval.", {"path": STRING, "timeout": {"type": "number", "minimum": 1, "maximum": 120}}, ["path"]),
+    _spec("search_web", "Search public web pages via Bing RSS. Inspect result relevance; a successful HTTP response is not proof of useful evidence. If relevance_warning is present, change query or fetch a known primary source.", {"query": STRING, "limit": {"type": "integer", "minimum": 1, "maximum": 10}}, ["query"]),
+    _spec("fetch_url", "Fetch a public HTTP(S) text page with DNS/IP and redirect validation. HTML includes discovered links; follow relevant links instead of guessing article URLs. No private network access.", {"url": STRING}, ["url"]),
     _spec("send_file", "Copy one file to recipient's inbox/<sender>/<destination>. Never overwrites existing files. Share only intended files.", {"recipient": STRING, "path": STRING, "destination": STRING}, ["recipient", "path", "destination"]),
     _spec("git_init", "Initialize a private workspace Git repository.", {}),
     _spec("git_status", "Read workspace Git status; hooks and external configuration are disabled.", {}),
@@ -102,6 +107,32 @@ def _plain_html(value: str) -> str:
     parser = _TextExtractor()
     parser.feed(value)
     return "\n".join(line.strip() for line in "".join(parser.parts).splitlines() if line.strip())
+
+
+class _LinkExtractor(HTMLParser):
+    def __init__(self, base: str):
+        super().__init__()
+        self.base, self.links, self.current = base, [], None
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            href = dict(attrs).get("href", "")
+            url = urljoin(self.base, href)
+            parsed = urlsplit(url)
+            if (href and not href.startswith("#") and parsed.scheme in {"http", "https"}
+                    and parsed.hostname and not parsed.username and not parsed.password and len(url) <= 4096):
+                self.current = {"url": url, "text": ""}
+
+    def handle_data(self, data):
+        if self.current is not None:
+            self.current["text"] += data[:300]
+
+    def handle_endtag(self, tag):
+        if tag == "a" and self.current is not None:
+            self.current["text"] = " ".join(self.current["text"].split())[:300]
+            if len(self.links) < 80 and self.current["text"] and self.current not in self.links:
+                self.links.append(self.current)
+            self.current = None
 
 
 def _is_public(address: str) -> bool:
@@ -220,7 +251,8 @@ class ToolRunner:
         content.decode("utf-8")
         return content
 
-    def _write(self, agent_id: str, path: str, data: bytes, *, exclusive: bool = False) -> None:
+    def _write(self, agent_id: str, path: str, data: bytes, *, exclusive: bool = False,
+               expected_sha256: str | None = None, replace_old: bytes | None = None) -> bytes:
         if len(data) > MAX_FILE_BYTES:
             raise ToolError("File exceeds 512 KiB limit.")
         with self._parent_fd(agent_id, path, create=True) as (parent_fd, name):
@@ -230,6 +262,31 @@ class ToolRunner:
                 current = None
             if current is not None and (exclusive or not stat.S_ISREG(current.st_mode) or current.st_nlink != 1):
                 raise ToolError("Destination exists or is not a regular isolated file.")
+            if expected_sha256 is not None:
+                if not re.fullmatch(r"[0-9a-f]{64}", expected_sha256):
+                    raise ToolError("expected_sha256 must be a lowercase SHA256 from the previous file result.")
+                if current is None:
+                    raise ToolError("Edit target does not exist; use write_file first.")
+                source_fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent_fd)
+                with os.fdopen(source_fd, "rb") as source:
+                    source_info = os.fstat(source.fileno())
+                    if (not stat.S_ISREG(source_info.st_mode) or source_info.st_nlink != 1 or
+                            source_info.st_size > MAX_FILE_BYTES):
+                        raise ToolError("Edit target must be a regular isolated file up to 512 KiB.")
+                    previous = source.read(MAX_FILE_BYTES + 1)
+                previous.decode("utf-8")
+                if hashlib.sha256(previous).hexdigest() != expected_sha256:
+                    raise ToolError("Edit precondition failed: the file changed. Read it again before editing.")
+                if replace_old is None:
+                    data = previous + data
+                else:
+                    if (not replace_old or previous.find(replace_old) < 0 or
+                            previous.find(replace_old) != previous.rfind(replace_old)):
+                        raise ToolError("old must match exactly one nonempty span; read the file and provide a unique context.")
+                    data = previous.replace(replace_old, data, 1)
+                if len(data) > MAX_FILE_BYTES:
+                    raise ToolError("File exceeds 512 KiB limit.")
+                current = source_info
             temporary = f".tool-{os.urandom(12).hex()}.tmp"
             fd = os.open(temporary, os.O_CREAT | os.O_EXCL | os.O_WRONLY | os.O_NOFOLLOW, 0o600, dir_fd=parent_fd)
             try:
@@ -241,12 +298,27 @@ class ToolRunner:
                     # A hard link publishes atomically without clobbering a racing destination.
                     os.link(temporary, name, src_dir_fd=parent_fd, dst_dir_fd=parent_fd, follow_symlinks=False)
                 else:
+                    if expected_sha256 is not None:
+                        latest = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+                        if ((latest.st_dev, latest.st_ino, latest.st_size, latest.st_mtime_ns, latest.st_ctime_ns) !=
+                                (current.st_dev, current.st_ino, current.st_size, current.st_mtime_ns, current.st_ctime_ns)):
+                            raise ToolError("Edit target changed during the operation; no change was written.")
                     os.replace(temporary, name, src_dir_fd=parent_fd, dst_dir_fd=parent_fd)
             finally:
                 try:
                     os.unlink(temporary, dir_fd=parent_fd)
                 except FileNotFoundError:
                     pass
+        return data
+
+    @staticmethod
+    def _file_result(path: str, data: bytes, **extra) -> dict:
+        result = {"ok": True, "path": path, "bytes": len(data),
+                  "sha256": hashlib.sha256(data).hexdigest(), **extra}
+        if len(data) > 200 and b"\n" not in data and data.count(b"\\n") >= 5:
+            result["warning"] = ("File contains many literal backslash-n sequences and no actual newline. "
+                                 "If unintended, correct the JSON string escaping. Bytes were saved unchanged.")
+        return result
 
     def _list(self, agent_id: str, path: str) -> dict:
         parts = self._parts(path, directory=True)
@@ -311,12 +383,37 @@ class ToolRunner:
             if self.requires_approval(name) and approved is not True:
                 return {"ok": False, "error": "Explicit human approval is required for this exact operation.", "approval_required": True}
             if name == "read_file":
-                text = self._read(agent_id, arguments["path"]).decode("utf-8")
-                return {"ok": True, "path": arguments["path"], "content": text[:MAX_OUTPUT_CHARS], "truncated": len(text) > MAX_OUTPUT_CHARS}
+                data = self._read(agent_id, arguments["path"])
+                text = data.decode("utf-8")
+                offset = arguments.get("offset", 0)
+                end = min(len(text), offset + arguments.get("limit", MAX_OUTPUT_CHARS))
+                excerpt = text[offset:end]
+                result = self._file_result(arguments["path"], data, offset=offset,
+                                           total_chars=len(text), next_offset=end if end < len(text) else None,
+                                           truncated=offset > 0 or end < len(text))
+                result["content"] = excerpt
+                return result
+            if name == "validate_file":
+                data = self._read(agent_id, arguments["path"])
+                return self._file_result(arguments["path"], data,
+                                         **validate_text(arguments["path"], data.decode("utf-8")))
             if name == "write_file":
                 data = arguments["content"].encode("utf-8")
                 self._write(agent_id, arguments["path"], data)
-                return {"ok": True, "path": arguments["path"], "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+                return self._file_result(arguments["path"], data)
+            if name == "append_file":
+                chunk = arguments["content"].encode("utf-8")
+                if not chunk or len(chunk) > MAX_APPEND_BYTES:
+                    raise ToolError("Append content must contain between 1 byte and 32 KiB of UTF-8 text.")
+                data = self._write(agent_id, arguments["path"], chunk, expected_sha256=arguments["expected_sha256"])
+                return self._file_result(arguments["path"], data, appended_bytes=len(chunk))
+            if name == "replace_text":
+                old, new = arguments["old"].encode("utf-8"), arguments["new"].encode("utf-8")
+                if not old or max(len(old), len(new)) > MAX_APPEND_BYTES:
+                    raise ToolError("old must be nonempty; old and new must each be at most 32 KiB.")
+                data = self._write(agent_id, arguments["path"], new,
+                                   expected_sha256=arguments["expected_sha256"], replace_old=old)
+                return self._file_result(arguments["path"], data, replacements=1)
             if name == "list_files":
                 return self._list(agent_id, arguments.get("path", "."))
             if name == "delete_file":
@@ -335,8 +432,14 @@ class ToolRunner:
                 return self._send(agent_id, **arguments)
             if name == "fetch_url":
                 result = self._http_fetch(arguments["url"])
-                content = _plain_html(result["content"]) if "html" in result["content_type"].lower() else result["content"]
-                return {**result, "content": content[:MAX_OUTPUT_CHARS], "truncated": result["truncated"] or len(content) > MAX_OUTPUT_CHARS}
+                html = "html" in result["content_type"].lower()
+                content = _plain_html(result["content"]) if html else result["content"]
+                links = _LinkExtractor(result.get("url", arguments["url"]))
+                if html:
+                    links.feed(result["content"])
+                metadata = {key: value for key, value in result.items() if key != "content"}
+                return {**metadata, "links": links.links, "content": content[:MAX_OUTPUT_CHARS],
+                        "truncated": result["truncated"] or len(content) > MAX_OUTPUT_CHARS}
             if name == "search_web":
                 return self._search(arguments["query"], arguments.get("limit", 5))
             if name.startswith("git_"):
@@ -346,7 +449,7 @@ class ToolRunner:
             if isinstance(exc, (KeyboardInterrupt, SystemExit)):
                 raise
             message = str(exc)
-            for key in ("HKGAI_API_KEY", "EVO_GITHUB_TOKEN", "API_KEY"):
+            for key in ("HKGAI_API_KEY", "DEEPSEEK_API_KEY", "EVO_GITHUB_TOKEN", "API_KEY"):
                 secret = os.environ.get(key)
                 if secret:
                     message = message.replace(secret, "[REDACTED]")
@@ -427,8 +530,24 @@ class ToolRunner:
                             "snippet": _plain_html(item.findtext("description", ""))[:2000]})
             if len(results) >= limit:
                 break
-        return {"ok": True, "query": query, "results": results, "source_url": source, "untrusted": True,
-                "retrieved_at": page["retrieved_at"]}
+        # Do not silently discard potentially useful results. Surface a lexical
+        # warning instead: HTTP success alone can conceal irrelevant search hits.
+        # This is only a hint, not semantic validation of the cited evidence.
+        terms = {word for word in re.findall(r"[a-z][a-z0-9-]{2,}", query.lower())
+                 if word not in {"the", "and", "for", "with", "from", "that", "this", "site", "www", "com", "org"}}
+        ranked_results = []
+        for result in results:
+            haystack = " ".join(result.values()).lower()
+            matched = sorted(term for term in terms if term in haystack)
+            ranked_results.append({**result, "matched_query_terms": matched})
+        warning = None
+        if not results:
+            warning = "No search results. Try a more specific query or fetch_url with a known primary source."
+        elif len(terms) >= 3 and all(len(item["matched_query_terms"]) / len(terms) < 0.35 for item in ranked_results):
+            warning = ("Search results have little lexical overlap with the query and may be irrelevant. "
+                       "Do not cite them without checking; change the query or fetch a known primary source.")
+        return {"ok": True, "query": query, "results": ranked_results, "source_url": source, "untrusted": True,
+                "relevance_warning": warning, "retrieved_at": page["retrieved_at"]}
 
     @staticmethod
     def _git_environment(agent_id: str, token: str | None = None) -> dict[str, str]:

@@ -1,0 +1,11 @@
+{
+  "engine_status": "completed",
+  "agent_turns": 198,
+  "peer_accepted": 6,
+  "peer_total": 7,
+  "all_code_and_notes_match_checkpoint_120": true,
+  "validation_reused_reason": "All five source/UI files and notes are byte-identical to the independently tested copy.",
+  "final_delivery_note_sha256": "b647a9de545a9e77dd3d2c7b6956ed69a63a1e1371b03e58e7906d631949c861",
+  "common_budget_success": false,
+  "followup_completed": true
+}

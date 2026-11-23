@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "path": "semis_deck.html",
+  "bytes": 48941,
+  "sha256": "2385d9adbcb0c9ba67d6a6a253c906beeb1666869adcfb069b7803c0ffc8cdb5",
+  "valid": true,
+  "errors": [],
+  "warnings": [],
+  "scope": "Static syntax/structure only. Does not execute code or verify facts, UI, or functionality."
+}
