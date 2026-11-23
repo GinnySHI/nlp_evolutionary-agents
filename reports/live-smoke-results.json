@@ -1,0 +1,258 @@
+{
+  "summary": {
+    "case_count": 2,
+    "verified_successes": 2,
+    "verified_task_completion_rate": 1.0,
+    "peer_reviewed_subtask_completion_rate": 1.0,
+    "total_elapsed_seconds": 40.571,
+    "manual_review_cases": 0,
+    "human_pending_cases": 0,
+    "fatal_errors": 0
+  },
+  "cases": [
+    {
+      "id": "file-handoff",
+      "session": "smoke-team",
+      "status": "completed",
+      "metrics": {
+        "elapsed_seconds": 18.463704824447632,
+        "active_seconds": 18.461258499883115,
+        "agent_turns": 10,
+        "tool_calls": 5,
+        "fatal_errors": 0,
+        "tool_errors": 0,
+        "invalid_actions": 0,
+        "subtasks_total": 1,
+        "subtasks_accepted": 1,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "lead": {
+            "group_entries": 2,
+            "lessons": 1,
+            "successes": 0,
+            "failures": 0
+          },
+          "writer": {
+            "group_entries": 3,
+            "lessons": 1,
+            "successes": 1,
+            "failures": 0
+          },
+          "reviewer": {
+            "group_entries": 2,
+            "lessons": 1,
+            "successes": 0,
+            "failures": 0
+          },
+          "recorder": {
+            "group_entries": 2,
+            "lessons": 1,
+            "successes": 0,
+            "failures": 0
+          }
+        }
+      },
+      "checks": [
+        {
+          "check": {
+            "type": "text_equals",
+            "agent": "writer",
+            "path": "hello.md",
+            "text": "Multi-agent collaboration verified"
+          },
+          "passed": true
+        },
+        {
+          "check": {
+            "type": "text_equals",
+            "agent": "reviewer",
+            "path": "inbox/writer/hello.md",
+            "text": "Multi-agent collaboration verified"
+          },
+          "passed": true
+        }
+      ],
+      "verified_success": true,
+      "requires_manual_review": false,
+      "pending": null,
+      "memory_before": {
+        "lead": {
+          "group_entries": 0,
+          "lessons": 0,
+          "successes": 0,
+          "failures": 0
+        },
+        "writer": {
+          "group_entries": 0,
+          "lessons": 0,
+          "successes": 0,
+          "failures": 0
+        },
+        "reviewer": {
+          "group_entries": 0,
+          "lessons": 0,
+          "successes": 0,
+          "failures": 0
+        },
+        "recorder": {
+          "group_entries": 0,
+          "lessons": 0,
+          "successes": 0,
+          "failures": 0
+        }
+      },
+      "memory_after": {
+        "lead": {
+          "group_entries": 2,
+          "lessons": 1,
+          "successes": 0,
+          "failures": 0
+        },
+        "writer": {
+          "group_entries": 3,
+          "lessons": 1,
+          "successes": 1,
+          "failures": 0
+        },
+        "reviewer": {
+          "group_entries": 2,
+          "lessons": 1,
+          "successes": 0,
+          "failures": 0
+        },
+        "recorder": {
+          "group_entries": 2,
+          "lessons": 1,
+          "successes": 0,
+          "failures": 0
+        }
+      }
+    },
+    {
+      "id": "context-continuation",
+      "session": "smoke-team",
+      "status": "completed",
+      "metrics": {
+        "elapsed_seconds": 22.054156064987183,
+        "active_seconds": 22.05139912525192,
+        "agent_turns": 12,
+        "tool_calls": 7,
+        "fatal_errors": 0,
+        "tool_errors": 0,
+        "invalid_actions": 0,
+        "subtasks_total": 1,
+        "subtasks_accepted": 1,
+        "subtask_completion_rate": 1.0,
+        "model_claimed_success": true,
+        "peer_reviewed_completion": true,
+        "reflection_calls": 4,
+        "reflection_failures": 0,
+        "memory": {
+          "lead": {
+            "group_entries": 4,
+            "lessons": 2,
+            "successes": 0,
+            "failures": 0
+          },
+          "writer": {
+            "group_entries": 6,
+            "lessons": 2,
+            "successes": 2,
+            "failures": 0
+          },
+          "reviewer": {
+            "group_entries": 4,
+            "lessons": 2,
+            "successes": 0,
+            "failures": 0
+          },
+          "recorder": {
+            "group_entries": 4,
+            "lessons": 2,
+            "successes": 0,
+            "failures": 0
+          }
+        }
+      },
+      "checks": [
+        {
+          "check": {
+            "type": "text_equals",
+            "agent": "writer",
+            "path": "followup.md",
+            "text": "Multi-agent collaboration verified\nMemory continuity verified"
+          },
+          "passed": true
+        },
+        {
+          "check": {
+            "type": "text_equals",
+            "agent": "reviewer",
+            "path": "inbox/writer/followup.md",
+            "text": "Multi-agent collaboration verified\nMemory continuity verified"
+          },
+          "passed": true
+        }
+      ],
+      "verified_success": true,
+      "requires_manual_review": false,
+      "pending": null,
+      "memory_before": {
+        "lead": {
+          "group_entries": 2,
+          "lessons": 1,
+          "successes": 0,
+          "failures": 0
+        },
+        "writer": {
+          "group_entries": 3,
+          "lessons": 1,
+          "successes": 1,
+          "failures": 0
+        },
+        "reviewer": {
+          "group_entries": 2,
+          "lessons": 1,
+          "successes": 0,
+          "failures": 0
+        },
+        "recorder": {
+          "group_entries": 2,
+          "lessons": 1,
+          "successes": 0,
+          "failures": 0
+        }
+      },
+      "memory_after": {
+        "lead": {
+          "group_entries": 4,
+          "lessons": 2,
+          "successes": 0,
+          "failures": 0
+        },
+        "writer": {
+          "group_entries": 6,
+          "lessons": 2,
+          "successes": 2,
+          "failures": 0
+        },
+        "reviewer": {
+          "group_entries": 4,
+          "lessons": 2,
+          "successes": 0,
+          "failures": 0
+        },
+        "recorder": {
+          "group_entries": 4,
+          "lessons": 2,
+          "successes": 0,
+          "failures": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "id": "file-handoff",
+      "session": "smoke-team",
+      "scenario": "smoke",
+      "task": "Have the coordinator delegate hello.md to writer. Acceptance criterion: its content must be exactly 'Multi-agent collaboration verified', with an optional trailing newline. Writer must write and read the file, then send_file to reviewer with destination hello.md; it arrives at inbox/writer/hello.md. Writer submits complete with hello.md. The coordinator messages reviewer to independently read inbox/writer/hello.md and review the writer subtask. The coordinator may finish only after acceptance. No code execution, search, Git or clarification is needed.",
+      "checks": [
+        {"type": "text_equals", "agent": "writer", "path": "hello.md", "text": "Multi-agent collaboration verified"},
+        {"type": "text_equals", "agent": "reviewer", "path": "inbox/writer/hello.md", "text": "Multi-agent collaboration verified"}
+      ]
+    },
+    {
+      "id": "context-continuation",
+      "session": "smoke-team",
+      "scenario": "smoke",
+      "task": "Continue with the same team and use the previous task's existing hello.md. Coordinator delegates writer to read hello.md and create followup.md with exactly the old content on the first line, then a newline and 'Memory continuity verified' on the second line; optional trailing newline is allowed. Writer reads followup.md and sends it to reviewer, destination followup.md (received as inbox/writer/followup.md). Writer submits complete with followup.md. Coordinator messages reviewer to read both inbox/writer/hello.md and inbox/writer/followup.md and review this task. Finish after acceptance. No execution, search, Git or clarification is needed.",
+      "checks": [
+        {"type": "text_equals", "agent": "writer", "path": "followup.md", "text": "Multi-agent collaboration verified\nMemory continuity verified"},
+        {"type": "text_equals", "agent": "reviewer", "path": "inbox/writer/followup.md", "text": "Multi-agent collaboration verified\nMemory continuity verified"}
+      ]
+    }
+  ]
+}
