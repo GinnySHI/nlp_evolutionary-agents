@@ -87,6 +87,18 @@ def test_exact_schema_and_agent_validation(runner):
     assert not runner.execute("dev", "list_files", {"shell": "rm -rf /"})["ok"]
 
 
+def test_send_file_normalizes_duplicate_owned_inbox_prefix(runner):
+    write(runner, path="booking.py", content="booking data")
+    result = runner.execute("dev", "send_file", {
+        "recipient": "qa", "path": "booking.py",
+        "destination": "inbox/dev/booking.py",
+    })
+    assert result["ok"], result
+    assert result["destination"] == "inbox/dev/booking.py"
+    assert runner.execute("qa", "read_file", {"path": result["destination"]})["content"] == "booking data"
+    assert not runner.execute("qa", "read_file", {"path": "inbox/dev/inbox/dev/booking.py"})["ok"]
+
+
 def test_share_explicit_file_only_with_audited_hash(runner):
     write(runner, path="output/report.md", content="A report")
     write(runner, path="private.txt", content="Do not share")

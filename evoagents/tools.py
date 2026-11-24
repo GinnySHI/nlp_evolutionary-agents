@@ -459,9 +459,16 @@ class ToolRunner:
         self.workspace(recipient)
         if agent_id == recipient:
             raise ToolError("Choose a different recipient.")
-        self._parts(destination)
+        # send_file owns the inbox/<sender>/ prefix. If the caller already
+        # supplied that exact prefix (a common handoff-path mistake), strip it
+        # once so transfers do not land in inbox/<sender>/inbox/<sender>/... .
+        canonical_destination = destination
+        owned_prefix = f"inbox/{agent_id}/"
+        if canonical_destination.startswith(owned_prefix):
+            canonical_destination = canonical_destination[len(owned_prefix):]
+        self._parts(canonical_destination)
         data = self._read(agent_id, path)
-        target = f"inbox/{agent_id}/{destination}"
+        target = f"inbox/{agent_id}/{canonical_destination}"
         self._write(recipient, target, data, exclusive=True)
         receipt = {"sender": agent_id, "recipient": recipient, "source": path, "destination": target,
                    "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "timestamp": time.time()}
